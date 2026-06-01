@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p uploads
+RUN mkdir -p uploads static
 
 EXPOSE 8000
 
