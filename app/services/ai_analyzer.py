@@ -2,7 +2,10 @@ import json
 import anthropic
 from app.config import settings
 
-client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+client = anthropic.Anthropic(
+    api_key=settings.anthropic_api_key,
+    timeout=120.0,
+)
 
 SYSTEM_PROMPT = """You are an expert financial analyst specializing in bank statement analysis for lenders, mortgage brokers, and small business consultants — similar to what Moneythumb provides.
 
