@@ -1,0 +1,11 @@
+Options -Indexes
+php_value upload_max_filesize 20M
+php_value post_max_size 22M
+php_value max_execution_time 120
+php_value memory_limit 256M
+
+# Protect uploads directory
+<FilesMatch "\.(pdf)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
