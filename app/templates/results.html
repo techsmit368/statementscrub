@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Report: {{ analysis.account_holder or analysis.filename }} — StatementIQ{% endblock %}
+{% block title %}Report: {{ analysis.account_holder or analysis.filename }} — StatementScrub{% endblock %}
 
 {% block content %}
 {% set rf = result.get('red_flags', {}) %}
