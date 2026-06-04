@@ -1,142 +1,190 @@
 {% extends "base.html" %}
-{% block title %}StatementIQ — Analyze Any Bank Statement in 30 Seconds{% endblock %}
+{% block title %}StatementScrub — AI Bank Statement Analyzer for Lenders & Mortgage Brokers{% endblock %}
 
 {% block content %}
+<!-- SEO Meta (injected via base) -->
+<meta name="description" content="StatementScrub analyzes any bank statement PDF in 30 seconds. Income verification, MCA detection, NSF counts, risk scoring — instant lender-ready reports. Free to start." />
+<meta name="keywords" content="bank statement analyzer, bank statement analysis tool, income verification software, MCA loan detection, mortgage broker tools, bank statement reader, automated bank statement review, analyze bank statements online" />
+<meta property="og:title" content="StatementScrub — AI Bank Statement Analyzer" />
+<meta property="og:description" content="Upload any bank statement PDF and get a complete lender-ready analysis in 30 seconds. Income verification, MCA detection, NSF counts, risk scoring." />
+<meta property="og:url" content="https://statementscrub.com" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://statementscrub.com" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "StatementScrub",
+  "applicationCategory": "FinanceApplication",
+  "description": "AI-powered bank statement analyzer for lenders, mortgage brokers, and financial professionals. Instant income verification, MCA detection, NSF counts, and risk scoring.",
+  "url": "https://statementscrub.com",
+  "offers": [
+    {"@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD"},
+    {"@type": "Offer", "name": "Starter", "price": "49", "priceCurrency": "USD", "billingIncrement": "month"},
+    {"@type": "Offer", "name": "Pro", "price": "149", "priceCurrency": "USD", "billingIncrement": "month"}
+  ],
+  "featureList": "Income verification, MCA loan detection, NSF detection, Cash flow analysis, Risk scoring, Telegram bot integration"
+}
+</script>
 
 <!-- Hero -->
 <section class="relative overflow-hidden bg-white">
   <div class="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-indigo-50 pointer-events-none"></div>
-  <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-sky-100/40 to-indigo-100/40 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28">
     <div class="max-w-3xl">
       <div class="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 text-sky-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
         <span class="w-2 h-2 bg-sky-500 rounded-full animate-pulse"></span>
-        AI-Powered — Results in under 30 seconds
+        AI-Powered — Full Report in Under 30 Seconds
       </div>
-
       <h1 class="text-5xl sm:text-6xl font-black text-slate-900 leading-tight mb-6">
-        Bank Statement<br/>Analysis That<br/><span class="gradient-text">Actually Works</span>
+        The Fastest<br/><span class="gradient-text">Bank Statement Analyzer</span><br/>for Lenders
       </h1>
-
       <p class="text-xl text-slate-500 mb-8 max-w-xl leading-relaxed">
-        Upload any bank statement PDF. Get instant income verification, MCA detection,
-        NSF counts, cash flow trends, and a lender-ready risk report — no manual data entry.
+        Upload any bank statement PDF — Chase, Wells Fargo, BofA, any bank. Get instant
+        income verification, MCA loan detection, NSF counts, cash flow trends, and a
+        lender-ready risk report. No manual data entry. Ever.
       </p>
-
-      <div class="flex flex-wrap gap-4 mb-12">
+      <div class="flex flex-wrap gap-4 mb-10">
         <a href="/auth/register" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-8 py-3.5 rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg shadow-sky-200">
           Analyze Free — No Card Needed
         </a>
-        <a href="#how-it-works" class="bg-white border-2 border-slate-200 text-slate-700 px-8 py-3.5 rounded-xl font-bold text-lg hover:border-slate-300 transition">
-          See How It Works
+        <a href="#pricing" class="bg-white border-2 border-slate-200 text-slate-700 px-8 py-3.5 rounded-xl font-bold text-lg hover:border-slate-300 transition">
+          See Pricing
         </a>
       </div>
-
-      <!-- Trust badges -->
-      <div class="flex flex-wrap gap-6 items-center text-sm text-slate-400">
-        <span class="flex items-center gap-1.5"><span class="text-green-500 text-lg">✓</span> No credit card</span>
-        <span class="flex items-center gap-1.5"><span class="text-green-500 text-lg">✓</span> 3 free reports</span>
-        <span class="flex items-center gap-1.5"><span class="text-green-500 text-lg">✓</span> Any bank, any format</span>
-        <span class="flex items-center gap-1.5"><span class="text-green-500 text-lg">✓</span> Secure & private</span>
+      <div class="flex flex-wrap gap-6 text-sm text-slate-400">
+        <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> No credit card</span>
+        <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> 3 free reports</span>
+        <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> Any bank, any format</span>
+        <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> Results in 30 seconds</span>
+        <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> Telegram bot included on Pro</span>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Social Proof Bar -->
+<section class="bg-slate-900 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-wrap justify-center gap-8 sm:gap-16 text-center">
+      {% for stat, label in [("30 sec","Average Analysis Time"),("100%","Automated — Zero Manual Work"),("Any Bank","Chase, BofA, Wells Fargo & more"),("Free SSL","Secure & Encrypted")] %}
+      <div>
+        <div class="text-2xl font-black text-white">{{ stat }}</div>
+        <div class="text-slate-400 text-sm mt-1">{{ label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
 <!-- Mock Report Preview -->
-<section class="bg-slate-900 py-16">
+<section class="bg-slate-800 py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-10">
-      <p class="text-slate-400 text-sm font-medium uppercase tracking-widest mb-2">What you get</p>
-      <h2 class="text-3xl font-bold text-white">A complete financial picture in seconds</h2>
+      <p class="text-slate-400 text-sm font-medium uppercase tracking-widest mb-2">Sample Output</p>
+      <h2 class="text-3xl font-bold text-white">What your report looks like</h2>
     </div>
-
-    <!-- Fake report card -->
-    <div class="max-w-4xl mx-auto bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
-      <!-- Report header -->
+    <div class="max-w-4xl mx-auto bg-slate-900 rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
       <div class="bg-slate-700/50 px-6 py-4 flex items-center justify-between border-b border-slate-600">
         <div>
           <div class="font-semibold text-white">John D. — Chase Bank</div>
-          <div class="text-slate-400 text-sm">Jan 2024 – Mar 2024 &middot; 3 months</div>
+          <div class="text-slate-400 text-sm">Jan 2025 – Mar 2025 &middot; 3 months analyzed</div>
         </div>
         <div class="flex gap-2">
           <span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-3 py-1 rounded-lg text-sm font-semibold">RISK: MEDIUM</span>
           <span class="bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-sm font-bold">REVIEW</span>
         </div>
       </div>
-
-      <!-- Metrics row -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-700">
-        {% for label, val, color in [
-          ("Avg Monthly Deposits", "$8,450", "text-sky-400"),
-          ("Avg Daily Balance", "$3,210", "text-emerald-400"),
-          ("NSF Count", "4", "text-red-400"),
-          ("MCA Loans", "Detected", "text-orange-400")
-        ] %}
-        <div class="bg-slate-800 px-4 py-4">
+        {% for label, val, color in [("Avg Monthly Deposits","$8,450","text-sky-400"),("Avg Daily Balance","$3,210","text-emerald-400"),("NSF Events","4","text-red-400"),("MCA Loans","Detected","text-orange-400")] %}
+        <div class="bg-slate-900 px-4 py-4">
           <div class="text-slate-500 text-xs uppercase tracking-wide mb-1">{{ label }}</div>
           <div class="text-xl font-bold {{ color }}">{{ val }}</div>
         </div>
         {% endfor %}
       </div>
-
-      <!-- AI Summary -->
-      <div class="px-6 py-4 border-b border-slate-700">
+      <div class="px-6 py-4 border-b border-slate-700/50">
         <div class="text-xs text-sky-400 uppercase tracking-widest mb-1">AI Lender Summary</div>
-        <p class="text-slate-300 text-sm leading-relaxed">
-          Account shows consistent payroll deposits averaging $8,450/month with irregular spending patterns.
-          4 NSF events in 3 months and 1 active MCA repayment detected (~$185/day) warrant additional review
-          before approval. Declining balance trend in March requires explanation.
-        </p>
+        <p class="text-slate-300 text-sm leading-relaxed">Account shows consistent payroll deposits averaging $8,450/month. 4 NSF events and 1 active MCA repayment (~$185/day) detected. Declining balance trend in March warrants additional review before approval.</p>
       </div>
-
-      <!-- Mini bar chart (CSS only) -->
-      <div class="px-6 py-4">
-        <div class="text-xs text-slate-500 uppercase tracking-widest mb-3">Monthly Cash Flow</div>
-        <div class="flex items-end gap-4">
-          {% for month, dep, wid in [("Jan", 85, 72), ("Feb", 91, 68), ("Mar", 79, 88)] %}
-          <div class="flex-1">
-            <div class="flex gap-1 items-end mb-1">
-              <div class="flex-1 bg-sky-500/30 rounded-sm" style="height: {{ dep * 0.6 }}px"></div>
-              <div class="flex-1 bg-red-500/30 rounded-sm" style="height: {{ wid * 0.6 }}px"></div>
-            </div>
-            <div class="text-xs text-slate-500 text-center">{{ month }}</div>
+      <div class="px-6 py-4 flex items-center gap-4 flex-wrap">
+        <div class="flex gap-4 text-xs text-slate-500">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-2 bg-sky-400 rounded-sm inline-block"></span>Deposits</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-2 bg-rose-400 rounded-sm inline-block"></span>Withdrawals</span>
+        </div>
+        <div class="flex-1 flex gap-3 items-end h-12">
+          {% for d, w in [(85,72),(91,68),(79,88)] %}
+          <div class="flex gap-0.5 items-end flex-1">
+            <div class="flex-1 bg-sky-400/40 rounded-t-sm" style="height:{{ d * 0.5 }}px"></div>
+            <div class="flex-1 bg-rose-400/40 rounded-t-sm" style="height:{{ w * 0.5 }}px"></div>
           </div>
           {% endfor %}
-          <div class="text-xs text-slate-600 flex flex-col gap-1">
-            <span class="flex items-center gap-1"><span class="w-2 h-2 bg-sky-500/60 rounded-sm"></span>Deposits</span>
-            <span class="flex items-center gap-1"><span class="w-2 h-2 bg-red-500/60 rounded-sm"></span>Withdrawals</span>
-          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- How it works -->
-<section id="how-it-works" class="py-20 bg-white">
+<!-- Telegram Feature Banner -->
+<section class="bg-gradient-to-r from-sky-600 to-indigo-700 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-white">
+        <div class="text-sky-200 text-sm font-semibold uppercase tracking-widest mb-2">Pro Plan Feature</div>
+        <h2 class="text-2xl sm:text-3xl font-black mb-2">Analyze via Telegram — Without Opening a Browser</h2>
+        <p class="text-sky-100 text-lg max-w-xl">
+          Send up to 4 bank statement PDFs directly to our Telegram bot. Get the full analysis report sent back to you instantly — wherever you are.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-4 text-sm text-sky-200">
+          <span>✓ Send PDFs from your phone</span>
+          <span>✓ Get instant report in chat</span>
+          <span>✓ Up to 4 statements at once</span>
+          <span>✓ Full analysis, no browser needed</span>
+        </div>
+      </div>
+      <div class="bg-white/10 backdrop-blur rounded-2xl p-6 text-white min-w-[280px] border border-white/20">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-sky-400 rounded-full flex items-center justify-center text-xl">✈️</div>
+          <div>
+            <div class="font-bold">@StatementScrubBot</div>
+            <div class="text-sky-200 text-xs">Telegram Bot</div>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="bg-white/10 rounded-lg p-2.5">📎 <span class="text-sky-100">statement_jan.pdf</span></div>
+          <div class="bg-sky-500/30 rounded-lg p-2.5 text-right">📊 Analyzing 1 statement...</div>
+          <div class="bg-sky-500/30 rounded-lg p-2.5 text-right text-xs leading-relaxed">✅ <strong>Chase Bank — John D.</strong><br/>Deposits: $8,450/mo | NSFs: 4<br/>MCA: Detected | Risk: MEDIUM<br/>→ Full report: statementscrub.com</div>
+        </div>
+        <a href="/auth/register" class="mt-4 block w-full bg-white text-sky-700 font-bold py-2.5 rounded-xl text-center hover:bg-sky-50 transition text-sm">
+          Get Pro Access →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-20 bg-white" id="how-it-works">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-14">
-      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">Simple Process</p>
-      <h2 class="text-4xl font-bold text-slate-900">Three steps to a full report</h2>
+      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">Simple 3-Step Process</p>
+      <h2 class="text-4xl font-bold text-slate-900">How bank statement analysis works</h2>
+      <p class="text-slate-500 mt-3 max-w-2xl mx-auto">No software to install. No training required. Upload a PDF and get a professional analysis instantly.</p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
       {% for num, title, desc, icon in [
-        ("01", "Upload PDF", "Drag & drop any bank statement PDF — Chase, Wells Fargo, BofA, credit unions, any format.", "📄"),
-        ("02", "AI Analyzes", "AI extracts every transaction, calculates averages, detects MCA loans, NSFs, and risk flags.", "🤖"),
-        ("03", "Get Your Report", "Receive a complete lender-ready report with risk score, income verification, and approval recommendation.", "📊")
+        ("01","Upload Any Bank Statement","Drag and drop any bank statement PDF. Works with Chase, Wells Fargo, Bank of America, credit unions, and every major US bank. Supports statements up to 20MB.","📄"),
+        ("02","AI Analyzes Every Transaction","Our AI reads every transaction, calculates monthly averages, identifies income sources, detects MCA loan repayments, flags NSFs and overdrafts, and scores risk.","🤖"),
+        ("03","Get Your Lender-Ready Report","Receive a complete report with income verification, cash flow trends, red flags, a 0–100 risk score, and a plain-English APPROVE / REVIEW / DECLINE recommendation.","📊")
       ] %}
-      <div class="relative">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg shadow-sky-200">
-            {{ num }}
-          </div>
-          <div>
-            <div class="text-2xl mb-2">{{ icon }}</div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">{{ title }}</h3>
-            <p class="text-slate-500 leading-relaxed">{{ desc }}</p>
-          </div>
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg flex-shrink-0 mt-1">{{ num }}</div>
+        <div>
+          <div class="text-3xl mb-3">{{ icon }}</div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">{{ title }}</h3>
+          <p class="text-slate-500 leading-relaxed">{{ desc }}</p>
         </div>
       </div>
       {% endfor %}
@@ -145,20 +193,24 @@
 </section>
 
 <!-- Features -->
-<section class="py-20 bg-slate-50">
+<section class="py-20 bg-slate-50" id="features">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-14">
-      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">What We Detect</p>
-      <h2 class="text-4xl font-bold text-slate-900">Everything a lender needs to know</h2>
+      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">Full Feature Set</p>
+      <h2 class="text-4xl font-bold text-slate-900">Everything a lender needs to make a decision</h2>
+      <p class="text-slate-500 mt-3">StatementScrub detects what other tools miss — MCA loans, gambling activity, declining trends.</p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {% for icon, title, desc, color in [
-        ("💰", "Income Verification", "Identifies payroll, ACH credits, and recurring deposits. Calculates average monthly income with consistency scoring.", "sky"),
-        ("🚩", "NSF & Overdraft Detection", "Counts every bounced check, NSF fee, and overdraft event. Lenders see total fees paid and frequency.", "red"),
-        ("⚡", "MCA Loan Detection", "Spots merchant cash advance repayments that other tools miss — merchant name, estimated daily payment, and pattern.", "orange"),
-        ("📈", "Cash Flow Trends", "Month-by-month breakdown showing whether the account is growing, stable, or declining.", "green"),
-        ("🎰", "Gambling Flags", "Detects casino, betting, and gambling transactions that many lenders require disclosed.", "purple"),
-        ("⚖️", "Risk Score & Recommendation", "0–100 risk score with APPROVE / REVIEW / DECLINE recommendation and a plain-English lender summary.", "indigo")
+      {% for icon, title, desc in [
+        ("💰","Income Verification","Identifies payroll direct deposits, ACH credits, and recurring income. Calculates true average monthly income with consistency scoring — consistent, irregular, declining, or increasing."),
+        ("🚩","NSF & Overdraft Detection","Counts every NSF event, bounced check, and overdraft fee across the full statement period. Total overdraft fees calculated automatically."),
+        ("⚡","MCA Loan Detection","Detects merchant cash advance repayments that most tools miss completely. Shows merchant name, estimated daily payment amount, and pattern details."),
+        ("📈","Monthly Cash Flow Breakdown","Full month-by-month table showing total deposits, total withdrawals, ending balance, and NSF count for every month in the statement."),
+        ("🎰","Gambling Transaction Flags","Automatically detects casino visits, online betting, lottery purchases, and gambling apps — total amount flagged for lender review."),
+        ("📱","Telegram Bot (Pro)","Send PDFs to our Telegram bot from anywhere. Get the full analysis report sent directly back to your chat — no browser, no login needed."),
+        ("⚖️","Risk Score 0–100","Every analysis gets a precise risk score from 0 (no risk) to 100 (extreme risk), plus a risk level: Low, Medium, High, or Critical."),
+        ("🏦","Works With Every Bank","Chase, Wells Fargo, Bank of America, Citibank, US Bank, TD Bank, PNC, Capital One, credit unions, community banks — any PDF format."),
+        ("📋","Lender-Ready Report","Plain-English summary written for underwriters. APPROVE / REVIEW / DECLINE recommendation included with every analysis.")
       ] %}
       <div class="bg-white rounded-xl p-6 border border-slate-200 card-hover shadow-sm">
         <div class="text-3xl mb-3">{{ icon }}</div>
@@ -170,23 +222,25 @@
   </div>
 </section>
 
-<!-- Who it's for -->
-<section class="py-20 bg-white">
+<!-- Who It's For -->
+<section class="py-20 bg-white" id="who-its-for">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-14">
-      <h2 class="text-4xl font-bold text-slate-900">Built for financial professionals</h2>
+      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">Built For</p>
+      <h2 class="text-4xl font-bold text-slate-900">Financial professionals who review bank statements daily</h2>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {% for icon, title, desc in [
-        ("🏠", "Mortgage Brokers", "Verify borrower income and flag risk factors before submitting to underwriting."),
-        ("💼", "Business Lenders", "Assess cash flow health and MCA exposure for small business loan applications."),
-        ("📋", "Bookkeepers", "Reconcile accounts and categorize transactions for clients in minutes, not hours."),
-        ("🔍", "Underwriters", "Get a second opinion on any statement — standardized format, instant delivery.")
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for icon, title, desc, kw in [
+        ("🏠","Mortgage Brokers","Verify borrower income and spot red flags before submitting to underwriting. Save hours per application.","Income verification for mortgage applications"),
+        ("💼","Business Lenders","Assess cash flow health, detect MCA stacking, and evaluate repayment capacity for small business loans.","Bank statement analysis for business loans"),
+        ("📋","Bookkeepers","Categorize transactions and reconcile accounts for clients in minutes instead of hours.","Automated bookkeeping bank statement tool"),
+        ("🔍","Underwriters","Standardized second opinion on any statement. Same format every time, instantly.","Bank statement review tool for underwriters"),
       ] %}
-      <div class="text-center p-6">
-        <div class="text-4xl mb-3">{{ icon }}</div>
-        <h3 class="font-semibold text-slate-900 mb-2">{{ title }}</h3>
-        <p class="text-slate-400 text-sm">{{ desc }}</p>
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 card-hover">
+        <div class="text-4xl mb-4">{{ icon }}</div>
+        <h3 class="font-bold text-slate-900 mb-2">{{ title }}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-3">{{ desc }}</p>
+        <span class="text-xs text-sky-600 bg-sky-50 px-2 py-1 rounded-full">{{ kw }}</span>
       </div>
       {% endfor %}
     </div>
@@ -194,61 +248,136 @@
 </section>
 
 <!-- Pricing -->
-<section class="py-20 bg-gradient-to-b from-slate-50 to-white">
+<section class="py-20 bg-gradient-to-b from-slate-50 to-white" id="pricing">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-14">
-      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">Pricing</p>
+      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">Transparent Pricing</p>
       <h2 class="text-4xl font-bold text-slate-900">Start free. Scale as you grow.</h2>
-      <p class="text-slate-500 mt-3">No contracts. Cancel anytime. Upgrade in seconds.</p>
+      <p class="text-slate-500 mt-3">No contracts. Cancel anytime. Upgrade or downgrade instantly.</p>
     </div>
-
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      {% for plan, price, period, limit, features, highlight in [
-        ("Free", "$0", "", "3 total reports", ["3 reports total", "Full AI analysis", "All detection features", "Email support"], false),
-        ("Starter", "$49", "/mo", "50 reports/month", ["50 reports/month", "Full AI analysis", "CSV export", "Priority support", "Report history"], true),
-        ("Pro", "$149", "/mo", "Unlimited reports", ["Unlimited reports", "Full AI analysis", "PDF + CSV export", "API access", "Dedicated support", "White-label reports"], false)
+      {% for plan, price, period, limit, features, hot, color in [
+        ("Free", "$0", "", "3 total reports", [
+          "3 reports total — forever free",
+          "Full AI analysis on every report",
+          "Income verification",
+          "NSF & overdraft detection",
+          "MCA loan detection",
+          "Risk score & recommendation",
+          "Email support"
+        ], false, "slate"),
+        ("Starter", "$49", "/mo", "50 reports per month", [
+          "50 reports per month",
+          "Full AI analysis on every report",
+          "Income verification",
+          "NSF & overdraft detection",
+          "MCA loan detection",
+          "Risk score & recommendation",
+          "Report history & dashboard",
+          "Priority email support"
+        ], true, "sky"),
+        ("Pro", "$149", "/mo", "Unlimited reports", [
+          "Unlimited reports per month",
+          "Full AI analysis on every report",
+          "Income verification",
+          "NSF & overdraft detection",
+          "MCA loan detection",
+          "Risk score & recommendation",
+          "📱 Telegram bot — analyze via chat",
+          "Send up to 4 PDFs at once via bot",
+          "Report history & dashboard",
+          "Dedicated support",
+          "API access"
+        ], false, "indigo")
       ] %}
       <div class="relative bg-white rounded-2xl border-2 p-8 card-hover
-        {% if highlight %}border-sky-500 shadow-xl shadow-sky-100{% else %}border-slate-200 shadow-sm{% endif %}">
-        {% if highlight %}
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs px-4 py-1.5 rounded-full font-bold tracking-wide">
-          MOST POPULAR
-        </div>
+        {{ 'border-sky-500 shadow-xl shadow-sky-100' if hot else 'border-slate-200 shadow-sm' }}">
+        {% if hot %}
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs px-4 py-1.5 rounded-full font-bold tracking-wide shadow">MOST POPULAR</div>
         {% endif %}
-        <div class="text-slate-500 font-semibold mb-2">{{ plan }}</div>
+        {% if plan == 'Pro' %}
+        <div class="absolute -top-4 right-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow">📱 TELEGRAM BOT</div>
+        {% endif %}
+        <div class="text-slate-500 font-semibold mb-1">{{ plan }}</div>
         <div class="flex items-end gap-1 mb-1">
           <span class="text-4xl font-black text-slate-900">{{ price }}</span>
-          <span class="text-slate-400 mb-1">{{ period }}</span>
+          <span class="text-slate-400 mb-1.5">{{ period }}</span>
         </div>
-        <div class="text-sm text-slate-400 mb-6">{{ limit }}</div>
-        <ul class="space-y-3 mb-8">
+        <div class="text-sm text-slate-400 mb-6 font-medium">{{ limit }}</div>
+        <ul class="space-y-2.5 mb-8">
           {% for f in features %}
-          <li class="flex items-center gap-2 text-sm text-slate-600">
-            <span class="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
+          <li class="flex items-start gap-2 text-sm {{ 'text-slate-900 font-semibold' if '📱' in f else 'text-slate-600' }}">
+            <span class="w-5 h-5 {{ 'bg-indigo-100 text-indigo-600' if '📱' in f else 'bg-green-100 text-green-600' }} rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">✓</span>
             {{ f }}
           </li>
           {% endfor %}
         </ul>
         <a href="/auth/register" class="block w-full py-3 rounded-xl text-center font-bold transition
-          {% if highlight %}bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:opacity-90 shadow-lg shadow-sky-200
-          {% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
-          Get Started
+          {{ 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:opacity-90 shadow-lg shadow-sky-200' if hot else ('bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:opacity-90 shadow-lg' if plan == 'Pro' else 'bg-slate-100 text-slate-700 hover:bg-slate-200') }}">
+          {{ 'Start Free' if plan == 'Free' else 'Get ' + plan }}
         </a>
       </div>
       {% endfor %}
     </div>
+
+    <div class="mt-10 text-center">
+      <p class="text-slate-400 text-sm">All plans include: Secure file handling &middot; SQLite/PostgreSQL storage &middot; SSL encryption &middot; 99.9% uptime</p>
+    </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- FAQ — SEO Goldmine -->
+<section class="py-20 bg-white" id="faq">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">FAQ</p>
+      <h2 class="text-4xl font-bold text-slate-900">Common questions</h2>
+    </div>
+    <div class="space-y-4" itemscope itemtype="https://schema.org/FAQPage">
+
+      {% for q, a in [
+        ("What is a bank statement analyzer?", "A bank statement analyzer is a tool that reads bank statement PDFs and automatically extracts transaction data, calculates income and expenses, detects risk factors like NSFs and MCA loans, and generates a structured report. StatementScrub uses AI to do this in under 30 seconds."),
+        ("Which banks does StatementScrub support?", "StatementScrub works with bank statements from any US bank including Chase, Wells Fargo, Bank of America, Citibank, US Bank, TD Bank, PNC, Capital One, Discover, and all credit unions. If it's a PDF, we can analyze it."),
+        ("How does MCA loan detection work?", "StatementScrub scans every transaction for patterns associated with merchant cash advance repayments — daily fixed deductions, merchant names common in MCA lending, and ACH debit patterns. It flags each detected MCA with the merchant name and estimated daily payment."),
+        ("What does NSF mean and why does it matter?", "NSF stands for Non-Sufficient Funds — when a check or payment bounces because the account doesn't have enough money. Lenders count NSF events as a key risk indicator. StatementScrub counts every NSF event and calculates total overdraft fees paid."),
+        ("Can I analyze bank statements on my phone via Telegram?", "Yes — Pro plan users get access to our Telegram bot. Simply send a PDF bank statement to @StatementScrubBot on Telegram and receive the full analysis report directly in your chat. You can send up to 4 statements at once."),
+        ("How accurate is the AI analysis?", "StatementScrub uses a large language model trained on financial data with a detailed structured schema. Accuracy depends on PDF quality — clean digital PDFs (not scanned images) produce the most accurate results. A confidence score is included in every report."),
+        ("Is my data secure?", "Yes. All uploads are encrypted in transit (SSL/TLS). PDFs are processed and then deleted from our servers. We never store raw bank statement files permanently. Your analysis reports are stored securely and only accessible by your account."),
+        ("How is StatementScrub different from Moneythumb?", "StatementScrub is fully AI-powered with no manual template matching. It works on any bank statement format without needing bank-specific templates. It also includes a Telegram bot for mobile analysis and is significantly more affordable."),
+        ("Can I use StatementScrub for mortgage underwriting?", "Yes. StatementScrub is designed for mortgage brokers and underwriters. It calculates average monthly income, identifies all income sources, and flags risk factors relevant to mortgage qualification decisions. The APPROVE/REVIEW/DECLINE recommendation is tailored for lending decisions."),
+        ("What happens after my free reports are used?", "After your 3 free reports, you can upgrade to Starter ($49/mo) for 50 reports per month or Pro ($149/mo) for unlimited reports plus Telegram bot access. There's no auto-charge — you choose when to upgrade.")
+      ] %}
+      <div class="border border-slate-200 rounded-xl overflow-hidden" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <details class="group">
+          <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition" itemprop="name">
+            <span class="font-semibold text-slate-900">{{ q }}</span>
+            <span class="text-slate-400 group-open:rotate-180 transition-transform text-lg flex-shrink-0 ml-4">↓</span>
+          </summary>
+          <div class="px-5 pb-5 text-slate-600 leading-relaxed" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text">{{ a }}</div>
+          </div>
+        </details>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
 <section class="py-20 bg-gradient-to-r from-sky-600 to-indigo-700">
   <div class="max-w-3xl mx-auto px-4 text-center">
-    <h2 class="text-4xl font-black text-white mb-4">Ready to analyze your first statement?</h2>
-    <p class="text-sky-200 text-lg mb-8">Start free. No credit card. 3 full reports on us.</p>
-    <a href="/auth/register" class="bg-white text-sky-700 px-10 py-4 rounded-xl font-black text-lg hover:bg-sky-50 transition shadow-2xl inline-block">
-      Start Analyzing Free →
-    </a>
+    <h2 class="text-4xl font-black text-white mb-4">Start analyzing bank statements for free</h2>
+    <p class="text-sky-200 text-lg mb-8">3 full reports. No credit card. No time limit on free plan.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="/auth/register" class="bg-white text-sky-700 px-10 py-4 rounded-xl font-black text-lg hover:bg-sky-50 transition shadow-2xl">
+        Get Started Free →
+      </a>
+      <a href="#faq" class="border-2 border-white/30 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition">
+        Read FAQ
+      </a>
+    </div>
+    <p class="text-sky-300 text-sm mt-6">Trusted by mortgage brokers, business lenders, and bookkeepers</p>
   </div>
 </section>
-
 {% endblock %}

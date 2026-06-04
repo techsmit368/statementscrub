@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Dashboard — StatementIQ{% endblock %}
+{% block title %}Dashboard — StatementScrub{% endblock %}
 
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
@@ -26,6 +26,50 @@
   {% if error %}
   <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm flex items-start gap-2">
     <span class="text-red-400 mt-0.5">⚠️</span> {{ error }}
+  </div>
+  {% endif %}
+
+  <!-- Telegram Connect Panel (Starter + Pro) -->
+  {% if user.plan in ['starter', 'pro'] %}
+  <div class="mb-6 bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 rounded-2xl p-5">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-sky-400 to-indigo-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0">✈️</div>
+        <div>
+          <div class="font-bold text-slate-900">Telegram Bot</div>
+          <div class="text-sm text-slate-500">Analyze statements from Telegram — send a PDF, get instant report</div>
+        </div>
+      </div>
+      {% if user.telegram_id %}
+        <div class="flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-semibold">
+          <span>✅</span> Connected
+        </div>
+      {% elif user.telegram_token %}
+        <div class="flex items-center gap-3 flex-wrap">
+          <div class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm">
+            <span class="text-slate-400">Send to bot: </span>
+            <code class="font-bold text-sky-700">/link {{ user.telegram_token }}</code>
+          </div>
+          <a href="https://t.me/StatementScrubBot" target="_blank"
+            class="bg-sky-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-sky-600 transition">
+            Open Bot →
+          </a>
+        </div>
+      {% else %}
+        <form method="POST" action="/telegram/connect">
+          <button type="submit" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition">
+            Connect Telegram
+          </button>
+        </form>
+      {% endif %}
+    </div>
+    {% if user.telegram_token and not user.telegram_id %}
+    <div class="mt-3 text-xs text-slate-500 bg-white/60 rounded-lg px-3 py-2">
+      1. Open <strong>@StatementScrubBot</strong> on Telegram &nbsp;
+      2. Send <code class="bg-slate-100 px-1 rounded">/link {{ user.telegram_token }}</code> &nbsp;
+      3. Done — send any PDF to get instant analysis
+    </div>
+    {% endif %}
   </div>
   {% endif %}
 

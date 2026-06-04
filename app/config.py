@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str = ""
     upload_dir: str = "uploads"
     max_upload_size_mb: int = 20
+    telegram_bot_token: str = ""
 
     class Config:
         env_file = ".env"

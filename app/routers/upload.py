@@ -1,5 +1,6 @@
 import uuid
 import os
+import secrets
 from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -140,4 +141,16 @@ async def delete_analysis(
     if analysis:
         db.delete(analysis)
         db.commit()
+    return RedirectResponse("/dashboard", status_code=302)
+
+
+@router.post("/telegram/connect")
+async def telegram_connect(
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    if not user.telegram_token:
+        user.telegram_token = secrets.token_hex(8)
+        db.commit()
+        db.refresh(user)
     return RedirectResponse("/dashboard", status_code=302)
