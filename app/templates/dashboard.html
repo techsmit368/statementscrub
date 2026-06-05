@@ -4,107 +4,165 @@
 {% block content %}
 <div class="animate-fade-in">
 
-  <!-- Page header -->
-  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap">
-    <div>
-      <h1 style="font-size:1.5rem;font-weight:900;color:#0f172a;margin-bottom:3px">Merchants</h1>
-      <p style="font-size:13px;color:#64748b">
-        {{ merchants | length }} merchant{{ "s" if merchants | length != 1 }}
-        · {{ user.analyses_used }} total statement{{ "s" if user.analyses_used != 1 }} analyzed
-        · <span style="font-weight:700;
-            {% if user.plan == 'pro' %}color:#7c3aed
-            {% elif user.plan == 'starter' %}color:#0284c7
-            {% else %}color:#64748b{% endif %}">{{ user.plan | title }} plan</span>
-      </p>
-    </div>
-    <label for="fileInputGlobal" style="cursor:pointer">
-      <div class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;font-size:13px;border-radius:10px">
-        <svg style="width:15px;height:15px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-        Analyze Statement
-      </div>
-    </label>
-  </div>
-
-  {% if error %}
-  <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:8px">
-    <svg style="width:16px;height:16px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-    {{ error }}
-  </div>
-  {% endif %}
-
-  <!-- Upload form (hidden, triggered by button) -->
+  <!-- Hidden upload form -->
   <form method="POST" action="/upload" enctype="multipart/form-data" id="globalUploadForm" style="display:none">
     <input type="file" name="file" id="fileInputGlobal" accept=".pdf" onchange="submitGlobalUpload(this)"/>
   </form>
 
   <!-- Upload loading overlay -->
-  <div id="uploadingOverlay" style="display:none;background:#fff;border:1px solid #e0e7ff;border-radius:16px;padding:40px;text-align:center;margin-bottom:24px">
+  <div id="uploadingOverlay" style="display:none;background:#fff;border:1px solid #e0e7ff;border-radius:16px;padding:44px;text-align:center;margin-bottom:24px;box-shadow:0 4px 20px rgba(99,102,241,0.08)">
     <div class="spinner" style="margin:0 auto 16px"></div>
-    <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">Analyzing statement…</div>
-    <div style="font-size:13px;color:#64748b">AI is reading transactions, calculating income, and detecting risk flags</div>
-    <div style="display:flex;justify-content:center;gap:20px;margin-top:14px" id="upload-steps">
-      <span class="upload-step active" style="font-size:12px;color:#6366f1;display:flex;align-items:center;gap:5px;font-weight:600">
-        <span style="width:7px;height:7px;background:#6366f1;border-radius:50%;animation:spin 1s linear infinite;display:inline-block"></span>Reading PDF
+    <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px">Analyzing statement…</div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:18px">AI is reading transactions, calculating income, and detecting risk</div>
+    <div style="display:inline-flex;gap:24px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 20px">
+      {% for step in ["Reading PDF","AI Analysis","Building Report"] %}
+      <span class="upload-step" style="font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:6px;font-weight:600">
+        <span style="width:8px;height:8px;background:#e2e8f0;border-radius:50%;display:inline-block;flex-shrink:0"></span>{{ step }}
       </span>
-      <span class="upload-step" style="font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:5px">
-        <span style="width:7px;height:7px;background:#e2e8f0;border-radius:50%;display:inline-block"></span>AI Analysis
-      </span>
-      <span class="upload-step" style="font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:5px">
-        <span style="width:7px;height:7px;background:#e2e8f0;border-radius:50%;display:inline-block"></span>Building Report
-      </span>
+      {% endfor %}
     </div>
   </div>
 
-  <!-- Telegram connect (compact) -->
-  {% if user.plan in ['starter', 'pro'] and not user.telegram_id %}
-  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:20px">✈️</span>
-      <div>
-        <div style="font-size:13px;font-weight:700;color:#0c4a6e">Connect Telegram Bot</div>
-        <div style="font-size:12px;color:#0369a1">Send PDFs directly via Telegram and get instant reports</div>
-      </div>
-    </div>
-    {% if user.telegram_token %}
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <code style="font-size:12px;background:#fff;border:1px solid #bae6fd;padding:5px 10px;border-radius:8px;color:#0284c7">/link {{ user.telegram_token }}</code>
-      <a href="https://t.me/StatementScrubBot" target="_blank" style="font-size:12px;font-weight:700;background:#0ea5e9;color:#fff;padding:6px 14px;border-radius:8px;text-decoration:none">Open Bot →</a>
-    </div>
-    {% else %}
-    <form method="POST" action="/telegram/connect">
-      <button type="submit" style="font-size:12px;font-weight:700;background:#0ea5e9;color:#fff;padding:7px 16px;border-radius:8px;border:none;cursor:pointer">Connect →</button>
-    </form>
-    {% endif %}
+  {% if error %}
+  <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:8px">
+    <svg style="width:15px;height:15px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+    {{ error }}
   </div>
   {% endif %}
 
   <!-- Credits warning -->
   {% if user.plan == 'free' and user.analyses_used >= 3 %}
-  <div style="background:#fefce8;border:1px solid #fef08a;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px">
-    <div style="font-size:13px;color:#713f12;font-weight:600">⚠ You've used all 3 free analyses.</div>
-    <a href="/credits" style="font-size:12px;font-weight:700;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:7px 16px;border-radius:8px;text-decoration:none">Buy Credits →</a>
+  <div style="background:linear-gradient(135deg,#fefce8,#fff7ed);border:1px solid #fde68a;border-radius:14px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:18px">⚠️</span>
+      <div style="font-size:13px;font-weight:600;color:#92400e">You've used all 3 free analyses. Buy credits to continue analyzing.</div>
+    </div>
+    <a href="/credits" style="font-size:12px;font-weight:800;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:8px 18px;border-radius:10px;text-decoration:none;white-space:nowrap;box-shadow:0 2px 10px rgba(99,102,241,0.25)">Buy Credits →</a>
   </div>
   {% endif %}
 
-  <!-- MERCHANT CARDS -->
+  <!-- Telegram connect (compact) -->
+  {% if user.plan in ['starter', 'pro'] and not user.telegram_id %}
+  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:14px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:18px">✈️</span>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#0c4a6e">Connect Telegram — analyze via chat</div>
+        <div style="font-size:11px;color:#0369a1">Send a PDF to @StatementScrubBot and get an instant report</div>
+      </div>
+    </div>
+    {% if user.telegram_token %}
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <code style="font-size:12px;background:#fff;border:1px solid #bae6fd;padding:4px 10px;border-radius:8px;color:#0284c7;font-weight:700">/link {{ user.telegram_token }}</code>
+      <a href="https://t.me/StatementScrubBot" target="_blank" style="font-size:12px;font-weight:700;background:#0ea5e9;color:#fff;padding:6px 14px;border-radius:8px;text-decoration:none">Open Bot →</a>
+    </div>
+    {% else %}
+    <form method="POST" action="/telegram/connect">
+      <button type="submit" style="font-size:12px;font-weight:700;background:#0ea5e9;color:#fff;padding:7px 16px;border-radius:8px;border:none;cursor:pointer;font-family:inherit">Connect →</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
+
   {% if merchants %}
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
-    {% for m in merchants %}
-    {% set risk = m.latest_risk %}
-    <a href="/merchant/{{ m.name | urlencode }}" style="text-decoration:none;display:block" class="card card-hover animate-slide-up" style="padding:20px">
-      <div style="padding:20px">
-        <!-- Top row -->
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:16px;font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">
-              {{ m.name }}
-            </div>
-            <div style="font-size:12px;color:#64748b">
-              {{ m.bank or "Multiple banks" }}
-              {% if m.count > 1 %} · {{ m.count }} statements{% endif %}
-            </div>
+
+  <!-- ── STATS ROW ── -->
+  {% set total_statements = merchants | sum(attribute='count') %}
+  {% set total_nsf = merchants | sum(attribute='total_nsf') %}
+  {% set high_risk = merchants | selectattr('latest_risk', 'in', ['high','critical']) | list | length %}
+  {% set avg_income_all = (merchants | sum(attribute='avg_deposits')) / (merchants | length) %}
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px">
+    {% for icon, label, value, col, bg in [
+      ("🏢","Total Merchants", merchants | length | string, "#6366f1","#f5f3ff"),
+      ("📄","Statements Analyzed", total_statements | string, "#0284c7","#f0f9ff"),
+      ("💰","Avg Monthly Income","$" ~ "{:,.0f}".format(avg_income_all), "#15803d","#f0fdf4"),
+      ("⚡","NSF Events Total", total_nsf | string, "#dc2626" if total_nsf > 0 else "#15803d", "#fef2f2" if total_nsf > 0 else "#f0fdf4"),
+    ] %}
+    <div class="card" style="padding:18px 20px;display:flex;align-items:center;gap:14px">
+      <div style="width:42px;height:42px;background:{{ bg }};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">{{ icon }}</div>
+      <div>
+        <div style="font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">{{ label }}</div>
+        <div style="font-size:1.4rem;font-weight:900;color:{{ col }};line-height:1">{{ value }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ── TABLE HEADER + SEARCH ROW ── -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px;flex-wrap:wrap">
+    <div>
+      <span style="font-size:13px;font-weight:800;color:#0f172a">{{ merchants | length }} Merchant{{ 's' if merchants | length != 1 }}</span>
+      <span style="font-size:13px;color:#94a3b8"> · sorted by latest activity</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="position:relative">
+        <svg style="width:15px;height:15px;color:#94a3b8;position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/></svg>
+        <input type="text" id="merchantSearch" placeholder="Search merchants…"
+          oninput="filterMerchants(this.value)"
+          style="padding:8px 12px 8px 32px;font-size:13px;border:1px solid #e2e8f0;border-radius:10px;outline:none;font-family:inherit;color:#0f172a;background:#fff;width:200px;transition:border-color 0.15s"
+          onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.1)'"
+          onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
+      </div>
+      <label for="fileInputGlobal" style="cursor:pointer">
+        <div class="btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;font-size:13px;white-space:nowrap">
+          <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+          New Analysis
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- ── MERCHANT TABLE ── -->
+  <div class="card" style="overflow:hidden">
+    <!-- Table header -->
+    <div style="display:grid;grid-template-columns:2fr 1.2fr 1fr 0.7fr 0.9fr 1fr 100px;gap:0;padding:10px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0">
+      {% for col in ["Merchant / Business","Bank","Avg Income /mo","NSF","Risk","Last Analyzed",""] %}
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.06em{% if loop.index > 2 %};text-align:center{% endif %}{% if loop.last %};text-align:right{% endif %}">{{ col }}</div>
+      {% endfor %}
+    </div>
+
+    <!-- Table rows -->
+    <div id="merchantTable">
+      {% for m in merchants %}
+      {% set risk = m.latest_risk %}
+      <div class="merchant-row" data-name="{{ m.name | lower }}"
+        style="display:grid;grid-template-columns:2fr 1.2fr 1fr 0.7fr 0.9fr 1fr 100px;gap:0;padding:14px 20px;border-bottom:1px solid #f1f5f9;align-items:center;transition:background 0.15s;cursor:pointer"
+        onclick="window.location='/merchant/{{ m.name | urlencode }}'"
+        onmouseover="this.style.background='#fafbff'"
+        onmouseout="this.style.background='transparent'">
+
+        <!-- Merchant name -->
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <div style="width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;
+            {% if risk == 'low' %}background:linear-gradient(135deg,#22c55e,#16a34a)
+            {% elif risk == 'medium' %}background:linear-gradient(135deg,#f59e0b,#d97706)
+            {% elif risk == 'high' %}background:linear-gradient(135deg,#f97316,#ea580c)
+            {% else %}background:linear-gradient(135deg,#ef4444,#dc2626){% endif %}">
+            {{ m.name[0].upper() }}
           </div>
-          <span style="padding:4px 10px;border-radius:100px;font-size:11px;font-weight:800;flex-shrink:0;
+          <div style="min-width:0">
+            <div style="font-size:14px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ m.name }}</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:1px">{{ m.count }} statement{{ 's' if m.count != 1 }}</div>
+          </div>
+        </div>
+
+        <!-- Bank -->
+        <div style="font-size:13px;color:#475569;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px">{{ m.bank or '—' }}</div>
+
+        <!-- Avg income -->
+        <div style="text-align:center">
+          <div style="font-size:14px;font-weight:800;color:#0f172a">${{ "{:,.0f}".format(m.avg_deposits) }}</div>
+        </div>
+
+        <!-- NSF -->
+        <div style="text-align:center">
+          <span style="font-size:14px;font-weight:800;{% if m.total_nsf > 0 %}color:#dc2626{% else %}color:#16a34a{% endif %}">{{ m.total_nsf }}</span>
+        </div>
+
+        <!-- Risk badge -->
+        <div style="text-align:center">
+          <span style="display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:800;
             {% if risk == 'low' %}background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0
             {% elif risk == 'medium' %}background:#fefce8;color:#a16207;border:1px solid #fef08a
             {% elif risk == 'high' %}background:#fff7ed;color:#c2410c;border:1px solid #fed7aa
@@ -113,52 +171,92 @@
           </span>
         </div>
 
-        <!-- Metrics row -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
-          <div style="background:#f8fafc;border-radius:10px;padding:10px 10px 8px">
-            <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em">Avg Income</div>
-            <div style="font-size:15px;font-weight:800;color:#0f172a">${{ "{:,.0f}".format(m.avg_deposits) }}<span style="font-size:10px;font-weight:500;color:#94a3b8">/mo</span></div>
-          </div>
-          <div style="background:#f8fafc;border-radius:10px;padding:10px 10px 8px">
-            <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em">NSF Total</div>
-            <div style="font-size:15px;font-weight:800;{% if m.total_nsf > 0 %}color:#dc2626{% else %}color:#16a34a{% endif %}">{{ m.total_nsf }}</div>
-          </div>
-          <div style="background:#f8fafc;border-radius:10px;padding:10px 10px 8px">
-            <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em">Statements</div>
-            <div style="font-size:15px;font-weight:800;color:#0f172a">{{ m.count }}</div>
-          </div>
+        <!-- Last analyzed -->
+        <div style="text-align:center;font-size:12px;color:#64748b;font-weight:500">
+          {{ m.latest_date.strftime('%b %d, %Y') if m.latest_date else '—' }}
         </div>
 
-        <!-- Footer row -->
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div style="font-size:11px;color:#94a3b8">
-            Last analyzed {{ m.latest_date.strftime('%b %d, %Y') if m.latest_date else '—' }}
-          </div>
-          <div style="font-size:12px;font-weight:700;color:#6366f1;display:flex;align-items:center;gap:4px">
-            View Details
-            <svg style="width:13px;height:13px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-          </div>
+        <!-- Action -->
+        <div style="text-align:right">
+          <a href="/merchant/{{ m.name | urlencode }}"
+            style="font-size:12px;font-weight:700;color:#6366f1;background:#f5f3ff;padding:6px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:all 0.15s;display:inline-flex;align-items:center;gap:3px"
+            onclick="event.stopPropagation()"
+            onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#f5f3ff'">
+            Open <svg style="width:12px;height:12px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+          </a>
         </div>
       </div>
-    </a>
-    {% endfor %}
+      {% endfor %}
+
+      <!-- No search results row (hidden by default) -->
+      <div id="noSearchResults" style="display:none;padding:40px;text-align:center;color:#94a3b8;font-size:14px">
+        No merchants match your search.
+      </div>
+    </div>
   </div>
 
   {% else %}
-  <!-- Empty state -->
-  <div style="text-align:center;padding:80px 24px">
-    <div style="width:64px;height:64px;background:#f1f5f9;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
-      <svg style="width:32px;height:32px;color:#94a3b8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-    </div>
-    <div style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:6px">No statements yet</div>
-    <div style="font-size:14px;color:#64748b;margin-bottom:24px">Upload a bank statement PDF to create your first merchant record.</div>
-    <label for="fileInputGlobal" style="cursor:pointer">
-      <div class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;padding:12px 24px;font-size:14px">
-        <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-        Analyze First Statement
+
+  <!-- ── EMPTY STATE ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+
+    <!-- Upload prompt -->
+    <div class="card" style="padding:40px 32px;text-align:center;border-style:dashed;border-color:#c7d2fe;background:linear-gradient(135deg,#fafbff,#f5f3ff)">
+      <div style="width:60px;height:60px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 4px 16px rgba(99,102,241,0.3)">
+        <svg style="width:28px;height:28px;color:#fff" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
       </div>
-    </label>
+      <div style="font-size:17px;font-weight:900;color:#0f172a;margin-bottom:6px">Analyze your first statement</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:24px;line-height:1.6">Upload a bank statement PDF — we'll extract income, NSF events, MCA loans, and give you a risk score in under 30 seconds.</div>
+      <label for="fileInputGlobal" style="cursor:pointer">
+        <div class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;padding:12px 24px;font-size:14px">
+          <svg style="width:15px;height:15px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+          Upload Statement
+        </div>
+      </label>
+    </div>
+
+    <!-- What you'll get -->
+    <div class="card" style="padding:28px">
+      <div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:18px">What you get from every analysis</div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        {% for icon, title, desc in [
+          ("💰","Income Verification","Average monthly deposits, consistency score, and income sources broken down"),
+          ("⚡","NSF & Overdraft Detection","Every bounced check and overdraft counted and risk-scored"),
+          ("🔎","MCA Loan Detection","Merchant Cash Advance repayments flagged automatically"),
+          ("✅","Approval Recommendation","APPROVE / MANUAL REVIEW / DECLINE with AI explanation"),
+        ] %}
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <span style="font-size:16px;flex-shrink:0;margin-top:1px">{{ icon }}</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:1px">{{ title }}</div>
+            <div style="font-size:12px;color:#64748b;line-height:1.5">{{ desc }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
   </div>
+
+  <!-- How it works strip -->
+  <div class="card" style="padding:24px 28px;background:linear-gradient(135deg,#0f172a,#1e3a5f)">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative">
+      {% for step, title, desc in [
+        ("1","Upload PDF","Drop any bank statement — all major US banks supported"),
+        ("2","AI Analyzes","Reads every transaction, scores risk, and detects red flags"),
+        ("3","Review Report","Full breakdown plus a clear lending recommendation"),
+      ] %}
+      <div style="padding:0 24px{% if loop.first %};padding-left:0{% endif %}{% if loop.last %};padding-right:0{% endif %}{% if not loop.last %};border-right:1px solid rgba(255,255,255,0.07){% endif %};display:flex;align-items:flex-start;gap:14px">
+        <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900;flex-shrink:0">{{ step }}</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px">{{ title }}</div>
+          <div style="font-size:12px;color:#64748b;line-height:1.5">{{ desc }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
   {% endif %}
 
 </div>
@@ -167,21 +265,34 @@
 function submitGlobalUpload(input) {
   if (!input.files || !input.files[0]) return;
   document.getElementById('uploadingOverlay').style.display = 'block';
-  // Step animation
-  setTimeout(() => {
-    const steps = document.querySelectorAll('.upload-step');
-    steps[0].style.color = '#16a34a'; steps[0].querySelector('span').style.background = '#16a34a';
-    steps[1].style.color = '#6366f1'; steps[1].querySelector('span').style.background = '#6366f1';
-    steps[1].querySelector('span').style.animation = 'spin 1s linear infinite';
-  }, 3500);
-  setTimeout(() => {
-    const steps = document.querySelectorAll('.upload-step');
-    steps[1].style.color = '#16a34a'; steps[1].querySelector('span').style.background = '#16a34a';
-    steps[1].querySelector('span').style.animation = '';
-    steps[2].style.color = '#6366f1'; steps[2].querySelector('span').style.background = '#6366f1';
-    steps[2].querySelector('span').style.animation = 'spin 1s linear infinite';
-  }, 9000);
+  const steps = document.querySelectorAll('.upload-step');
+
+  function activateStep(i, color) {
+    steps[i].style.color = color;
+    steps[i].querySelector('span').style.background = color;
+    if (color === '#6366f1') steps[i].querySelector('span').style.animation = 'spin 0.8s linear infinite';
+    else steps[i].querySelector('span').style.animation = '';
+  }
+
+  activateStep(0, '#6366f1');
+  setTimeout(() => { activateStep(0, '#16a34a'); activateStep(1, '#6366f1'); }, 3500);
+  setTimeout(() => { activateStep(1, '#16a34a'); activateStep(2, '#6366f1'); }, 9000);
+
   document.getElementById('globalUploadForm').submit();
+}
+
+function filterMerchants(q) {
+  const rows = document.querySelectorAll('.merchant-row');
+  const lower = q.toLowerCase().trim();
+  let visible = 0;
+  rows.forEach(row => {
+    const name = row.dataset.name || '';
+    const show = !lower || name.includes(lower);
+    row.style.display = show ? 'grid' : 'none';
+    if (show) visible++;
+  });
+  const noResults = document.getElementById('noSearchResults');
+  if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
 }
 </script>
 {% endblock %}
