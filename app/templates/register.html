@@ -1,65 +1,211 @@
 {% extends "base.html" %}
-{% block title %}Create Account — StatementScrub{% endblock %}
+{% block title %}Create Free Account — StatementScrub{% endblock %}
 
 {% block content %}
-<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
-  <div class="w-full max-w-md">
+<div style="min-height:calc(100vh - 64px);display:grid;grid-template-columns:1fr 1fr;">
 
-    <div class="text-center mb-8">
-      <div class="w-14 h-14 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-sky-200">
-        <span class="text-white font-black text-xl">S</span>
+  <!-- LEFT: Value panel -->
+  <div style="background:linear-gradient(145deg,#1e1b4b 0%,#1e3a5f 55%,#0c4a6e 100%);padding:60px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none"></div>
+    <div style="position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.25) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:-60px;left:-40px;width:300px;height:300px;background:radial-gradient(circle,rgba(14,165,233,0.15) 0%,transparent 70%);pointer-events:none"></div>
+
+    <div class="relative">
+      <a href="/" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:48px">
+        <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(99,102,241,0.4)">
+          <span style="color:#fff;font-weight:900;font-size:15px">S</span>
+        </div>
+        <span style="font-size:1.2rem;font-weight:900;color:#fff">Statement<span style="background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Scrub</span></span>
+      </a>
+
+      <h2 style="font-size:1.9rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:10px">
+        3 free analyses.<br/>No card. No catch.
+      </h2>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin-bottom:32px">Sign up in 30 seconds and run your first bank statement analysis immediately.</p>
+
+      <!-- Mini report preview -->
+      <div style="background:#0f172a;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:28px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03)">
+          <div style="display:flex;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#ef4444;opacity:0.7"></span><span style="width:9px;height:9px;border-radius:50%;background:#f59e0b;opacity:0.7"></span><span style="width:9px;height:9px;border-radius:50%;background:#22c55e;opacity:0.7"></span></div>
+          <span style="font-size:10px;color:#475569;font-family:monospace">analysis_report.pdf</span>
+          <span style="font-size:10px;color:#4ade80;font-weight:700">✓ Done</span>
+        </div>
+        <div style="padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div>
+              <div style="font-size:11px;color:#475569">Account Holder</div>
+              <div style="font-size:13px;font-weight:700;color:#f1f5f9">James R. Mitchell</div>
+            </div>
+            <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);padding:3px 10px;border-radius:100px;font-size:10px;font-weight:800">LOW RISK</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+            {% for label, val, col in [("Avg Income","$9,840","#4ade80"),("Avg Spend","$7,120","#94a3b8"),("NSF Count","0","#4ade80")] %}
+            <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:7px 9px">
+              <div style="font-size:9px;color:#475569;margin-bottom:2px">{{ label }}</div>
+              <div style="font-size:12px;font-weight:700;color:{{ col }}">{{ val }}</div>
+            </div>
+            {% endfor %}
+          </div>
+          <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:10px;padding:9px 12px;font-size:11px;font-weight:700;color:#4ade80">✓ AI Recommendation: APPROVE</div>
+        </div>
       </div>
-      <h1 class="text-2xl font-bold text-slate-900">Start for free</h1>
-      <p class="text-slate-400 mt-1">3 full reports — no credit card required</p>
+
+      <!-- What you get list -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        {% for text in ["Full AI risk report on every statement","Income verification + NSF + MCA detection","Instant results — under 30 seconds","Credits never expire"] %}
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8">
+          <svg style="width:15px;height:15px;color:#4ade80;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+          {{ text }}
+        </div>
+        {% endfor %}
+      </div>
     </div>
 
-    {% if error %}
-    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-2">
-      <span>⚠️</span> {{ error }}
+    <!-- Bottom trust bar -->
+    <div class="relative" style="margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg style="width:16px;height:16px;color:#475569;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        <span style="font-size:12px;color:#475569">Your data is encrypted and deleted within 24 hours.</span>
+      </div>
     </div>
-    {% endif %}
+  </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-      <form method="POST" action="/auth/register" class="space-y-4">
+  <!-- RIGHT: Form -->
+  <div style="display:flex;align-items:center;justify-content:center;padding:48px 56px;background:#fafbfc;">
+    <div style="width:100%;max-width:400px">
+
+      <div style="margin-bottom:32px">
+        <h1 style="font-size:1.75rem;font-weight:900;color:#0f172a;margin-bottom:6px">Create your account</h1>
+        <p style="color:#64748b;font-size:15px">Start analyzing statements in under 2 minutes.</p>
+      </div>
+
+      {% if error %}
+      <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:8px">
+        <svg style="width:16px;height:16px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/auth/register" style="display:flex;flex-direction:column;gap:16px">
+
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+          <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:7px">Full name</label>
           <input type="text" name="full_name" placeholder="Jane Smith"
-            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition" />
+            style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
+            onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
+            onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
         </div>
+
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Work Email</label>
+          <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:7px">Work email</label>
           <input type="email" name="email" required placeholder="you@company.com"
-            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition" />
+            style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
+            onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
+            onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
         </div>
+
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
-          <input type="password" name="password" required minlength="8" placeholder="8+ characters"
-            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition" />
+          <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:7px">Password</label>
+          <div style="position:relative">
+            <input type="password" name="password" id="reg-pw" required minlength="8" placeholder="8+ characters"
+              oninput="checkStrength(this.value)"
+              style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 44px 12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
+              onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
+              onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
+            <button type="button" onclick="togglePw('reg-pw','reg-eye')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8;padding:0">
+              <svg id="reg-eye" style="width:18px;height:18px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
+          </div>
+          <!-- Strength bar -->
+          <div id="strength-wrap" style="display:none;margin-top:8px">
+            <div style="display:flex;gap:4px;margin-bottom:5px">
+              <div id="s1" style="flex:1;height:3px;border-radius:2px;background:#e2e8f0;transition:background 0.2s"></div>
+              <div id="s2" style="flex:1;height:3px;border-radius:2px;background:#e2e8f0;transition:background 0.2s"></div>
+              <div id="s3" style="flex:1;height:3px;border-radius:2px;background:#e2e8f0;transition:background 0.2s"></div>
+              <div id="s4" style="flex:1;height:3px;border-radius:2px;background:#e2e8f0;transition:background 0.2s"></div>
+            </div>
+            <span id="strength-label" style="font-size:11px;color:#94a3b8;font-weight:500"></span>
+          </div>
         </div>
-        <button type="submit"
-          class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-3 rounded-xl font-bold hover:opacity-90 transition shadow-md shadow-sky-200 mt-2">
+
+        <button type="submit" class="btn-primary" style="width:100%;padding:14px;font-size:15px;border:none;cursor:pointer;border-radius:12px;margin-top:4px">
           Create Free Account →
         </button>
+
       </form>
-    </div>
 
-    <!-- Value props under form -->
-    <div class="mt-6 grid grid-cols-3 gap-3 text-center text-xs text-slate-400">
-      <div class="flex flex-col items-center gap-1">
-        <span class="text-green-500 text-lg">✓</span> No credit card
+      <!-- Trust pills -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px">
+        {% for icon, text in [("🚫","No credit card"),("📄","3 free reports"),("⚡","Instant results")] %}
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:9px 8px;text-align:center">
+          <div style="font-size:14px;margin-bottom:3px">{{ icon }}</div>
+          <div style="font-size:11px;color:#64748b;font-weight:500">{{ text }}</div>
+        </div>
+        {% endfor %}
       </div>
-      <div class="flex flex-col items-center gap-1">
-        <span class="text-green-500 text-lg">✓</span> 3 free reports
-      </div>
-      <div class="flex flex-col items-center gap-1">
-        <span class="text-green-500 text-lg">✓</span> Instant results
-      </div>
-    </div>
 
-    <p class="text-center text-sm text-slate-400 mt-6">
-      Already have an account?
-      <a href="/auth/login" class="text-sky-600 font-semibold hover:underline">Sign in</a>
-    </p>
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0">
+        <div style="flex:1;height:1px;background:#e2e8f0"></div>
+        <span style="font-size:12px;color:#94a3b8;font-weight:500">Have an account?</span>
+        <div style="flex:1;height:1px;background:#e2e8f0"></div>
+      </div>
+
+      <a href="/auth/login" style="display:block;width:100%;text-align:center;padding:13px;border:2px solid #e0e7ff;border-radius:12px;font-size:14px;font-weight:700;color:#6366f1;text-decoration:none;background:#fafbff;transition:all 0.2s"
+        onmouseover="this.style.background='#f5f3ff';this.style.borderColor='#c7d2fe'"
+        onmouseout="this.style.background='#fafbff';this.style.borderColor='#e0e7ff'">
+        Sign in
+      </a>
+
+      <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:20px;line-height:1.5">
+        By creating an account you agree to our <a href="/terms" style="color:#94a3b8">Terms</a> and <a href="/privacy" style="color:#94a3b8">Privacy Policy</a>
+      </p>
+    </div>
   </div>
 </div>
+
+<style>
+  @media (max-width: 768px) {
+    div[style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    div[style*="padding:60px 56px"] {
+      display: none !important;
+    }
+    div[style*="padding:48px 56px"] {
+      padding: 40px 24px !important;
+    }
+  }
+</style>
+
+<script>
+function togglePw(inputId, eyeId) {
+  const input = document.getElementById(inputId);
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function checkStrength(val) {
+  const wrap = document.getElementById('strength-wrap');
+  const label = document.getElementById('strength-label');
+  if (!val) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+
+  let score = 0;
+  if (val.length >= 8)  score++;
+  if (val.length >= 12) score++;
+  if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+
+  const colors = ['#ef4444','#f59e0b','#eab308','#22c55e'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  const textColors = ['#dc2626','#d97706','#ca8a04','#16a34a'];
+
+  for (let i = 1; i <= 4; i++) {
+    const bar = document.getElementById('s' + i);
+    bar.style.background = i <= score ? colors[score - 1] : '#e2e8f0';
+  }
+  label.textContent = labels[score - 1] || '';
+  label.style.color = textColors[score - 1] || '#94a3b8';
+}
+</script>
+
 {% endblock %}

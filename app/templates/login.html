@@ -1,47 +1,158 @@
 {% extends "base.html" %}
-{% block title %}Login — StatementScrub{% endblock %}
+{% block title %}Sign In — StatementScrub{% endblock %}
 
 {% block content %}
-<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
-  <div class="w-full max-w-md">
+<div style="min-height:calc(100vh - 64px);display:grid;grid-template-columns:1fr 1fr;">
 
-    <div class="text-center mb-8">
-      <div class="w-14 h-14 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-sky-200">
-        <span class="text-white font-black text-xl">S</span>
+  <!-- LEFT: Value panel -->
+  <div style="background:linear-gradient(145deg,#1e1b4b 0%,#1e3a5f 55%,#0c4a6e 100%);padding:60px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+    <!-- background grid -->
+    <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none"></div>
+    <!-- glow -->
+    <div style="position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.25) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:-60px;left:-40px;width:300px;height:300px;background:radial-gradient(circle,rgba(14,165,233,0.15) 0%,transparent 70%);pointer-events:none"></div>
+
+    <div class="relative">
+      <!-- Logo -->
+      <a href="/" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:60px">
+        <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(99,102,241,0.4)">
+          <span style="color:#fff;font-weight:900;font-size:15px">S</span>
+        </div>
+        <span style="font-size:1.2rem;font-weight:900;color:#fff">Statement<span style="background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Scrub</span></span>
+      </a>
+
+      <h2 style="font-size:2rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:12px">
+        Your fastest path to<br/>smarter lending decisions.
+      </h2>
+      <p style="color:#94a3b8;font-size:15px;line-height:1.6;margin-bottom:36px">Upload a bank statement. Get a full risk report in under 30 seconds.</p>
+
+      <!-- Bullets -->
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:44px">
+        {% for icon_path, icon_col, text in [
+          ("M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0","#4ade80","Income verification, NSF flags & balance trends"),
+          ("M13 10V3L4 14h7v7l9-11h-7z","#818cf8","MCA loan detection — automatic on every statement"),
+          ("M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0","#38bdf8","AI recommendation: APPROVE / REVIEW / DECLINE"),
+        ] %}
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+            <svg style="width:17px;height:17px;color:{{ icon_col }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="{{ icon_path }}"/></svg>
+          </div>
+          <span style="font-size:14px;color:#cbd5e1;font-weight:500">{{ text }}</span>
+        </div>
+        {% endfor %}
       </div>
-      <h1 class="text-2xl font-bold text-slate-900">Welcome back</h1>
-      <p class="text-slate-400 mt-1">Sign in to your StatementScrub account</p>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px">
+        {% for num, label in [("12,400+","Reports Generated"),("<30s","Avg Processing"),("$0.49","Per Analysis")] %}
+        <div style="text-align:center">
+          <div style="font-size:1.25rem;font-weight:900;background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">{{ num }}</div>
+          <div style="font-size:10px;color:#64748b;margin-top:3px;font-weight:500">{{ label }}</div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
 
-    {% if error %}
-    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-2">
-      <span>⚠️</span> {{ error }}
-    </div>
-    {% endif %}
-
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-      <form method="POST" action="/auth/login" class="space-y-4">
+    <!-- Testimonial at bottom -->
+    <div class="relative" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px">
+      <div style="font-size:13px;color:#94a3b8;line-height:1.6;margin-bottom:14px">"StatementScrub cut our underwriting time from 45 minutes to under 2. The NSF detection has saved us from three bad loans this quarter."</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff">MT</div>
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
+          <div style="font-size:13px;font-weight:700;color:#e2e8f0">Michael Torres</div>
+          <div style="font-size:11px;color:#64748b">Senior Loan Officer, Regional Bank</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:1px">{% for _ in range(5) %}<svg style="width:12px;height:12px;color:#f59e0b" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Form -->
+  <div style="display:flex;align-items:center;justify-content:center;padding:48px 56px;background:#fafbfc;">
+    <div style="width:100%;max-width:400px">
+
+      <div style="margin-bottom:36px">
+        <h1 style="font-size:1.75rem;font-weight:900;color:#0f172a;margin-bottom:6px">Welcome back</h1>
+        <p style="color:#64748b;font-size:15px">Sign in to your account to continue.</p>
+      </div>
+
+      {% if error %}
+      <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:8px">
+        <svg style="width:16px;height:16px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/auth/login" style="display:flex;flex-direction:column;gap:18px">
+
+        <div>
+          <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:7px">Email address</label>
           <input type="email" name="email" required placeholder="you@company.com"
-            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition" />
+            style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
+            onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
+            onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
         </div>
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
-          <input type="password" name="password" required placeholder="••••••••"
-            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition" />
-        </div>
-        <button type="submit"
-          class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white py-3 rounded-xl font-bold hover:opacity-90 transition shadow-md shadow-sky-200 mt-2">
-          Sign In
-        </button>
-      </form>
-    </div>
 
-    <p class="text-center text-sm text-slate-400 mt-6">
-      Don't have an account?
-      <a href="/auth/register" class="text-sky-600 font-semibold hover:underline">Create one free</a>
-    </p>
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+            <label style="font-size:13px;font-weight:700;color:#374151">Password</label>
+            <a href="/contact" style="font-size:12px;color:#6366f1;text-decoration:none;font-weight:600">Forgot password?</a>
+          </div>
+          <div style="position:relative">
+            <input type="password" name="password" id="pw-input" required placeholder="••••••••"
+              style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 44px 12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
+              onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
+              onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
+            <button type="button" onclick="togglePw('pw-input','pw-eye')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8;padding:0">
+              <svg id="pw-eye" style="width:18px;height:18px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%;padding:14px;font-size:15px;border:none;cursor:pointer;border-radius:12px;margin-top:4px">
+          Sign In →
+        </button>
+
+      </form>
+
+      <div style="display:flex;align-items:center;gap:12px;margin:24px 0">
+        <div style="flex:1;height:1px;background:#e2e8f0"></div>
+        <span style="font-size:12px;color:#94a3b8;font-weight:500">New here?</span>
+        <div style="flex:1;height:1px;background:#e2e8f0"></div>
+      </div>
+
+      <a href="/auth/register" style="display:block;width:100%;text-align:center;padding:13px;border:2px solid #e0e7ff;border-radius:12px;font-size:14px;font-weight:700;color:#6366f1;text-decoration:none;background:#fafbff;transition:all 0.2s"
+        onmouseover="this.style.background='#f5f3ff';this.style.borderColor='#c7d2fe'"
+        onmouseout="this.style.background='#fafbff';this.style.borderColor='#e0e7ff'">
+        Create a free account
+      </a>
+
+      <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:24px;line-height:1.5">
+        By signing in you agree to our <a href="/terms" style="color:#94a3b8">Terms</a> and <a href="/privacy" style="color:#94a3b8">Privacy Policy</a>
+      </p>
+    </div>
   </div>
 </div>
+
+<style>
+  @media (max-width: 768px) {
+    div[style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    div[style*="padding:60px 56px"] {
+      display: none !important;
+    }
+    div[style*="padding:48px 56px"] {
+      padding: 40px 24px !important;
+    }
+  }
+</style>
+
+<script>
+function togglePw(inputId, eyeId) {
+  const input = document.getElementById(inputId);
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+</script>
+
 {% endblock %}
