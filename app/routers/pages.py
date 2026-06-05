@@ -7,6 +7,11 @@ router = APIRouter(tags=["pages"])
 templates = Jinja2Templates(directory="app/templates")
 
 
+@router.get("/compare", response_class=HTMLResponse)
+async def compare(request: Request):
+    return templates.TemplateResponse("compare.html", {"request": request, "user": None})
+
+
 @router.get("/credits", response_class=HTMLResponse)
 async def credits(request: Request):
     return templates.TemplateResponse("credits.html", {"request": request, "user": None})

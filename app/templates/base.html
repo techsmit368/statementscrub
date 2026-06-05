@@ -10,67 +10,132 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd',
-              500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e'
-            }
+            brand: { 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' }
           },
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          animation: {
+            'glow': 'glow 3s ease-in-out infinite alternate',
+            'float': 'float 6s ease-in-out infinite',
+            'counter': 'counter 0.5s ease forwards',
+          }
         }
       }
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <style>
+    * { -webkit-font-smoothing: antialiased; }
     body { font-family: 'Inter', sans-serif; }
+
     .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .gradient-text-warm {
       background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .glass { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); }
-    .card-hover { transition: all 0.2s; }
-    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-    @keyframes pulse-ring { 0%{transform:scale(0.8);opacity:1} 100%{transform:scale(2);opacity:0} }
-    @keyframes slide-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-    .animate-slide-up { animation: slide-up 0.4s ease forwards; }
-    .spinner { width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#0ea5e9;border-radius:50%;animation:spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
-</head>
-<body class="bg-slate-50 min-h-screen flex flex-col text-slate-800">
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      box-shadow: 0 0 20px rgba(14,165,233,0.3), 0 4px 15px rgba(99,102,241,0.2);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.9; box-shadow: 0 0 30px rgba(14,165,233,0.5), 0 8px 25px rgba(99,102,241,0.3); transform: translateY(-1px); }
 
-  <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-lg flex items-center justify-center">
-          <span class="text-white font-bold text-sm">S</span>
+    .card-glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: all 0.25s;
+    }
+    .card-glass:hover { background: rgba(255,255,255,0.07); border-color: rgba(14,165,233,0.3); transform: translateY(-2px); }
+
+    .card-hover { transition: all 0.25s; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+
+    .dot-pattern {
+      background-image: radial-gradient(circle, rgba(148,163,184,0.15) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .dot-pattern-dark {
+      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .glow-orb {
+      background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%);
+      filter: blur(60px);
+    }
+    .glow-orb-purple {
+      background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+
+    @keyframes glow { from { opacity: 0.5; } to { opacity: 1; } }
+    @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+    @keyframes slide-up { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+    .animate-slide-up { animation: slide-up 0.5s ease forwards; }
+    .animate-fade-in { animation: fade-in 0.4s ease forwards; }
+    .spinner { width:36px;height:36px;border:3px solid rgba(14,165,233,0.2);border-top-color:#0ea5e9;border-radius:50%;animation:spin 0.8s linear infinite; }
+
+    .shimmer-btn {
+      background: linear-gradient(90deg, #0ea5e9, #6366f1, #0ea5e9);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+
+    .nav-blur { background: rgba(2,8,23,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    .badge-glow { box-shadow: 0 0 12px rgba(14,165,233,0.4); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #020817; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body class="bg-[#020817] min-h-screen flex flex-col text-slate-100">
+
+  <!-- Navigation -->
+  <nav class="nav-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 group-hover:shadow-sky-500/40 transition-shadow">
+          <span class="text-white font-black text-sm">S</span>
         </div>
-        <span class="text-xl font-bold text-slate-900">Statement<span class="gradient-text">Scrub</span></span>
+        <span class="text-lg font-bold text-white tracking-tight">Statement<span class="gradient-text-warm">Scrub</span></span>
       </a>
-      <div class="hidden md:flex items-center gap-5 text-sm font-medium text-slate-600">
-        <a href="/how-it-works" class="hover:text-sky-600 transition-colors">How It Works</a>
-        <a href="/testimonials" class="hover:text-sky-600 transition-colors">Testimonials</a>
-        <a href="/credits" class="hover:text-sky-600 transition-colors">Buy Credits</a>
-        <a href="/blog" class="hover:text-sky-600 transition-colors">Blog</a>
-        <a href="/contact" class="hover:text-sky-600 transition-colors">Contact</a>
+
+      <!-- Nav Links -->
+      <div class="hidden md:flex items-center gap-1">
+        {% for label, href in [("How It Works","/how-it-works"),("Compare","/compare"),("Credits","/credits"),("Blog","/blog"),("Contact","/contact")] %}
+        <a href="{{ href }}" class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">{{ label }}</a>
+        {% endfor %}
       </div>
-      <div class="flex items-center gap-3 text-sm">
+
+      <!-- Auth -->
+      <div class="flex items-center gap-2.5">
         {% if user %}
-          <span class="hidden sm:block text-slate-400 text-xs">{{ user.email }}</span>
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide
-            {% if user.plan == 'pro' %}bg-violet-100 text-violet-700
-            {% elif user.plan == 'starter' %}bg-sky-100 text-sky-700
-            {% else %}bg-slate-100 text-slate-600{% endif %}">
+          <span class="hidden sm:block text-slate-500 text-xs">{{ user.email }}</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide border
+            {% if user.plan == 'pro' %}bg-violet-500/10 text-violet-400 border-violet-500/20
+            {% elif user.plan == 'starter' %}bg-sky-500/10 text-sky-400 border-sky-500/20
+            {% else %}bg-white/5 text-slate-400 border-white/10{% endif %}">
             {{ user.plan | upper }}
           </span>
-          <a href="/dashboard" class="text-slate-600 hover:text-sky-600 font-medium transition-colors">Dashboard</a>
-          <a href="/auth/logout" class="text-slate-400 hover:text-red-500 transition-colors">Logout</a>
+          <a href="/dashboard" class="text-sm font-medium text-slate-300 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5">Dashboard</a>
+          <a href="/auth/logout" class="text-sm text-slate-500 hover:text-red-400 transition-colors">Logout</a>
         {% else %}
-          <a href="/demo" class="hidden sm:inline-block text-slate-600 hover:text-sky-600 font-medium transition-colors">Book Demo</a>
-          <a href="/auth/login" class="text-slate-600 hover:text-sky-600 font-medium transition-colors">Login</a>
-          <a href="/auth/register" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-sm">
-            Get Started Free
+          <a href="/auth/login" class="text-sm font-medium text-slate-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5">Login</a>
+          <a href="/auth/register" class="btn-primary text-white text-sm font-semibold px-4 py-2 rounded-xl">
+            Start Free →
           </a>
         {% endif %}
       </div>
@@ -81,56 +146,60 @@
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 pt-10 pb-6">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
-        <!-- Brand -->
-        <div class="col-span-2 sm:col-span-1">
-          <a href="/" class="flex items-center gap-2 mb-3">
-            <div class="w-7 h-7 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-lg flex items-center justify-center">
-              <span class="text-white font-bold text-xs">S</span>
+  <!-- Footer -->
+  <footer class="border-t border-white/5 bg-[#020817]">
+    <div class="max-w-7xl mx-auto px-4 pt-14 pb-8">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-8 mb-12">
+        <div class="col-span-2">
+          <a href="/" class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center">
+              <span class="text-white font-black text-sm">S</span>
             </div>
-            <span class="font-bold text-slate-800">Statement<span class="gradient-text">Scrub</span></span>
+            <span class="font-bold text-white">Statement<span class="gradient-text-warm">Scrub</span></span>
           </a>
-          <p class="text-slate-400 text-xs leading-relaxed">AI-powered bank statement analysis for lenders, brokers, and underwriters.</p>
+          <p class="text-slate-500 text-sm leading-relaxed max-w-xs">AI-powered bank statement analysis for lenders, mortgage brokers, and underwriters. Results in 30 seconds.</p>
+          <div class="flex items-center gap-2 mt-5">
+            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <span class="text-xs text-slate-500">All systems operational</span>
+          </div>
         </div>
-        <!-- Product -->
         <div>
-          <div class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-3">Product</div>
-          <ul class="space-y-2 text-sm text-slate-500">
-            <li><a href="/how-it-works" class="hover:text-sky-600 transition-colors">How It Works</a></li>
-            <li><a href="/#pricing" class="hover:text-sky-600 transition-colors">Pricing</a></li>
-            <li><a href="/credits" class="hover:text-sky-600 transition-colors">Buy Credits</a></li>
-            <li><a href="/blog" class="hover:text-sky-600 transition-colors">Blog</a></li>
-            <li><a href="/demo" class="hover:text-sky-600 transition-colors">Book a Demo</a></li>
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Product</div>
+          <ul class="space-y-2.5 text-sm text-slate-500">
+            <li><a href="/how-it-works" class="hover:text-sky-400 transition-colors">How It Works</a></li>
+            <li><a href="/#pricing" class="hover:text-sky-400 transition-colors">Pricing</a></li>
+            <li><a href="/credits" class="hover:text-sky-400 transition-colors">Buy Credits</a></li>
+            <li><a href="/compare" class="hover:text-sky-400 transition-colors">Compare</a></li>
           </ul>
         </div>
-        <!-- Company -->
         <div>
-          <div class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-3">Company</div>
-          <ul class="space-y-2 text-sm text-slate-500">
-            <li><a href="/testimonials" class="hover:text-sky-600 transition-colors">Testimonials</a></li>
-            <li><a href="/contact" class="hover:text-sky-600 transition-colors">Contact Us</a></li>
-            <li><a href="/auth/register" class="hover:text-sky-600 transition-colors">Get Started Free</a></li>
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Company</div>
+          <ul class="space-y-2.5 text-sm text-slate-500">
+            <li><a href="/blog" class="hover:text-sky-400 transition-colors">Blog</a></li>
+            <li><a href="/testimonials" class="hover:text-sky-400 transition-colors">Testimonials</a></li>
+            <li><a href="/demo" class="hover:text-sky-400 transition-colors">Book Demo</a></li>
+            <li><a href="/contact" class="hover:text-sky-400 transition-colors">Contact</a></li>
           </ul>
         </div>
-        <!-- Legal -->
         <div>
-          <div class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-3">Legal</div>
-          <ul class="space-y-2 text-sm text-slate-500">
-            <li><a href="/terms" class="hover:text-sky-600 transition-colors">Terms of Service</a></li>
-            <li><a href="/privacy" class="hover:text-sky-600 transition-colors">Privacy Policy</a></li>
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Legal</div>
+          <ul class="space-y-2.5 text-sm text-slate-500">
+            <li><a href="/terms" class="hover:text-sky-400 transition-colors">Terms of Service</a></li>
+            <li><a href="/privacy" class="hover:text-sky-400 transition-colors">Privacy Policy</a></li>
           </ul>
+          <div class="mt-6 p-3 bg-white/3 border border-white/6 rounded-xl">
+            <div class="text-xs text-slate-500 leading-relaxed">🔒 SOC 2-level security. PDFs deleted within 24h.</div>
+          </div>
         </div>
       </div>
-      <div class="border-t border-slate-100 pt-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
         <span>© 2025 StatementScrub. All rights reserved.</span>
-        <span class="flex gap-4">
-          <a href="/terms" class="hover:text-sky-600 transition-colors">Terms</a>
-          <a href="/privacy" class="hover:text-sky-600 transition-colors">Privacy</a>
-          <a href="/contact" class="hover:text-sky-600 transition-colors">Contact</a>
-        </span>
-        <span>Not financial advice. For professional use only.</span>
+        <div class="flex gap-5">
+          <a href="/terms" class="hover:text-sky-400 transition-colors">Terms</a>
+          <a href="/privacy" class="hover:text-sky-400 transition-colors">Privacy</a>
+          <a href="/contact" class="hover:text-sky-400 transition-colors">Contact</a>
+        </div>
+        <span class="text-slate-600">Not financial advice. For professional use only.</span>
       </div>
     </div>
   </footer>
