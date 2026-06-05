@@ -18,6 +18,72 @@
   </div>
 </section>
 
+<!-- Competitor Comparison -->
+<section class="py-14 bg-slate-900">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <p class="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-2">Price Comparison</p>
+      <h2 class="text-2xl font-bold text-white">We're cheaper than every major competitor</h2>
+      <p class="text-slate-400 mt-2 text-sm">Same AI analysis. No templates. Significantly lower price.</p>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-700">
+            <th class="text-left text-slate-400 font-semibold pb-3 pr-6">Tool</th>
+            <th class="text-center text-slate-400 font-semibold pb-3 px-4">5 reports</th>
+            <th class="text-center text-slate-400 font-semibold pb-3 px-4">20 reports</th>
+            <th class="text-center text-slate-400 font-semibold pb-3 px-4">60 reports</th>
+            <th class="text-center text-slate-400 font-semibold pb-3 px-4">Unlimited</th>
+            <th class="text-center text-slate-400 font-semibold pb-3 pl-4">Pay per report</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          <tr>
+            <td class="py-4 pr-6 font-semibold text-slate-300">Other Tool A</td>
+            <td class="py-4 px-4 text-center text-red-400">$24.95/mo<br/><span class="text-xs text-slate-500">($4.99/ea)</span></td>
+            <td class="py-4 px-4 text-center text-red-400">$49.95/mo<br/><span class="text-xs text-slate-500">($2.50/ea)</span></td>
+            <td class="py-4 px-4 text-center text-red-400">$99.95/mo<br/><span class="text-xs text-slate-500">($1.67/ea)</span></td>
+            <td class="py-4 px-4 text-center text-slate-500">—</td>
+            <td class="py-4 pl-4 text-center text-red-400">$2–$5/ea</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-6 font-semibold text-slate-300">Other Tool B</td>
+            <td class="py-4 px-4 text-center text-red-400">$39/mo<br/><span class="text-xs text-slate-500">(~$2.44/ea)</span></td>
+            <td class="py-4 px-4 text-center text-red-400">$74/mo<br/><span class="text-xs text-slate-500">(~$1.80/ea)</span></td>
+            <td class="py-4 px-4 text-center text-red-400">$159/mo<br/><span class="text-xs text-slate-500">(~$0.96/ea)</span></td>
+            <td class="py-4 px-4 text-center text-slate-500">—</td>
+            <td class="py-4 pl-4 text-center text-slate-500">—</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-6 font-semibold text-slate-300">Other Tool C</td>
+            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
+            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
+            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
+            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
+            <td class="py-4 pl-4 text-center text-red-400">$2–$5+/ea</td>
+          </tr>
+          <tr class="bg-sky-900/30">
+            <td class="py-4 pr-6">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-gradient-to-br from-sky-500 to-indigo-600 rounded flex items-center justify-center text-white font-bold text-xs">S</div>
+                <span class="font-bold text-white">StatementScrub</span>
+                <span class="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">CHEAPEST</span>
+              </div>
+            </td>
+            <td class="py-4 px-4 text-center text-green-400 font-bold">$14.90 credits<br/><span class="text-xs text-green-300">($1.49/ea)</span></td>
+            <td class="py-4 px-4 text-center text-green-400 font-bold">$27.90 credits<br/><span class="text-xs text-green-300">($1.12/ea)</span></td>
+            <td class="py-4 px-4 text-center text-green-400 font-bold">$54.90 credits<br/><span class="text-xs text-green-300">($1.10/ea)</span></td>
+            <td class="py-4 px-4 text-center text-green-400 font-bold">$149/mo<br/><span class="text-xs text-green-300">(truly unlimited)</span></td>
+            <td class="py-4 pl-4 text-center text-green-400 font-bold">$1.00–$1.49/ea</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-center text-slate-500 text-xs mt-6">Based on publicly available market pricing. Subject to change.</p>
+  </div>
+</section>
+
 <!-- Credit Packs Grid -->
 <section class="pb-20 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -25,12 +91,12 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
       {% for pack, credits, price, per_credit, savings, badge, hot, note in [
-        ("Starter",    10,  29.90,  "$2.99",  "",           "",             false, "Perfect for occasional use"),
-        ("Basic",      25,  59.90,  "$2.40",  "20% off",    "",             false, "Great for trying the platform"),
-        ("Standard",   50,  99.90,  "$2.00",  "33% off",    "POPULAR",      true,  "Ideal for small brokerages"),
-        ("Business",  100, 174.90,  "$1.75",  "42% off",    "",             false, "High-volume mortgage brokers"),
-        ("Growth",    250, 299.90,  "$1.20",  "60% off",    "BEST VALUE",   false, "Teams processing 250+ statements"),
-        ("Scale",     500, 499.90,  "$1.00",  "67% off",    "LOWEST PRICE", false, "Enterprise & large lenders"),
+        ("Starter",    10,  14.90,  "$1.49",  "",              "",              false, "Perfect for occasional use"),
+        ("Basic",      25,  27.90,  "$1.12",  "25% cheaper",   "",              false, "Great for trying the platform"),
+        ("Standard",   50,  54.90,  "$1.10",  "26% cheaper",   "POPULAR",       true,  "Ideal for small brokerages"),
+        ("Business",  100, 104.90,  "$1.05",  "29% cheaper",   "",              false, "High-volume mortgage brokers"),
+        ("Growth",    250, 262.90,  "$1.05",  "37% cheaper",   "BEST VALUE",    false, "Teams processing 250+ statements"),
+        ("Scale",     500, 499.90,  "$1.00",  "40% cheaper",   "LOWEST PRICE",  false, "Enterprise & large lenders"),
       ] %}
       <div class="relative bg-white rounded-2xl border-2 p-7 card-hover shadow-sm
         {{ 'border-sky-500 shadow-xl shadow-sky-100' if hot else 'border-slate-200' }}">
@@ -93,12 +159,12 @@
       <h2 class="text-center text-xl font-bold text-slate-900 mb-8">Price per analysis — the more you buy, the less you pay</h2>
       <div class="space-y-3">
         {% for label, credits, price_per, pct in [
-          ("Starter (10 credits)",  10,  2.99, 100),
-          ("Basic (25 credits)",    25,  2.40, 80),
-          ("Standard (50 credits)", 50,  2.00, 67),
-          ("Business (100 credits)",100, 1.75, 58),
-          ("Growth (250 credits)",  250, 1.20, 40),
-          ("Scale (500 credits)",   500, 1.00, 33),
+          ("Starter (10 credits)",  10,  1.49, 100),
+          ("Basic (25 credits)",    25,  1.12, 75),
+          ("Standard (50 credits)", 50,  1.10, 74),
+          ("Business (100 credits)",100, 1.05, 70),
+          ("Growth (250 credits)",  250, 1.05, 70),
+          ("Scale (500 credits)",   500, 1.00, 67),
         ] %}
         <div class="flex items-center gap-4">
           <div class="w-44 text-sm text-slate-600 text-right flex-shrink-0">{{ label }}</div>
@@ -115,7 +181,7 @@
         </div>
         {% endfor %}
       </div>
-      <p class="text-center text-slate-400 text-sm mt-4">Scale pack saves you 67% vs Starter pricing — as low as $1.00/report</p>
+      <p class="text-center text-slate-400 text-sm mt-4">Every pack is cheaper than MoneyThumb's best price of $1.67/report — Scale pack as low as $1.00/report</p>
     </div>
 
   </div>
