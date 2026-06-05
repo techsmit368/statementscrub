@@ -25,12 +25,12 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
       {% for pack, credits, price, per_credit, savings, badge, hot, note in [
-        ("Starter",    10,  24.90,  "$2.49",  "",      "",                false, "Perfect for occasional use"),
-        ("Basic",      25,  49.90,  "$2.00",  "20% off","",               false, "Great for trying the platform"),
-        ("Standard",   50,  79.90,  "$1.60",  "36% off","POPULAR",        true,  "Ideal for small brokerages"),
-        ("Business",  100, 129.90,  "$1.30",  "48% off","",               false, "High-volume mortgage brokers"),
-        ("Growth",    250, 249.90,  "$1.00",  "60% off","BEST VALUE",     false, "Teams processing 250+ statements"),
-        ("Scale",     500, 349.90,  "$0.70",  "72% off","LOWEST $/REPORT",false, "Enterprise & large lenders"),
+        ("Starter",    10,  29.90,  "$2.99",  "",           "",             false, "Perfect for occasional use"),
+        ("Basic",      25,  59.90,  "$2.40",  "20% off",    "",             false, "Great for trying the platform"),
+        ("Standard",   50,  99.90,  "$2.00",  "33% off",    "POPULAR",      true,  "Ideal for small brokerages"),
+        ("Business",  100, 174.90,  "$1.75",  "42% off",    "",             false, "High-volume mortgage brokers"),
+        ("Growth",    250, 299.90,  "$1.20",  "60% off",    "BEST VALUE",   false, "Teams processing 250+ statements"),
+        ("Scale",     500, 499.90,  "$1.00",  "67% off",    "LOWEST PRICE", false, "Enterprise & large lenders"),
       ] %}
       <div class="relative bg-white rounded-2xl border-2 p-7 card-hover shadow-sm
         {{ 'border-sky-500 shadow-xl shadow-sky-100' if hot else 'border-slate-200' }}">
@@ -93,12 +93,12 @@
       <h2 class="text-center text-xl font-bold text-slate-900 mb-8">Price per analysis — the more you buy, the less you pay</h2>
       <div class="space-y-3">
         {% for label, credits, price_per, pct in [
-          ("Starter (10 credits)",  10,  2.49, 100),
-          ("Basic (25 credits)",    25,  2.00, 80),
-          ("Standard (50 credits)", 50,  1.60, 64),
-          ("Business (100 credits)",100, 1.30, 52),
-          ("Growth (250 credits)",  250, 1.00, 40),
-          ("Scale (500 credits)",   500, 0.70, 28),
+          ("Starter (10 credits)",  10,  2.99, 100),
+          ("Basic (25 credits)",    25,  2.40, 80),
+          ("Standard (50 credits)", 50,  2.00, 67),
+          ("Business (100 credits)",100, 1.75, 58),
+          ("Growth (250 credits)",  250, 1.20, 40),
+          ("Scale (500 credits)",   500, 1.00, 33),
         ] %}
         <div class="flex items-center gap-4">
           <div class="w-44 text-sm text-slate-600 text-right flex-shrink-0">{{ label }}</div>
@@ -115,7 +115,7 @@
         </div>
         {% endfor %}
       </div>
-      <p class="text-center text-slate-400 text-sm mt-4">Scale pack saves you 72% vs Starter pricing</p>
+      <p class="text-center text-slate-400 text-sm mt-4">Scale pack saves you 67% vs Starter pricing — as low as $1.00/report</p>
     </div>
 
   </div>
