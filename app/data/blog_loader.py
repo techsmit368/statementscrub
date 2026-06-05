@@ -15,7 +15,11 @@ def load_posts() -> list[dict]:
 
 
 def get_post(slug: str) -> dict | None:
-    f = POSTS_DIR / f"{slug}.json"
-    if f.exists():
-        return json.loads(f.read_text(encoding="utf-8"))
+    for f in POSTS_DIR.glob("*.json"):
+        try:
+            post = json.loads(f.read_text(encoding="utf-8"))
+            if post.get("slug") == slug:
+                return post
+        except Exception:
+            pass
     return None
