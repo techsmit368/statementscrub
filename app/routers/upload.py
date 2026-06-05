@@ -80,9 +80,10 @@ async def dashboard(
         .all()
     )
     merchants = _build_merchants(analyses)
+    recent = analyses[:5]  # last 5 for sidebar
     return templates.TemplateResponse(
         "dashboard.html",
-        {"request": request, "user": user, "merchants": merchants, "active_page": "dashboard"},
+        {"request": request, "user": user, "merchants": merchants, "recent": recent, "active_page": "dashboard"},
     )
 
 
