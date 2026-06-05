@@ -1,6 +1,7 @@
 import uuid
 import os
 import secrets
+from urllib.parse import unquote
 from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, BackgroundTasks
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -18,6 +19,54 @@ router = APIRouter(tags=["upload"])
 templates = Jinja2Templates(directory="app/templates")
 
 
+def _build_merchants(analyses):
+    """Group analyses by account_holder into merchant summary dicts."""
+    merchants = {}
+    for a in analyses:
+        key = (a.account_holder or "").strip() or "Unknown"
+        if key not in merchants:
+            merchants[key] = {
+                "name": key,
+                "bank": a.bank_name,
+                "statements": [],
+                "total_nsf": 0,
+                "sum_deposits": 0,
+                "sum_balance": 0,
+                "latest_risk": "low",
+                "latest_rec": None,
+                "latest_summary": None,
+                "latest_date": None,
+                "latest_id": None,
+                "mca_detected": False,
+            }
+        m = merchants[key]
+        m["statements"].append(a)
+        m["total_nsf"] += int(a.nsf_count or 0)
+        m["sum_deposits"] += float(a.avg_monthly_deposits or 0)
+        m["sum_balance"] += float(a.avg_daily_balance or 0)
+        if a.mca_detected:
+            m["mca_detected"] = True
+        if a.created_at and (m["latest_date"] is None or a.created_at > m["latest_date"]):
+            m["latest_date"] = a.created_at
+            m["latest_id"] = a.id
+            if a.result_json:
+                rf = a.result_json.get("red_flags", {})
+                m["latest_risk"] = rf.get("risk_level", "low") or "low"
+                m["latest_rec"] = a.result_json.get("approval_recommendation")
+                m["latest_summary"] = a.result_json.get("lender_summary", "")
+
+    result = []
+    for name, m in merchants.items():
+        count = len(m["statements"])
+        m["count"] = count
+        m["avg_deposits"] = m["sum_deposits"] / count if count else 0
+        m["avg_balance"] = m["sum_balance"] / count if count else 0
+        result.append(m)
+
+    result.sort(key=lambda x: x["latest_date"] or __import__("datetime").datetime(2000, 1, 1), reverse=True)
+    return result
+
+
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(
     request: Request,
@@ -28,12 +77,83 @@ async def dashboard(
         db.query(Analysis)
         .filter(Analysis.user_id == user.id)
         .order_by(Analysis.created_at.desc())
-        .limit(20)
         .all()
     )
+    merchants = _build_merchants(analyses)
     return templates.TemplateResponse(
         "dashboard.html",
-        {"request": request, "user": user, "analyses": analyses},
+        {"request": request, "user": user, "merchants": merchants, "active_page": "dashboard"},
+    )
+
+
+@router.get("/merchant/{merchant_name}", response_class=HTMLResponse)
+async def merchant_detail(
+    merchant_name: str,
+    request: Request,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    name = unquote(merchant_name)
+    all_analyses = (
+        db.query(Analysis)
+        .filter(Analysis.user_id == user.id)
+        .order_by(Analysis.created_at.desc())
+        .all()
+    )
+    statements = [
+        a for a in all_analyses
+        if ((a.account_holder or "").strip() or "Unknown") == name
+    ]
+    if not statements:
+        return RedirectResponse("/dashboard", status_code=302)
+
+    # Build combined stats
+    total_nsf = sum(int(a.nsf_count or 0) for a in statements)
+    avg_deposits = sum(float(a.avg_monthly_deposits or 0) for a in statements) / len(statements)
+    avg_balance = sum(float(a.avg_daily_balance or 0) for a in statements) / len(statements)
+    mca = any(a.mca_detected for a in statements)
+
+    latest = statements[0]
+    latest_risk = "low"
+    latest_rec = None
+    latest_summary = None
+    if latest.result_json:
+        rf = latest.result_json.get("red_flags", {})
+        latest_risk = rf.get("risk_level", "low") or "low"
+        latest_rec = latest.result_json.get("approval_recommendation")
+        latest_summary = latest.result_json.get("lender_summary", "")
+
+    # Date range string
+    dates = sorted([a.created_at for a in statements if a.created_at])
+    date_range = None
+    if dates:
+        if len(dates) > 1:
+            date_range = f"{dates[0].strftime('%b %Y')} – {dates[-1].strftime('%b %Y')}"
+        else:
+            date_range = dates[0].strftime("%b %Y")
+
+    banks = list({a.bank_name for a in statements if a.bank_name})
+    combined = {
+        "avg_deposits": avg_deposits,
+        "avg_balance": avg_balance,
+        "total_nsf": total_nsf,
+        "mca_detected": mca,
+        "latest_risk": latest_risk,
+        "latest_rec": latest_rec,
+        "latest_summary": latest_summary,
+        "bank": banks[0] if len(banks) == 1 else (", ".join(banks[:2]) if banks else None),
+        "date_range": date_range,
+    }
+
+    return templates.TemplateResponse(
+        "merchant.html",
+        {
+            "request": request,
+            "user": user,
+            "merchant_name": name,
+            "statements": statements,
+            "combined": combined,
+        },
     )
 
 
@@ -121,7 +241,9 @@ async def upload_statement(
         db.commit()
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
-    return RedirectResponse(f"/results/{analysis.id}", status_code=302)
+    merchant_slug = (analysis.account_holder or "").strip() or "Unknown"
+    from urllib.parse import quote
+    return RedirectResponse(f"/merchant/{quote(merchant_slug, safe='')}", status_code=302)
 
 
 @router.get("/results/{analysis_id}", response_class=HTMLResponse)

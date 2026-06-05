@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_app.html" %}
 {% block title %}Report: {{ analysis.account_holder or analysis.filename }} — StatementScrub{% endblock %}
 
 {% block content %}
@@ -13,9 +13,22 @@
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 animate-slide-up">
 
   <!-- Back -->
-  <a href="/dashboard" class="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-sky-600 transition mb-6">
-    ← Back to Dashboard
-  </a>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
+    {% if analysis.account_holder %}
+    <a href="/merchant/{{ analysis.account_holder | urlencode }}" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#64748b;text-decoration:none;font-weight:600;padding:5px 10px;border-radius:8px;transition:all 0.15s"
+       onmouseover="this.style.background='#f1f5f9';this.style.color='#0f172a'"
+       onmouseout="this.style.background='transparent';this.style.color='#64748b'">
+      <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+      {{ analysis.account_holder }}
+    </a>
+    <span style="color:#e2e8f0">/</span>
+    {% endif %}
+    <a href="/dashboard" style="font-size:12px;color:#94a3b8;text-decoration:none;font-weight:500;padding:5px 10px;border-radius:8px;transition:all 0.15s"
+       onmouseover="this.style.background='#f1f5f9';this.style.color='#64748b'"
+       onmouseout="this.style.background='transparent';this.style.color='#94a3b8'">
+      Dashboard
+    </a>
+  </div>
 
   <!-- Report Header -->
   <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
@@ -285,7 +298,7 @@
     <a href="/dashboard" class="border border-slate-200 text-slate-600 px-5 py-2.5 rounded-lg hover:bg-slate-50 text-sm font-medium transition">
       ← Dashboard
     </a>
-    <a href="/auth/register" class="border border-sky-200 text-sky-600 px-5 py-2.5 rounded-lg hover:bg-sky-50 text-sm font-medium transition">
+    <a href="/dashboard" class="border border-sky-200 text-sky-600 px-5 py-2.5 rounded-lg hover:bg-sky-50 text-sm font-medium transition">
       + New Analysis
     </a>
     <form method="POST" action="/results/{{ analysis.id }}/delete" class="ml-auto"

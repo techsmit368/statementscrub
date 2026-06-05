@@ -1,250 +1,187 @@
-{% extends "base.html" %}
+{% extends "base_app.html" %}
 {% block title %}Dashboard — StatementScrub{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+<div class="animate-fade-in">
 
-  <!-- Header -->
-  <div class="flex items-center justify-between mb-8">
+  <!-- Page header -->
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap">
     <div>
-      <h1 class="text-2xl font-bold text-slate-900">My Reports</h1>
-      <p class="text-slate-400 text-sm mt-0.5">
-        {{ user.analyses_used }} report{{ "s" if user.analyses_used != 1 }} used
-        &middot;
-        <span class="{% if user.plan == 'pro' %}text-violet-600{% elif user.plan == 'starter' %}text-sky-600{% else %}text-slate-500{% endif %} font-semibold capitalize">
-          {{ user.plan }} plan
-        </span>
+      <h1 style="font-size:1.5rem;font-weight:900;color:#0f172a;margin-bottom:3px">Merchants</h1>
+      <p style="font-size:13px;color:#64748b">
+        {{ merchants | length }} merchant{{ "s" if merchants | length != 1 }}
+        · {{ user.analyses_used }} total statement{{ "s" if user.analyses_used != 1 }} analyzed
+        · <span style="font-weight:700;
+            {% if user.plan == 'pro' %}color:#7c3aed
+            {% elif user.plan == 'starter' %}color:#0284c7
+            {% else %}color:#64748b{% endif %}">{{ user.plan | title }} plan</span>
       </p>
     </div>
-    {% if user.plan == 'free' %}
-    <a href="/#pricing" class="text-sm bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition">
-      Upgrade Plan
-    </a>
-    {% endif %}
+    <label for="fileInputGlobal" style="cursor:pointer">
+      <div class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;font-size:13px;border-radius:10px">
+        <svg style="width:15px;height:15px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        Analyze Statement
+      </div>
+    </label>
   </div>
 
   {% if error %}
-  <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm flex items-start gap-2">
-    <span class="text-red-400 mt-0.5">⚠️</span> {{ error }}
+  <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:8px">
+    <svg style="width:16px;height:16px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+    {{ error }}
   </div>
   {% endif %}
 
-  <!-- Telegram Connect Panel (Starter + Pro) -->
-  {% if user.plan in ['starter', 'pro'] %}
-  <div class="mb-6 bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 rounded-2xl p-5">
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-gradient-to-br from-sky-400 to-indigo-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0">✈️</div>
-        <div>
-          <div class="font-bold text-slate-900">Telegram Bot</div>
-          <div class="text-sm text-slate-500">Analyze statements from Telegram — send a PDF, get instant report</div>
-        </div>
+  <!-- Upload form (hidden, triggered by button) -->
+  <form method="POST" action="/upload" enctype="multipart/form-data" id="globalUploadForm" style="display:none">
+    <input type="file" name="file" id="fileInputGlobal" accept=".pdf" onchange="submitGlobalUpload(this)"/>
+  </form>
+
+  <!-- Upload loading overlay -->
+  <div id="uploadingOverlay" style="display:none;background:#fff;border:1px solid #e0e7ff;border-radius:16px;padding:40px;text-align:center;margin-bottom:24px">
+    <div class="spinner" style="margin:0 auto 16px"></div>
+    <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">Analyzing statement…</div>
+    <div style="font-size:13px;color:#64748b">AI is reading transactions, calculating income, and detecting risk flags</div>
+    <div style="display:flex;justify-content:center;gap:20px;margin-top:14px" id="upload-steps">
+      <span class="upload-step active" style="font-size:12px;color:#6366f1;display:flex;align-items:center;gap:5px;font-weight:600">
+        <span style="width:7px;height:7px;background:#6366f1;border-radius:50%;animation:spin 1s linear infinite;display:inline-block"></span>Reading PDF
+      </span>
+      <span class="upload-step" style="font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:5px">
+        <span style="width:7px;height:7px;background:#e2e8f0;border-radius:50%;display:inline-block"></span>AI Analysis
+      </span>
+      <span class="upload-step" style="font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:5px">
+        <span style="width:7px;height:7px;background:#e2e8f0;border-radius:50%;display:inline-block"></span>Building Report
+      </span>
+    </div>
+  </div>
+
+  <!-- Telegram connect (compact) -->
+  {% if user.plan in ['starter', 'pro'] and not user.telegram_id %}
+  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:20px">✈️</span>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#0c4a6e">Connect Telegram Bot</div>
+        <div style="font-size:12px;color:#0369a1">Send PDFs directly via Telegram and get instant reports</div>
       </div>
-      {% if user.telegram_id %}
-        <div class="flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-semibold">
-          <span>✅</span> Connected
-        </div>
-      {% elif user.telegram_token %}
-        <div class="flex items-center gap-3 flex-wrap">
-          <div class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm">
-            <span class="text-slate-400">Send to bot: </span>
-            <code class="font-bold text-sky-700">/link {{ user.telegram_token }}</code>
-          </div>
-          <a href="https://t.me/StatementScrubBot" target="_blank"
-            class="bg-sky-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-sky-600 transition">
-            Open Bot →
-          </a>
-        </div>
-      {% else %}
-        <form method="POST" action="/telegram/connect">
-          <button type="submit" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition">
-            Connect Telegram
-          </button>
-        </form>
-      {% endif %}
     </div>
-    {% if user.telegram_token and not user.telegram_id %}
-    <div class="mt-3 text-xs text-slate-500 bg-white/60 rounded-lg px-3 py-2">
-      1. Open <strong>@StatementScrubBot</strong> on Telegram &nbsp;
-      2. Send <code class="bg-slate-100 px-1 rounded">/link {{ user.telegram_token }}</code> &nbsp;
-      3. Done — send any PDF to get instant analysis
+    {% if user.telegram_token %}
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <code style="font-size:12px;background:#fff;border:1px solid #bae6fd;padding:5px 10px;border-radius:8px;color:#0284c7">/link {{ user.telegram_token }}</code>
+      <a href="https://t.me/StatementScrubBot" target="_blank" style="font-size:12px;font-weight:700;background:#0ea5e9;color:#fff;padding:6px 14px;border-radius:8px;text-decoration:none">Open Bot →</a>
     </div>
+    {% else %}
+    <form method="POST" action="/telegram/connect">
+      <button type="submit" style="font-size:12px;font-weight:700;background:#0ea5e9;color:#fff;padding:7px 16px;border-radius:8px;border:none;cursor:pointer">Connect →</button>
+    </form>
     {% endif %}
   </div>
   {% endif %}
 
-  <!-- Upload Zone -->
-  <div id="uploadZone" class="mb-8 bg-white rounded-2xl border-2 border-dashed border-slate-300 hover:border-sky-400 transition-colors cursor-pointer group">
-    <form method="POST" action="/upload" enctype="multipart/form-data" id="uploadForm">
-      <input type="file" name="file" id="fileInput" accept=".pdf" class="hidden" onchange="onFileSelected(this)" />
-      <label for="fileInput" class="block p-10 text-center cursor-pointer">
-        <div class="w-16 h-16 bg-sky-50 group-hover:bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-colors">
-          <svg class="w-8 h-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-        </div>
-        <div id="uploadIdleState">
-          <p class="text-slate-700 font-semibold text-lg mb-1">Drop a bank statement PDF here</p>
-          <p class="text-slate-400 text-sm">or click to browse — any bank, any format, up to 20MB</p>
-        </div>
-        <div id="uploadReadyState" class="hidden">
-          <p class="text-sky-600 font-semibold text-lg mb-1" id="selectedFileName"></p>
-          <p class="text-slate-400 text-sm">Ready to analyze</p>
-        </div>
-      </label>
+  <!-- Credits warning -->
+  {% if user.plan == 'free' and user.analyses_used >= 3 %}
+  <div style="background:#fefce8;border:1px solid #fef08a;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <div style="font-size:13px;color:#713f12;font-weight:600">⚠ You've used all 3 free analyses.</div>
+    <a href="/credits" style="font-size:12px;font-weight:700;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:7px 16px;border-radius:8px;text-decoration:none">Buy Credits →</a>
+  </div>
+  {% endif %}
 
-      <!-- Analyze button (shown after file selected) -->
-      <div id="analyzeSection" class="hidden px-10 pb-8 text-center">
-        <button type="submit" id="analyzeBtn"
-          class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-10 py-3.5 rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg shadow-sky-200">
-          Analyze Statement →
-        </button>
+  <!-- MERCHANT CARDS -->
+  {% if merchants %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
+    {% for m in merchants %}
+    {% set risk = m.latest_risk %}
+    <a href="/merchant/{{ m.name | urlencode }}" style="text-decoration:none;display:block" class="card card-hover animate-slide-up" style="padding:20px">
+      <div style="padding:20px">
+        <!-- Top row -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:16px;font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">
+              {{ m.name }}
+            </div>
+            <div style="font-size:12px;color:#64748b">
+              {{ m.bank or "Multiple banks" }}
+              {% if m.count > 1 %} · {{ m.count }} statements{% endif %}
+            </div>
+          </div>
+          <span style="padding:4px 10px;border-radius:100px;font-size:11px;font-weight:800;flex-shrink:0;
+            {% if risk == 'low' %}background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0
+            {% elif risk == 'medium' %}background:#fefce8;color:#a16207;border:1px solid #fef08a
+            {% elif risk == 'high' %}background:#fff7ed;color:#c2410c;border:1px solid #fed7aa
+            {% else %}background:#fef2f2;color:#b91c1c;border:1px solid #fecaca{% endif %}">
+            {{ risk | upper }}
+          </span>
+        </div>
+
+        <!-- Metrics row -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+          <div style="background:#f8fafc;border-radius:10px;padding:10px 10px 8px">
+            <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em">Avg Income</div>
+            <div style="font-size:15px;font-weight:800;color:#0f172a">${{ "{:,.0f}".format(m.avg_deposits) }}<span style="font-size:10px;font-weight:500;color:#94a3b8">/mo</span></div>
+          </div>
+          <div style="background:#f8fafc;border-radius:10px;padding:10px 10px 8px">
+            <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em">NSF Total</div>
+            <div style="font-size:15px;font-weight:800;{% if m.total_nsf > 0 %}color:#dc2626{% else %}color:#16a34a{% endif %}">{{ m.total_nsf }}</div>
+          </div>
+          <div style="background:#f8fafc;border-radius:10px;padding:10px 10px 8px">
+            <div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em">Statements</div>
+            <div style="font-size:15px;font-weight:800;color:#0f172a">{{ m.count }}</div>
+          </div>
+        </div>
+
+        <!-- Footer row -->
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:11px;color:#94a3b8">
+            Last analyzed {{ m.latest_date.strftime('%b %d, %Y') if m.latest_date else '—' }}
+          </div>
+          <div style="font-size:12px;font-weight:700;color:#6366f1;display:flex;align-items:center;gap:4px">
+            View Details
+            <svg style="width:13px;height:13px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </div>
       </div>
-    </form>
+    </a>
+    {% endfor %}
   </div>
 
-  <!-- Loading overlay (shown during analysis) -->
-  <div id="loadingState" class="hidden mb-8 bg-gradient-to-br from-sky-50 to-indigo-50 rounded-2xl border border-sky-200 p-10 text-center">
-    <div class="spinner mx-auto mb-4"></div>
-    <p class="font-semibold text-slate-700 text-lg mb-1">Analyzing your statement…</p>
-    <p class="text-slate-400 text-sm">AI is extracting transactions, calculating averages, and detecting risk flags</p>
-    <div class="mt-4 flex justify-center gap-6 text-sm text-slate-400">
-      <span class="flex items-center gap-1.5 text-sky-600"><span class="w-1.5 h-1.5 bg-sky-400 rounded-full animate-pulse"></span>Reading PDF</span>
-      <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>AI Analysis</span>
-      <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>Building Report</span>
-    </div>
-  </div>
-
-  <!-- Reports -->
-  {% if analyses %}
-  <div>
-    <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-4">Recent Reports</h2>
-    <div class="space-y-3">
-      {% for a in analyses %}
-      <div class="bg-white rounded-xl border border-slate-200 shadow-sm card-hover overflow-hidden">
-        {% if a.status == 'complete' %}
-          {% set rf = a.result_json.get('red_flags', {}) if a.result_json else {} %}
-          {% set risk = rf.get('risk_level', 'low') %}
-          <div class="flex items-center justify-between p-5">
-            <div class="flex items-center gap-4">
-              <!-- Risk color bar -->
-              <div class="w-1 h-12 rounded-full flex-shrink-0
-                {% if risk == 'low' %}bg-green-400
-                {% elif risk == 'medium' %}bg-yellow-400
-                {% elif risk == 'high' %}bg-orange-400
-                {% else %}bg-red-500{% endif %}"></div>
-              <div>
-                <div class="font-semibold text-slate-900">
-                  {{ a.account_holder or a.filename }}
-                </div>
-                <div class="text-sm text-slate-400 mt-0.5">
-                  {{ a.bank_name or "Unknown Bank" }}
-                  {% if a.statement_period %} &middot; {{ a.statement_period }}{% endif %}
-                  &middot; {{ a.created_at.strftime('%b %d, %Y') if a.created_at else '' }}
-                </div>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-4 sm:gap-6">
-              <div class="hidden sm:block text-center">
-                <div class="text-lg font-bold text-slate-900">${{ "{:,.0f}".format(a.avg_monthly_deposits or 0) }}</div>
-                <div class="text-xs text-slate-400">Avg/Mo Deposits</div>
-              </div>
-              <div class="hidden sm:block text-center">
-                <div class="text-lg font-bold {% if (a.nsf_count or 0) > 0 %}text-red-500{% else %}text-green-500{% endif %}">
-                  {{ a.nsf_count or 0 }}
-                </div>
-                <div class="text-xs text-slate-400">NSFs</div>
-              </div>
-              {% if a.mca_detected %}
-              <span class="hidden sm:block bg-orange-100 text-orange-700 text-xs font-semibold px-2.5 py-1 rounded-full">MCA</span>
-              {% endif %}
-              <!-- Risk badge -->
-              <span class="text-xs font-bold px-2.5 py-1 rounded-full
-                {% if risk == 'low' %}bg-green-100 text-green-700
-                {% elif risk == 'medium' %}bg-yellow-100 text-yellow-700
-                {% elif risk == 'high' %}bg-orange-100 text-orange-700
-                {% else %}bg-red-100 text-red-700{% endif %}">
-                {{ risk | upper }}
-              </span>
-              <a href="/results/{{ a.id }}"
-                class="bg-sky-50 text-sky-700 hover:bg-sky-100 px-4 py-2 rounded-lg font-semibold text-sm transition">
-                View Report →
-              </a>
-            </div>
-          </div>
-
-        {% elif a.status == 'failed' %}
-          <div class="flex items-center justify-between p-5">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">❌</span>
-              <div>
-                <div class="font-medium text-slate-700">{{ a.filename }}</div>
-                <div class="text-sm text-red-400">Analysis failed — try re-uploading</div>
-              </div>
-            </div>
-          </div>
-        {% else %}
-          <div class="flex items-center gap-3 p-5">
-            <div class="w-5 h-5 border-2 border-sky-400 border-t-transparent rounded-full animate-spin"></div>
-            <div>
-              <div class="font-medium text-slate-700">{{ a.filename }}</div>
-              <div class="text-sm text-slate-400">Processing…</div>
-            </div>
-          </div>
-        {% endif %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
   {% else %}
-  <div class="text-center py-16 text-slate-400">
-    <div class="text-5xl mb-4">📭</div>
-    <p class="font-medium text-slate-500 mb-1">No reports yet</p>
-    <p class="text-sm">Upload your first bank statement above to get started</p>
+  <!-- Empty state -->
+  <div style="text-align:center;padding:80px 24px">
+    <div style="width:64px;height:64px;background:#f1f5f9;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+      <svg style="width:32px;height:32px;color:#94a3b8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    </div>
+    <div style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:6px">No statements yet</div>
+    <div style="font-size:14px;color:#64748b;margin-bottom:24px">Upload a bank statement PDF to create your first merchant record.</div>
+    <label for="fileInputGlobal" style="cursor:pointer">
+      <div class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;padding:12px 24px;font-size:14px">
+        <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        Analyze First Statement
+      </div>
+    </label>
   </div>
   {% endif %}
 
 </div>
 
 <script>
-function onFileSelected(input) {
+function submitGlobalUpload(input) {
   if (!input.files || !input.files[0]) return;
-  document.getElementById('uploadIdleState').classList.add('hidden');
-  document.getElementById('uploadReadyState').classList.remove('hidden');
-  document.getElementById('selectedFileName').textContent = input.files[0].name;
-  document.getElementById('analyzeSection').classList.remove('hidden');
+  document.getElementById('uploadingOverlay').style.display = 'block';
+  // Step animation
+  setTimeout(() => {
+    const steps = document.querySelectorAll('.upload-step');
+    steps[0].style.color = '#16a34a'; steps[0].querySelector('span').style.background = '#16a34a';
+    steps[1].style.color = '#6366f1'; steps[1].querySelector('span').style.background = '#6366f1';
+    steps[1].querySelector('span').style.animation = 'spin 1s linear infinite';
+  }, 3500);
+  setTimeout(() => {
+    const steps = document.querySelectorAll('.upload-step');
+    steps[1].style.color = '#16a34a'; steps[1].querySelector('span').style.background = '#16a34a';
+    steps[1].querySelector('span').style.animation = '';
+    steps[2].style.color = '#6366f1'; steps[2].querySelector('span').style.background = '#6366f1';
+    steps[2].querySelector('span').style.animation = 'spin 1s linear infinite';
+  }, 9000);
+  document.getElementById('globalUploadForm').submit();
 }
-
-document.getElementById('uploadForm').addEventListener('submit', function(e) {
-  const fileInput = document.getElementById('fileInput');
-  if (!fileInput.files || !fileInput.files[0]) { e.preventDefault(); return; }
-
-  document.getElementById('uploadZone').classList.add('hidden');
-  document.getElementById('loadingState').classList.remove('hidden');
-
-  // Animate loading steps
-  setTimeout(() => {
-    const steps = document.querySelectorAll('#loadingState span');
-    steps[0].classList.remove('text-sky-600');
-    steps[0].querySelector('span').classList.remove('animate-pulse', 'bg-sky-400');
-    steps[0].querySelector('span').classList.add('bg-green-400');
-
-    steps[1].classList.add('text-sky-600');
-    steps[1].querySelector('span').classList.add('animate-pulse', 'bg-sky-400');
-    steps[1].querySelector('span').classList.remove('bg-slate-300');
-  }, 3000);
-
-  setTimeout(() => {
-    const steps = document.querySelectorAll('#loadingState span');
-    steps[1].classList.remove('text-sky-600');
-    steps[1].querySelector('span').classList.remove('animate-pulse', 'bg-sky-400');
-    steps[1].querySelector('span').classList.add('bg-green-400');
-
-    steps[2].classList.add('text-sky-600');
-    steps[2].querySelector('span').classList.add('animate-pulse', 'bg-sky-400');
-    steps[2].querySelector('span').classList.remove('bg-slate-300');
-  }, 10000);
-});
 </script>
 {% endblock %}

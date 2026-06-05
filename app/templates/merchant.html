@@ -1,0 +1,220 @@
+{% extends "base_app.html" %}
+{% block title %}{{ merchant_name }} — StatementScrub{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in">
+
+  <!-- Back + header -->
+  <div style="margin-bottom:24px">
+    <a href="/dashboard" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#64748b;text-decoration:none;font-weight:600;margin-bottom:14px;
+      padding:5px 10px;border-radius:8px;transition:all 0.15s"
+      onmouseover="this.style.background='#f1f5f9';this.style.color='#0f172a'"
+      onmouseout="this.style.background='transparent';this.style.color='#64748b'">
+      <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+      All Merchants
+    </a>
+
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <h1 style="font-size:1.6rem;font-weight:900;color:#0f172a;margin-bottom:3px">{{ merchant_name }}</h1>
+        <div style="font-size:13px;color:#64748b">
+          {{ statements | length }} statement{{ "s" if statements | length != 1 }}
+          {% if combined.bank %} · {{ combined.bank }}{% endif %}
+          {% if combined.date_range %} · {{ combined.date_range }}{% endif %}
+        </div>
+      </div>
+      <span style="padding:5px 14px;border-radius:100px;font-size:12px;font-weight:800;
+        {% set risk = combined.latest_risk %}
+        {% if risk == 'low' %}background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0
+        {% elif risk == 'medium' %}background:#fefce8;color:#a16207;border:1px solid #fef08a
+        {% elif risk == 'high' %}background:#fff7ed;color:#c2410c;border:1px solid #fed7aa
+        {% else %}background:#fef2f2;color:#b91c1c;border:1px solid #fecaca{% endif %}">
+        {{ combined.latest_risk | upper }} RISK
+      </span>
+    </div>
+  </div>
+
+  <!-- Combined stats -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px" class="stats-grid">
+    {% for label, value, sub, col in [
+      ("Avg Monthly Income", "$" ~ "{:,.0f}".format(combined.avg_deposits), "across all statements", "#0284c7"),
+      ("Avg Daily Balance", "$" ~ "{:,.0f}".format(combined.avg_balance), "across all statements", "#16a34a"),
+      ("Total NSF Events", combined.total_nsf | string, "across all periods", "#dc2626" if combined.total_nsf > 0 else "#16a34a"),
+      ("Statements", statements | length | string, "uploaded for this merchant", "#6366f1"),
+    ] %}
+    <div class="card" style="padding:18px 20px">
+      <div style="font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px">{{ label }}</div>
+      <div style="font-size:1.5rem;font-weight:900;color:{{ col }};line-height:1;margin-bottom:4px">{{ value }}</div>
+      <div style="font-size:11px;color:#cbd5e1">{{ sub }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- AI recommendation (from latest) -->
+  {% if combined.latest_rec %}
+  {% set rec = combined.latest_rec %}
+  <div style="padding:16px 20px;border-radius:14px;margin-bottom:24px;display:flex;align-items:center;gap:14px;
+    {% if rec == 'approve' %}background:#f0fdf4;border:1px solid #bbf7d0
+    {% elif rec == 'review' %}background:#fefce8;border:1px solid #fef08a
+    {% else %}background:#fef2f2;border:1px solid #fecaca{% endif %}">
+    <div style="width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      {% if rec == 'approve' %}background:#dcfce7
+      {% elif rec == 'review' %}background:#fef9c3
+      {% else %}background:#fee2e2{% endif %}">
+      {% if rec == 'approve' %}
+      <svg style="width:18px;height:18px;color:#16a34a" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      {% elif rec == 'review' %}
+      <svg style="width:18px;height:18px;color:#a16207" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      {% else %}
+      <svg style="width:18px;height:18px;color:#dc2626" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      {% endif %}
+    </div>
+    <div>
+      <div style="font-size:14px;font-weight:800;
+        {% if rec == 'approve' %}color:#15803d{% elif rec == 'review' %}color:#a16207{% else %}color:#b91c1c{% endif %}">
+        Latest Recommendation: {{ rec | upper }}
+      </div>
+      {% if combined.latest_summary %}
+      <div style="font-size:12px;color:#64748b;margin-top:2px">{{ combined.latest_summary }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start" class="merchant-grid">
+
+    <!-- LEFT: Statement list -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">
+        {{ statements | length }} Statement{{ "s" if statements | length != 1 }}
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        {% for a in statements %}
+        {% set rf = a.result_json.get('red_flags', {}) if a.result_json else {} %}
+        {% set risk = rf.get('risk_level', 'low') %}
+        {% set rec = a.result_json.get('approval_recommendation', 'review') if a.result_json else 'review' %}
+        <div class="card" style="padding:16px 18px;display:flex;align-items:center;gap:14px">
+          <!-- Risk bar -->
+          <div style="width:3px;height:44px;border-radius:2px;flex-shrink:0;
+            {% if risk == 'low' %}background:#4ade80
+            {% elif risk == 'medium' %}background:#fbbf24
+            {% elif risk == 'high' %}background:#fb923c
+            {% else %}background:#f87171{% endif %}"></div>
+
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:2px">
+              {{ a.statement_period or a.filename }}
+            </div>
+            <div style="font-size:11px;color:#64748b">
+              {{ a.bank_name or "Unknown Bank" }} · {{ a.created_at.strftime('%b %d, %Y') if a.created_at else '' }}
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+            <div style="text-align:right;display:none" class="sm-show">
+              <div style="font-size:13px;font-weight:700;color:#0f172a">${{ "{:,.0f}".format(a.avg_monthly_deposits or 0) }}</div>
+              <div style="font-size:10px;color:#94a3b8">avg/mo</div>
+            </div>
+            <div style="text-align:right;display:none" class="sm-show">
+              <div style="font-size:13px;font-weight:700;{% if (a.nsf_count or 0) > 0 %}color:#dc2626{% else %}color:#16a34a{% endif %}">{{ a.nsf_count or 0 }}</div>
+              <div style="font-size:10px;color:#94a3b8">NSF</div>
+            </div>
+            <span style="padding:3px 9px;border-radius:100px;font-size:10px;font-weight:800;
+              {% if risk == 'low' %}background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0
+              {% elif risk == 'medium' %}background:#fefce8;color:#a16207;border:1px solid #fef08a
+              {% elif risk == 'high' %}background:#fff7ed;color:#c2410c;border:1px solid #fed7aa
+              {% else %}background:#fef2f2;color:#b91c1c;border:1px solid #fecaca{% endif %}">
+              {{ risk | upper }}
+            </span>
+            <a href="/results/{{ a.id }}" style="font-size:12px;font-weight:700;color:#6366f1;background:#f5f3ff;padding:6px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:all 0.15s"
+               onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#f5f3ff'">
+              View →
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- RIGHT: Upload new statement for this merchant -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">
+        Add Statement
+      </div>
+
+      <div class="card" style="padding:20px">
+        <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px">Upload for {{ merchant_name }}</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:16px">Add another statement period to build a combined picture.</div>
+
+        <form method="POST" action="/upload" enctype="multipart/form-data" id="merchantUploadForm">
+          <input type="file" name="file" id="merchantFileInput" accept=".pdf" style="display:none" onchange="onMerchantFileSelected(this)"/>
+
+          <label for="merchantFileInput" class="upload-zone" style="display:block;padding:24px 16px;text-align:center;margin-bottom:14px">
+            <div id="upload-idle">
+              <svg style="width:28px;height:28px;color:#94a3b8;margin:0 auto 8px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              <div style="font-size:13px;font-weight:600;color:#475569;margin-bottom:3px">Drop PDF here</div>
+              <div style="font-size:11px;color:#94a3b8">or click to browse</div>
+            </div>
+            <div id="upload-ready" style="display:none">
+              <svg style="width:24px;height:24px;color:#6366f1;margin:0 auto 6px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0"/></svg>
+              <div style="font-size:13px;font-weight:600;color:#6366f1" id="upload-filename">File ready</div>
+            </div>
+          </label>
+
+          <button type="submit" id="merchant-upload-btn" style="display:none;width:100%" class="btn-primary" style="padding:11px;font-size:13px">
+            Analyze Statement →
+          </button>
+        </form>
+
+        <!-- Uploading state -->
+        <div id="merchant-uploading" style="display:none;text-align:center;padding:16px 0">
+          <div class="spinner" style="margin:0 auto 10px"></div>
+          <div style="font-size:13px;font-weight:600;color:#0f172a">Analyzing…</div>
+          <div style="font-size:11px;color:#64748b;margin-top:3px">This takes about 25–30 seconds</div>
+        </div>
+      </div>
+
+      <!-- MCA / flags summary from latest -->
+      {% if combined.mca_detected %}
+      <div style="margin-top:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:14px 16px">
+        <div style="font-size:12px;font-weight:700;color:#c2410c;margin-bottom:3px">⚠ MCA Detected</div>
+        <div style="font-size:11px;color:#78350f">Merchant Cash Advance repayments found across statements. High-risk indicator.</div>
+      </div>
+      {% endif %}
+
+      {% if combined.total_nsf > 0 %}
+      <div style="margin-top:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 16px">
+        <div style="font-size:12px;font-weight:700;color:#b91c1c;margin-bottom:3px">{{ combined.total_nsf }} NSF Event{{ "s" if combined.total_nsf != 1 }}</div>
+        <div style="font-size:11px;color:#7f1d1d">Returned checks / NSF charges detected across all analyzed periods.</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  @media (min-width: 640px) { .sm-show { display: block !important; } }
+  @media (max-width: 900px) {
+    .merchant-grid { grid-template-columns: 1fr !important; }
+    .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
+  }
+</style>
+
+<script>
+function onMerchantFileSelected(input) {
+  if (!input.files || !input.files[0]) return;
+  document.getElementById('upload-idle').style.display = 'none';
+  document.getElementById('upload-ready').style.display = 'block';
+  document.getElementById('upload-filename').textContent = input.files[0].name;
+  document.getElementById('merchant-upload-btn').style.display = 'block';
+}
+
+document.getElementById('merchantUploadForm').addEventListener('submit', function() {
+  document.getElementById('merchant-upload-btn').style.display = 'none';
+  document.querySelector('label[for="merchantFileInput"]').style.display = 'none';
+  document.getElementById('merchant-uploading').style.display = 'block';
+});
+</script>
+
+{% endblock %}
