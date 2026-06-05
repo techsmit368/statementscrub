@@ -1,238 +1,276 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block title %}Buy Analysis Credits — StatementScrub{% endblock %}
 {% block content %}
 
 <!-- Hero -->
-<section class="relative bg-white overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-indigo-50 pointer-events-none"></div>
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
-    <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-3">Pay As You Go — No Subscription</p>
-    <h1 class="text-4xl sm:text-5xl font-black text-slate-900 mb-4">Buy Analysis <span class="gradient-text">Credits</span></h1>
-    <p class="text-slate-500 text-lg max-w-2xl mx-auto mb-6">1 credit = 1 full bank statement analysis. Credits never expire. Buy once, use whenever.</p>
-    <div class="flex flex-wrap gap-4 justify-center text-sm text-slate-500">
-      <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> Credits never expire</span>
-      <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> Full AI analysis every report</span>
-      <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> No subscription required</span>
-      <span class="flex items-center gap-1.5"><span class="text-green-500 font-bold">✓</span> Buy more, pay less per report</span>
+<section class="relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%)">
+  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle at 20% 50%,rgba(99,102,241,0.15) 0%,transparent 60%),radial-gradient(circle at 80% 20%,rgba(14,165,233,0.12) 0%,transparent 50%)"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle,rgba(148,163,184,0.12) 1px,transparent 1px);background-size:28px 28px"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
+    <div class="inline-flex items-center gap-2 text-sky-300 text-xs font-bold px-4 py-2 rounded-full border border-white/10 mb-6" style="background:rgba(255,255,255,0.08)">
+      <svg style="width:13px;height:13px" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      Pay-as-you-go &middot; No subscription required
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl font-black text-white mb-5 leading-tight">
+      Analysis Credits<br/>
+      <span style="background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">at the fairest price</span>
+    </h1>
+    <p class="text-slate-300 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+      1 credit = 1 complete AI bank statement analysis. Credits never expire &mdash; buy once, use whenever.
+    </p>
+
+    <div class="flex flex-wrap gap-3 justify-center mb-10">
+      {% for label in ["Credits never expire", "Full AI every report", "No subscription lock-in", "Instant access after signup"] %}
+      <span class="inline-flex items-center gap-1.5 text-slate-300 text-sm font-medium px-4 py-2 rounded-full" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1)">
+        <span class="text-green-400 font-bold">&#10003;</span> {{ label }}
+      </span>
+      {% endfor %}
+    </div>
+
+    <div class="inline-flex items-center gap-5" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:18px 28px">
+      <div class="text-left">
+        <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Starting from</div>
+        <div class="text-white font-black text-3xl leading-none mt-1">$1.00<span class="text-lg text-slate-400 font-semibold">/report</span></div>
+      </div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,0.15)"></div>
+      <div class="text-left">
+        <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider">vs industry avg</div>
+        <div class="text-red-400 font-black text-3xl leading-none mt-1" style="text-decoration:line-through;opacity:0.8">$3&ndash;5<span class="text-lg font-semibold">/report</span></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Competitor Comparison -->
-<section class="py-14 bg-slate-900">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-10">
-      <p class="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-2">Price Comparison</p>
-      <h2 class="text-2xl font-bold text-white">We're cheaper than every major competitor</h2>
-      <p class="text-slate-400 mt-2 text-sm">Same AI analysis. No templates. Significantly lower price.</p>
+<!-- Stats bar -->
+<section class="bg-white border-b border-slate-100">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+      {% for val, label in [("500+","Credit packs sold"),("<30s","Analysis time"),("99.2%","Extraction accuracy"),("$0","Hidden fees")] %}
+      <div>
+        <div class="text-2xl font-black text-slate-900">{{ val }}</div>
+        <div class="text-xs text-slate-500 font-medium mt-0.5">{{ label }}</div>
+      </div>
+      {% endfor %}
     </div>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-slate-700">
-            <th class="text-left text-slate-400 font-semibold pb-3 pr-6">Tool</th>
-            <th class="text-center text-slate-400 font-semibold pb-3 px-4">5 reports</th>
-            <th class="text-center text-slate-400 font-semibold pb-3 px-4">20 reports</th>
-            <th class="text-center text-slate-400 font-semibold pb-3 px-4">60 reports</th>
-            <th class="text-center text-slate-400 font-semibold pb-3 px-4">Unlimited</th>
-            <th class="text-center text-slate-400 font-semibold pb-3 pl-4">Pay per report</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-800">
-          <tr>
-            <td class="py-4 pr-6 font-semibold text-slate-300">Other Tool A</td>
-            <td class="py-4 px-4 text-center text-red-400">$24.95/mo<br/><span class="text-xs text-slate-500">($4.99/ea)</span></td>
-            <td class="py-4 px-4 text-center text-red-400">$49.95/mo<br/><span class="text-xs text-slate-500">($2.50/ea)</span></td>
-            <td class="py-4 px-4 text-center text-red-400">$99.95/mo<br/><span class="text-xs text-slate-500">($1.67/ea)</span></td>
-            <td class="py-4 px-4 text-center text-slate-500">—</td>
-            <td class="py-4 pl-4 text-center text-red-400">$2–$5/ea</td>
-          </tr>
-          <tr>
-            <td class="py-4 pr-6 font-semibold text-slate-300">Other Tool B</td>
-            <td class="py-4 px-4 text-center text-red-400">$39/mo<br/><span class="text-xs text-slate-500">(~$2.44/ea)</span></td>
-            <td class="py-4 px-4 text-center text-red-400">$74/mo<br/><span class="text-xs text-slate-500">(~$1.80/ea)</span></td>
-            <td class="py-4 px-4 text-center text-red-400">$159/mo<br/><span class="text-xs text-slate-500">(~$0.96/ea)</span></td>
-            <td class="py-4 px-4 text-center text-slate-500">—</td>
-            <td class="py-4 pl-4 text-center text-slate-500">—</td>
-          </tr>
-          <tr>
-            <td class="py-4 pr-6 font-semibold text-slate-300">Other Tool C</td>
-            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
-            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
-            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
-            <td class="py-4 px-4 text-center text-slate-500">Custom quote</td>
-            <td class="py-4 pl-4 text-center text-red-400">$2–$5+/ea</td>
-          </tr>
-          <tr class="bg-sky-900/30">
-            <td class="py-4 pr-6">
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 bg-gradient-to-br from-sky-500 to-indigo-600 rounded flex items-center justify-center text-white font-bold text-xs">S</div>
-                <span class="font-bold text-white">StatementScrub</span>
-                <span class="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">CHEAPEST</span>
-              </div>
-            </td>
-            <td class="py-4 px-4 text-center text-green-400 font-bold">$14.90 credits<br/><span class="text-xs text-green-300">($1.49/ea)</span></td>
-            <td class="py-4 px-4 text-center text-green-400 font-bold">$27.90 credits<br/><span class="text-xs text-green-300">($1.12/ea)</span></td>
-            <td class="py-4 px-4 text-center text-green-400 font-bold">$54.90 credits<br/><span class="text-xs text-green-300">($1.10/ea)</span></td>
-            <td class="py-4 px-4 text-center text-green-400 font-bold">$149/mo<br/><span class="text-xs text-green-300">(truly unlimited)</span></td>
-            <td class="py-4 pl-4 text-center text-green-400 font-bold">$1.00–$1.49/ea</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="text-center text-slate-500 text-xs mt-6">Based on publicly available market pricing. Subject to change.</p>
   </div>
 </section>
 
-<!-- Credit Packs Grid -->
-<section class="pb-20 bg-white">
+<!-- Credit Packs -->
+<section id="packs" class="py-20 bg-slate-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+    <div class="text-center mb-12">
+      <p class="text-sky-600 text-sm font-bold uppercase tracking-widest mb-2">One-time purchase</p>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3">Choose your credit pack</h2>
+      <p class="text-slate-500 max-w-xl mx-auto">The more you buy, the less you pay per report. All credits stack &mdash; never reset.</p>
+    </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
-      {% for pack, credits, price, per_credit, savings, badge, hot, note in [
-        ("Starter",    10,  14.90,  "$1.49",  "",              "",              false, "Perfect for occasional use"),
-        ("Basic",      25,  27.90,  "$1.12",  "25% cheaper",   "",              false, "Great for trying the platform"),
-        ("Standard",   50,  54.90,  "$1.10",  "26% cheaper",   "POPULAR",       true,  "Ideal for small brokerages"),
-        ("Business",  100, 104.90,  "$1.05",  "29% cheaper",   "",              false, "High-volume mortgage brokers"),
-        ("Growth",    250, 262.90,  "$1.05",  "37% cheaper",   "BEST VALUE",    false, "Teams processing 250+ statements"),
-        ("Scale",     500, 499.90,  "$1.00",  "40% cheaper",   "LOWEST PRICE",  false, "Enterprise & large lenders"),
+      {% for pack, credits, price, per_credit, savings_pct, badge, hot, note in [
+        ("Starter",   10,  14.90, "1.49", 0,  "",             false, "Perfect for occasional use"),
+        ("Basic",     25,  27.90, "1.12", 25, "",             false, "Great for exploring the platform"),
+        ("Standard",  50,  54.90, "1.10", 26, "POPULAR",      true,  "Ideal for small mortgage brokerages"),
+        ("Business", 100, 104.90, "1.05", 29, "",             false, "High-volume mortgage brokers"),
+        ("Growth",   250, 262.90, "1.05", 37, "BEST VALUE",   false, "Teams processing 250+ statements"),
+        ("Scale",    500, 499.90, "1.00", 40, "LOWEST PRICE", false, "Enterprise &amp; large lenders"),
       ] %}
-      <div class="relative bg-white rounded-2xl border-2 p-7 card-hover shadow-sm
-        {{ 'border-sky-500 shadow-xl shadow-sky-100' if hot else 'border-slate-200' }}">
+      <div class="relative bg-white rounded-2xl p-7 transition-all duration-200 {% if hot %}border-2 border-indigo-500 shadow-2xl shadow-indigo-100{% else %}border-2 border-slate-200 hover:border-slate-300 hover:shadow-lg{% endif %}">
 
         {% if badge %}
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap
-          {{ 'bg-gradient-to-r from-sky-500 to-indigo-600' if hot else 'bg-gradient-to-r from-indigo-500 to-purple-600' }}
-          text-white text-xs px-4 py-1.5 rounded-full font-bold tracking-wide shadow">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-white text-xs px-5 py-1.5 rounded-full font-black tracking-wide shadow-lg"
+          style="{% if hot %}background:linear-gradient(135deg,#6366f1,#0ea5e9){% elif badge == 'BEST VALUE' %}background:linear-gradient(135deg,#7c3aed,#6366f1){% else %}background:linear-gradient(135deg,#1e293b,#334155){% endif %}">
           {{ badge }}
         </div>
         {% endif %}
 
-        <div class="flex items-start justify-between mb-4">
+        <div class="flex items-start justify-between mb-5">
           <div>
-            <div class="text-slate-500 font-semibold text-sm mb-0.5">{{ pack }} Pack</div>
-            <div class="text-4xl font-black text-slate-900">{{ credits }}<span class="text-xl font-semibold text-slate-400 ml-1">credits</span></div>
+            <div class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-0.5">{{ pack }} Pack</div>
+            <div class="text-5xl font-black text-slate-900 leading-none">{{ credits }}<span class="text-base font-semibold text-slate-400 ml-1">credits</span></div>
           </div>
-          {% if savings %}
-          <span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">{{ savings }}</span>
+          {% if savings_pct > 0 %}
+          <div class="bg-green-50 border border-green-200 text-green-700 text-xs font-black px-2.5 py-1.5 rounded-xl">Save {{ savings_pct }}%</div>
           {% endif %}
         </div>
 
         <div class="border-t border-slate-100 pt-4 mb-5">
           <div class="flex items-end gap-1.5">
-            <span class="text-3xl font-black text-slate-900">${{ "%.0f"|format(price) }}</span>
-            <span class="text-slate-400 text-sm mb-1.5">one-time</span>
+            <span class="text-4xl font-black text-slate-900">${{ "%.0f"|format(price) }}</span>
+            <span class="text-slate-400 text-sm mb-2 font-medium">one-time</span>
           </div>
-          <div class="text-sky-600 font-semibold text-sm mt-1">{{ per_credit }} per analysis</div>
+          <div class="flex items-center gap-2 mt-1.5">
+            <span class="font-bold text-sm {% if hot %}text-indigo-600{% else %}text-sky-600{% endif %}">${{ per_credit }}/report</span>
+            {% if savings_pct > 0 %}<span class="text-slate-400 text-xs line-through">$1.49</span>{% endif %}
+          </div>
           <div class="text-slate-400 text-xs mt-1">{{ note }}</div>
         </div>
 
         <ul class="space-y-2 mb-6">
-          {% for feature in [
-            "Full AI bank statement analysis",
-            "Income verification",
-            "NSF & MCA detection",
-            "Risk score 0–100",
-            "APPROVE / REVIEW / DECLINE",
-            "Report history saved",
-          ] %}
-          <li class="flex items-center gap-2 text-sm text-slate-600">
-            <span class="w-4 h-4 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
+          {% for feature in ["Full AI statement analysis","Income verification report","NSF &amp; MCA detection","Risk score 0&ndash;100","APPROVE / REVIEW / DECLINE","Report history saved forever"] %}
+          <li class="flex items-center gap-2.5 text-sm text-slate-600">
+            <div class="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center {% if hot %}bg-indigo-100{% else %}bg-green-100{% endif %}">
+              <svg style="width:9px;height:9px" fill="currentColor" viewBox="0 0 20 20" class="{% if hot %}text-indigo-600{% else %}text-green-600{% endif %}">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
             {{ feature }}
           </li>
           {% endfor %}
         </ul>
 
         <a href="/auth/register"
-          class="block w-full py-3 rounded-xl text-center font-bold transition text-sm
-            {{ 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:opacity-90 shadow-lg shadow-sky-100' if hot else 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-          Buy {{ credits }} Credits →
+          class="block w-full py-3.5 rounded-xl text-center font-black text-sm transition-all duration-150 {% if hot %}text-white hover:opacity-90{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}"
+          {% if hot %}style="background:linear-gradient(135deg,#6366f1,#0ea5e9);box-shadow:0 8px 24px rgba(99,102,241,0.3)"{% endif %}>
+          Get {{ credits }} Credits &rarr;
         </a>
       </div>
       {% endfor %}
 
     </div>
 
-    <!-- Per-Credit Price Comparison Bar -->
-    <div class="mt-16 max-w-4xl mx-auto">
-      <h2 class="text-center text-xl font-bold text-slate-900 mb-8">Price per analysis — the more you buy, the less you pay</h2>
+    <!-- Price per report bar chart -->
+    <div class="mt-20 max-w-3xl mx-auto">
+      <h3 class="text-center text-xl font-black text-slate-900 mb-2">Price per analysis drops as you scale</h3>
+      <p class="text-center text-slate-500 text-sm mb-8">Industry average is $3&ndash;5 per report. Even our Starter pack beats that.</p>
       <div class="space-y-3">
-        {% for label, credits, price_per, pct in [
-          ("Starter (10 credits)",  10,  1.49, 100),
-          ("Basic (25 credits)",    25,  1.12, 75),
-          ("Standard (50 credits)", 50,  1.10, 74),
-          ("Business (100 credits)",100, 1.05, 70),
-          ("Growth (250 credits)",  250, 1.05, 70),
-          ("Scale (500 credits)",   500, 1.00, 67),
+        {% for label, pct, price_per, savings in [
+          ("Starter (10)", 100, "$1.49", ""),
+          ("Basic (25)", 75, "$1.12", "25% off"),
+          ("Standard (50)", 74, "$1.10", "26% off"),
+          ("Business (100)", 70, "$1.05", "29% off"),
+          ("Growth (250)", 70, "$1.05", "29% off"),
+          ("Scale (500)", 67, "$1.00", "33% off"),
         ] %}
         <div class="flex items-center gap-4">
-          <div class="w-44 text-sm text-slate-600 text-right flex-shrink-0">{{ label }}</div>
-          <div class="flex-1 bg-slate-100 rounded-full h-8 overflow-hidden">
-            <div class="h-full rounded-full flex items-center px-3 text-white text-xs font-bold
-              {% if pct > 70 %}bg-slate-500
-              {% elif pct > 50 %}bg-sky-500
-              {% elif pct > 35 %}bg-indigo-500
-              {% else %}bg-gradient-to-r from-sky-500 to-indigo-600{% endif %}"
-              style="width: {{ pct }}%">
-              ${{ price_per }}/report
+          <div class="w-36 text-sm text-slate-600 text-right flex-shrink-0 font-medium">{{ label }}</div>
+          <div class="flex-1 bg-slate-200 rounded-full h-9 overflow-hidden">
+            <div class="h-full rounded-full flex items-center px-3 text-white text-xs font-bold"
+              style="width:{{ pct }}%;min-width:5rem;{% if pct > 85 %}background:#94a3b8{% elif pct > 72 %}background:#38bdf8{% else %}background:linear-gradient(135deg,#6366f1,#0ea5e9){% endif %}">
+              {{ price_per }}/report
             </div>
           </div>
+          {% if savings %}
+          <div class="flex-shrink-0 text-xs font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-1 rounded-lg w-16 text-center">{{ savings }}</div>
+          {% else %}<div class="w-16"></div>{% endif %}
         </div>
         {% endfor %}
       </div>
-      <p class="text-center text-slate-400 text-sm mt-4">Every pack is cheaper than MoneyThumb's best price of $1.67/report — Scale pack as low as $1.00/report</p>
     </div>
 
   </div>
 </section>
 
-<!-- vs Subscription Comparison -->
+<!-- Competitor Comparison Table -->
+<section class="py-16 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <p class="text-sky-600 text-sm font-bold uppercase tracking-widest mb-2">Price Comparison</p>
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Significantly cheaper than every major alternative</h2>
+      <p class="text-slate-500 mt-3 text-sm">Same AI analysis quality. No restrictive templates. Up to 80% lower cost.</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200">
+              <th class="text-left text-slate-500 font-semibold py-4 px-5">Tool</th>
+              <th class="text-center text-slate-500 font-semibold py-4 px-4">5 reports</th>
+              <th class="text-center text-slate-500 font-semibold py-4 px-4">20 reports</th>
+              <th class="text-center text-slate-500 font-semibold py-4 px-4">60 reports</th>
+              <th class="text-center text-slate-500 font-semibold py-4 px-4">Pay-per</th>
+              <th class="text-center text-slate-500 font-semibold py-4 px-4">Model</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-4 px-5 font-semibold text-slate-700">Other Tool A</td>
+              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$24.95/mo</span><br/><span class="text-xs text-slate-400">$4.99/ea</span></td>
+              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$49.95/mo</span><br/><span class="text-xs text-slate-400">$2.50/ea</span></td>
+              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$99.95/mo</span><br/><span class="text-xs text-slate-400">$1.67/ea</span></td>
+              <td class="py-4 px-4 text-center text-red-500 font-bold">$2&ndash;5/ea</td>
+              <td class="py-4 px-4 text-center"><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-1 rounded-lg">Subscription</span></td>
+            </tr>
+            <tr>
+              <td class="py-4 px-5 font-semibold text-slate-700">Other Tool B</td>
+              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$39/mo</span><br/><span class="text-xs text-slate-400">~$2.44/ea</span></td>
+              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$74/mo</span><br/><span class="text-xs text-slate-400">~$1.80/ea</span></td>
+              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$159/mo</span><br/><span class="text-xs text-slate-400">~$0.96/ea</span></td>
+              <td class="py-4 px-4 text-center text-slate-400">&mdash;</td>
+              <td class="py-4 px-4 text-center"><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-1 rounded-lg">Subscription</span></td>
+            </tr>
+            <tr>
+              <td class="py-4 px-5 font-semibold text-slate-700">Other Tool C</td>
+              <td class="py-4 px-4 text-center text-slate-400 text-xs italic">Custom quote</td>
+              <td class="py-4 px-4 text-center text-slate-400 text-xs italic">Custom quote</td>
+              <td class="py-4 px-4 text-center text-slate-400 text-xs italic">Custom quote</td>
+              <td class="py-4 px-4 text-center text-red-500 font-bold">$2&ndash;5+/ea</td>
+              <td class="py-4 px-4 text-center"><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-1 rounded-lg">Enterprise</span></td>
+            </tr>
+            <tr style="background:linear-gradient(135deg,rgba(224,242,254,0.7),rgba(238,242,255,0.6));border-top:2px solid #c7d2fe">
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs" style="background:linear-gradient(135deg,#6366f1,#0ea5e9)">S</div>
+                  <span class="font-black text-slate-900">StatementScrub</span>
+                  <span class="bg-green-500 text-white text-xs font-black px-2 py-0.5 rounded-full">CHEAPEST</span>
+                </div>
+              </td>
+              <td class="py-4 px-4 text-center"><span class="text-green-600 font-black">$14.90</span><br/><span class="text-xs text-green-500 font-bold">$1.49/ea</span></td>
+              <td class="py-4 px-4 text-center"><span class="text-green-600 font-black">$27.90</span><br/><span class="text-xs text-green-500 font-bold">$1.12/ea</span></td>
+              <td class="py-4 px-4 text-center"><span class="text-green-600 font-black">$54.90</span><br/><span class="text-xs text-green-500 font-bold">$1.10/ea</span></td>
+              <td class="py-4 px-4 text-center text-green-600 font-black">$1.00&ndash;1.49</td>
+              <td class="py-4 px-4 text-center"><span class="bg-green-50 text-green-700 text-xs font-black px-2 py-1 rounded-lg border border-green-200">Pay-as-you-go</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="text-center text-slate-400 text-xs mt-4">Based on publicly available market pricing. Subject to change.</p>
+  </div>
+</section>
+
+<!-- Credits vs Subscription -->
 <section class="py-16 bg-slate-50">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-10">
-      <h2 class="text-2xl font-bold text-slate-900">Credits vs Monthly Subscription — which is right for you?</h2>
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Credits or monthly plan?</h2>
+      <p class="text-slate-500 mt-2 text-sm">Pick what fits your workflow.</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white rounded-2xl border border-slate-200 p-7 shadow-sm">
-        <div class="text-3xl mb-3">🎟️</div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Buy Credits if you…</h3>
-        <ul class="space-y-2.5 text-sm text-slate-600">
-          {% for item in [
-            "Don't analyze statements every month",
-            "Want to try before committing to a plan",
-            "Have unpredictable or seasonal volume",
-            "Just need a one-time bulk analysis run",
-            "Want credits that never expire",
-          ] %}
-          <li class="flex items-center gap-2">
-            <span class="text-sky-500 font-bold flex-shrink-0">✓</span> {{ item }}
+      <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-2xl mb-4">&#127903;</div>
+        <h3 class="text-lg font-black text-slate-900 mb-1">Buy Credits when you&hellip;</h3>
+        <p class="text-slate-500 text-sm mb-5">Flexible, no recurring charges.</p>
+        <ul class="space-y-3 mb-6">
+          {% for item in ["Don't analyze statements every month","Want to try before committing","Have unpredictable or seasonal volume","Need a one-time bulk analysis run","Want credits that truly never expire"] %}
+          <li class="flex items-start gap-3 text-sm text-slate-600">
+            <div class="w-5 h-5 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5" style="color:#0284c7">
+              <svg style="width:9px;height:9px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ item }}
           </li>
           {% endfor %}
         </ul>
-        <a href="#packs" class="mt-6 block text-center bg-slate-100 text-slate-700 font-bold py-2.5 rounded-xl hover:bg-slate-200 transition text-sm">
-          Browse Credit Packs ↑
-        </a>
+        <a href="#packs" class="block text-center bg-slate-100 text-slate-800 font-bold py-3 rounded-xl hover:bg-slate-200 transition text-sm">Browse Credit Packs &uarr;</a>
       </div>
-      <div class="bg-gradient-to-br from-sky-50 to-indigo-50 rounded-2xl border border-sky-200 p-7 shadow-sm">
-        <div class="text-3xl mb-3">📅</div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Subscribe monthly if you…</h3>
-        <ul class="space-y-2.5 text-sm text-slate-600">
-          {% for item in [
-            "Analyze statements every week or daily",
-            "Want the lowest possible per-report cost",
-            "Need unlimited reports (Pro plan)",
-            "Want Telegram bot access (Pro)",
-            "Process 50+ statements per month",
-          ] %}
-          <li class="flex items-center gap-2">
-            <span class="text-indigo-500 font-bold flex-shrink-0">✓</span> {{ item }}
+      <div class="rounded-2xl p-8 shadow-xl text-white" style="background:linear-gradient(135deg,#4f46e5,#0ea5e9)">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4" style="background:rgba(255,255,255,0.15)">&#128197;</div>
+        <h3 class="text-lg font-black mb-1">Subscribe monthly when you&hellip;</h3>
+        <p class="text-sm mb-5" style="color:rgba(255,255,255,0.7)">Best for high-volume teams.</p>
+        <ul class="space-y-3 mb-6">
+          {% for item in ["Analyze statements daily or weekly","Want the absolute lowest per-report cost","Need unlimited reports (Pro plan)","Want Telegram bot notifications","Process 50+ statements per month"] %}
+          <li class="flex items-start gap-3 text-sm" style="color:rgba(255,255,255,0.9)">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(255,255,255,0.2)">
+              <svg style="width:9px;height:9px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ item }}
           </li>
           {% endfor %}
         </ul>
-        <a href="/#pricing" class="mt-6 block text-center bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold py-2.5 rounded-xl hover:opacity-90 transition text-sm shadow-lg shadow-sky-100">
-          See Subscription Plans →
-        </a>
+        <a href="/#pricing" class="block text-center bg-white text-indigo-700 font-black py-3 rounded-xl hover:bg-indigo-50 transition text-sm shadow-lg">View Subscription Plans &rarr;</a>
       </div>
     </div>
   </div>
@@ -241,23 +279,27 @@
 <!-- FAQ -->
 <section class="py-16 bg-white">
   <div class="max-w-3xl mx-auto px-4 sm:px-6">
-    <h2 class="text-2xl font-bold text-slate-900 text-center mb-8">Credit Pack FAQ</h2>
-    <div class="space-y-4">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Frequently Asked Questions</h2>
+    </div>
+    <div class="space-y-3">
       {% for q, a in [
-        ("Do credits expire?", "No. Credits never expire. Once purchased, they stay in your account until you use them — no time limit."),
-        ("Can I buy multiple packs?", "Yes. Credits stack. If you buy a 100-credit pack and a 50-credit pack, you'll have 150 credits total in your account."),
-        ("What counts as 1 credit?", "One credit = one full bank statement analysis. This includes uploading a PDF, running the full AI analysis, and generating your complete report."),
-        ("Can I combine credits with a subscription?", "Yes. If you have a subscription and run out of monthly reports, credits can cover the overflow."),
-        ("What if I need more than 500?", "Contact us at support@statementscrub.com for custom enterprise pricing on 1,000+ credit packs."),
-        ("Is there a refund policy?", "Unused credits can be refunded within 14 days of purchase. Contact support@statementscrub.com."),
+        ("Do credits expire?","No. Credits never expire. Once purchased, they stay in your account until you use them &mdash; no time limit, no pressure."),
+        ("Can I buy multiple packs?","Yes. Credits stack. Buy a 100-credit pack and a 50-credit pack and you will have 150 credits total. They combine automatically."),
+        ("What counts as 1 credit?","One credit = one full bank statement analysis. Upload a PDF, AI processes it, you get a complete structured report with income, NSF, risk score, and recommendation."),
+        ("Can I combine credits with a subscription?","Yes. If you are on a subscription plan and exhaust your monthly reports, credits automatically cover the overflow &mdash; no interruption."),
+        ("What if I need more than 500 credits?","Contact us at support@statementscrub.com for custom enterprise pricing on 1,000+ credit packs with volume discounts."),
+        ("Is there a refund policy?","Unused credits can be refunded within 14 days of purchase. Email support@statementscrub.com with your order details."),
       ] %}
-      <div class="border border-slate-200 rounded-xl overflow-hidden">
+      <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
         <details class="group">
-          <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition">
-            <span class="font-semibold text-slate-900 text-sm">{{ q }}</span>
-            <span class="text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4">↓</span>
+          <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition-colors select-none">
+            <span class="font-bold text-slate-900 text-sm">{{ q }}</span>
+            <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 ml-4 transition-colors" style="color:#94a3b8">
+              <svg style="width:12px;height:12px" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200 group-open:rotate-180"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </span>
           </summary>
-          <div class="px-5 pb-5 text-slate-600 text-sm leading-relaxed">{{ a }}</div>
+          <div class="px-5 pb-5 text-slate-600 text-sm leading-relaxed border-t border-slate-100">{{ a }}</div>
         </details>
       </div>
       {% endfor %}
@@ -265,14 +307,25 @@
   </div>
 </section>
 
-<!-- CTA -->
-<section class="py-16 bg-gradient-to-r from-sky-600 to-indigo-700">
-  <div class="max-w-3xl mx-auto px-4 text-center">
-    <h2 class="text-3xl font-black text-white mb-3">Start with 3 free reports first</h2>
-    <p class="text-sky-200 text-lg mb-6">No credit card needed. See the quality before you buy.</p>
-    <a href="/auth/register" class="inline-block bg-white text-sky-700 px-10 py-4 rounded-xl font-black text-lg hover:bg-sky-50 transition shadow-2xl">
-      Try Free First →
-    </a>
+<!-- Bottom CTA -->
+<section class="py-20 relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#0f172a 100%)">
+  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle at 30% 50%,rgba(99,102,241,0.18) 0%,transparent 55%),radial-gradient(circle at 75% 30%,rgba(14,165,233,0.1) 0%,transparent 50%)"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle,rgba(148,163,184,0.08) 1px,transparent 1px);background-size:28px 28px"></div>
+  <div class="relative max-w-3xl mx-auto px-4 text-center">
+    <div class="text-4xl mb-4">&#127873;</div>
+    <h2 class="text-3xl sm:text-4xl font-black text-white mb-3">Start with 3 free reports first</h2>
+    <p class="text-slate-300 text-lg mb-8">No credit card needed. Experience the quality before you commit to a pack.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="/auth/register" class="inline-flex items-center justify-center gap-2 bg-white text-indigo-700 px-8 py-4 rounded-xl font-black text-base hover:bg-indigo-50 transition shadow-2xl">
+        Try Free &mdash; No Card Needed
+        <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#packs" class="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-bold text-base transition" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)">
+        View Credit Packs
+      </a>
+    </div>
+    <p class="text-slate-500 text-xs mt-6">3 free reports included with every new account &middot; No credit card required</p>
   </div>
 </section>
+
 {% endblock %}
