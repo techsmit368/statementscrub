@@ -6,6 +6,11 @@ router = APIRouter(tags=["pages"])
 templates = Jinja2Templates(directory="app/templates")
 
 
+@router.get("/credits", response_class=HTMLResponse)
+async def credits(request: Request):
+    return templates.TemplateResponse("credits.html", {"request": request, "user": None})
+
+
 @router.get("/terms", response_class=HTMLResponse)
 async def terms(request: Request):
     return templates.TemplateResponse("terms.html", {"request": request, "user": None})
