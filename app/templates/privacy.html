@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — StatementScrub{% endblock %}
+{% block content %}
+<section class="relative bg-white overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-indigo-50 pointer-events-none"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+    <div class="mb-12">
+      <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-3">Legal</p>
+      <h1 class="text-4xl font-black text-slate-900 mb-3">Privacy Policy</h1>
+      <p class="text-slate-400 text-sm">Last updated: June 1, 2025 &nbsp;·&nbsp; Effective: June 1, 2025</p>
+    </div>
+
+    <div class="bg-sky-50 border border-sky-200 rounded-xl p-5 text-sky-800 text-sm mb-10">
+      <strong>Your privacy matters.</strong> StatementScrub processes sensitive financial documents. This policy explains exactly what data we collect, how we use it, and your rights — in plain English.
+    </div>
+
+    <!-- Quick Summary -->
+    <div class="bg-slate-900 rounded-2xl p-8 mb-12 text-white">
+      <h2 class="text-lg font-bold mb-5 text-sky-400 uppercase tracking-widest text-sm">Quick Summary</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {% for icon, point in [
+          ("🗑️", "Uploaded PDFs are deleted from our servers within 24 hours"),
+          ("🔒", "All data is encrypted in transit (TLS) and at rest"),
+          ("🚫", "We never sell your data to third parties"),
+          ("📧", "We only email you about your account or product updates"),
+          ("👤", "You can delete your account and all data at any time"),
+          ("🤖", "AI analysis is automated — no human reads your statements"),
+        ] %}
+        <div class="flex items-start gap-3">
+          <span class="text-xl flex-shrink-0">{{ icon }}</span>
+          <span class="text-slate-300 text-sm leading-relaxed">{{ point }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="space-y-10 text-slate-600 leading-relaxed">
+
+      {% for section, body in [
+        ("1. Who We Are",
+        "StatementScrub (\"we\", \"us\", \"Company\") operates the website statementscrub.com and the StatementScrub bank statement analysis service. For privacy-related inquiries, contact us at support@statementscrub.com."),
+
+        ("2. Information We Collect",
+        "We collect the following categories of information: (a) Account Information: name, email address, password (hashed, never stored in plain text), and subscription plan. (b) Uploaded Files: bank statement PDFs you upload to use the Service. These files are processed by our AI system and deleted within 24 hours. (c) Analysis Data: extracted financial data from your uploaded statements (transaction summaries, income figures, risk scores) retained to provide report history. (d) Payment Information: billing details processed by Stripe. We do not store full card numbers — Stripe handles all payment data. (e) Usage Data: log data including IP address, browser type, pages visited, and feature usage, used to improve the Service. (f) Telegram Data: if you use the Pro Telegram bot feature, your Telegram user ID is stored to link your bot sessions to your account."),
+
+        ("3. How We Use Your Information",
+        "We use the information we collect to: (a) provide, operate, and improve the Service; (b) process your bank statement uploads and generate analysis reports; (c) manage your account and subscription; (d) send transactional emails (report ready, account alerts, billing receipts); (e) send product updates and feature announcements (you can opt out at any time); (f) detect and prevent fraud, abuse, and security incidents; (g) comply with legal obligations."),
+
+        ("4. Bank Statement Data — Special Handling",
+        "Bank statement PDFs contain highly sensitive financial information. We treat this data with the highest level of care: (a) PDFs are uploaded over encrypted HTTPS connections only; (b) Files are processed by our AI in an isolated environment; (c) Raw PDF files are automatically deleted within 24 hours of upload; (d) Extracted financial data (transaction summaries, totals) is retained to power your report history dashboard; (e) No human employee reads your uploaded bank statements unless you explicitly contact support and share a file; (f) We do not use your financial data to train our AI models without explicit consent."),
+
+        ("5. Sharing Your Information",
+        "We do not sell, trade, or rent your personal information to third parties. We share information only in the following circumstances: (a) Service Providers: we use Stripe for payment processing, and standard cloud infrastructure providers. These parties are bound by data processing agreements. (b) Legal Requirements: we may disclose information if required by law, subpoena, court order, or to protect the rights, property, or safety of StatementScrub, our users, or the public. (c) Business Transfers: if StatementScrub is acquired or merged, your data may transfer to the new entity, subject to the same privacy protections. We will notify you of any such transfer."),
+
+        ("6. Data Retention",
+        "We retain your data as follows: (a) Account data: retained for the duration of your account and for 90 days after deletion; (b) Uploaded PDFs: deleted within 24 hours of upload; (c) Analysis report data: retained for the duration of your account to power report history; (d) Payment records: retained for 7 years as required by financial regulations; (e) Log data: retained for 90 days."),
+
+        ("7. Security",
+        "We implement industry-standard security measures including: TLS/SSL encryption for all data in transit; encryption at rest for stored data; hashed password storage using bcrypt; access controls limiting employee access to production data; regular security reviews. No method of transmission over the internet is 100% secure. While we strive to use commercially acceptable means to protect your data, we cannot guarantee absolute security."),
+
+        ("8. Your Rights",
+        "Depending on your location, you may have the following rights regarding your personal data: (a) Access: request a copy of the personal data we hold about you; (b) Correction: request correction of inaccurate data; (c) Deletion: request deletion of your account and associated data; (d) Portability: request an export of your data in a machine-readable format; (e) Opt-out: unsubscribe from marketing emails at any time via the unsubscribe link or by contacting us. To exercise any of these rights, email us at support@statementscrub.com."),
+
+        ("9. California Privacy Rights (CCPA)",
+        "If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA): (a) the right to know what personal information we collect, use, disclose, and sell; (b) the right to delete personal information; (c) the right to opt out of the sale of personal information — we do not sell personal information; (d) the right to non-discrimination for exercising your privacy rights. To submit a CCPA request, email support@statementscrub.com with the subject line 'CCPA Request'."),
+
+        ("10. Cookies and Tracking",
+        "We use session cookies to maintain your login state. We do not use third-party advertising cookies or behavioral tracking. We may use basic analytics (such as server-side logging) to understand how users use the Service. We do not use Google Analytics or other third-party analytics services that track users across websites."),
+
+        ("11. Children's Privacy",
+        "StatementScrub is not directed to individuals under the age of 18. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a minor, please contact us immediately at support@statementscrub.com."),
+
+        ("12. Third-Party Links",
+        "Our Service may contain links to third-party websites. We are not responsible for the privacy practices of those sites. We encourage you to review the privacy policies of any third-party sites you visit."),
+
+        ("13. Changes to This Policy",
+        "We may update this Privacy Policy from time to time. We will notify you of material changes by email (to the address associated with your account) or by posting a prominent notice on our website. The updated policy will be effective on the date listed at the top of this page. Continued use of the Service after the effective date constitutes acceptance of the revised policy."),
+
+        ("14. Contact Us",
+        "For privacy questions, data requests, or concerns, contact us at: Email: support@statementscrub.com · Website: statementscrub.com/contact · We aim to respond to all privacy inquiries within 5 business days."),
+      ] %}
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-3 pb-2 border-b border-slate-100">{{ section }}</h2>
+        <p>{{ body }}</p>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-slate-200 flex flex-wrap gap-4 text-sm">
+      <a href="/terms" class="text-sky-600 hover:underline font-medium">Terms of Service →</a>
+      <a href="/contact" class="text-sky-600 hover:underline font-medium">Contact Us →</a>
+      <a href="/" class="text-slate-400 hover:text-slate-600 transition-colors">← Back to Home</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
