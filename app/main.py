@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from contextlib import asynccontextmanager
 from app.database import engine, Base
-from app.routers import auth, upload, telegram, blog
+from app.routers import auth, upload, telegram, blog, pages
 from app.services.auth import get_current_user
 from app.database import get_db
 import app.models
@@ -24,6 +24,7 @@ app.include_router(auth.router)
 app.include_router(upload.router)
 app.include_router(telegram.router)
 app.include_router(blog.router)
+app.include_router(pages.router)
 
 templates = Jinja2Templates(directory="app/templates")
 
