@@ -3,230 +3,244 @@
 
 {% block head %}
 <style>
-  .hero-bg {
-    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14,165,233,0.12) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(99,102,241,0.08) 0%, transparent 50%),
-                #020817;
-  }
-  .stat-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-  .feature-icon {
-    background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(99,102,241,0.1));
-    border: 1px solid rgba(14,165,233,0.2);
-  }
-  .demo-window {
-    background: #0d1627;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-  }
-  .demo-progress-bar {
-    background: linear-gradient(90deg, #0ea5e9, #6366f1);
-    transition: width 0.3s ease;
-    border-radius: 4px;
-  }
-  .result-row { animation: slide-up 0.4s ease forwards; opacity: 0; }
-  .risk-badge-low { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+  .upload-zone { border: 2px dashed rgba(99,102,241,0.35); transition: all 0.3s; }
+  .upload-zone:hover { border-color: #6366f1; background: rgba(99,102,241,0.04); }
   .pricing-popular {
-    background: linear-gradient(135deg, rgba(14,165,233,0.08), rgba(99,102,241,0.06));
-    border: 1px solid rgba(14,165,233,0.3);
-    box-shadow: 0 0 40px rgba(14,165,233,0.08);
+    background: linear-gradient(135deg, #1e1b4b, #1e3a5f);
+    border: 2px solid #6366f1;
+    box-shadow: 0 8px 40px rgba(99,102,241,0.25);
   }
-  .upload-drop-zone {
-    border: 2px dashed rgba(14,165,233,0.3);
-    transition: all 0.3s;
+  .feature-card-1 { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; }
+  .feature-card-2 { background: linear-gradient(135deg, #fdf4ff, #f3e8ff); border: 1px solid #e9d5ff; }
+  .feature-card-3 { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #bbf7d0; }
+  .feature-card-4 { background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 1px solid #fed7aa; }
+  .feature-card-5 { background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #fbcfe8; }
+  .feature-card-6 { background: linear-gradient(135deg, #f0fdfa, #ccfbf1); border: 1px solid #99f6e4; }
+
+  .step-connector::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: calc(100% + 8px);
+    width: calc(100% - 16px);
+    height: 2px;
+    background: linear-gradient(90deg, #6366f1, #0ea5e9);
+    opacity: 0.3;
   }
-  .upload-drop-zone:hover { border-color: rgba(14,165,233,0.6); background: rgba(14,165,233,0.04); }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- HERO -->
-<section class="hero-bg dot-pattern-dark relative overflow-hidden min-h-[92vh] flex items-center">
-  <div class="absolute inset-0 pointer-events-none">
-    <div class="glow-orb absolute w-[600px] h-[600px] -top-32 -left-16 opacity-60"></div>
-    <div class="glow-orb-purple absolute w-[500px] h-[500px] top-20 right-0 opacity-40"></div>
-    <div class="glow-orb absolute w-[400px] h-[400px] bottom-0 left-1/2 -translate-x-1/2 opacity-30"></div>
-  </div>
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="hero-gradient relative overflow-hidden" style="min-height: 90vh; display: flex; align-items: center;">
+  <div class="hero-glow absolute inset-0 pointer-events-none"></div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 w-full">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <!-- Left: Hero Copy -->
+  <!-- dot grid -->
+  <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 30px 30px;"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full py-20">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+      <!-- Left -->
       <div class="animate-slide-up">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-semibold mb-6 badge-glow">
-          <span class="w-1.5 h-1.5 bg-sky-400 rounded-full animate-pulse"></span>
-          AI-Powered Analysis · Results in 30 Seconds
+        <div class="section-label mb-6" style="background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3);">
+          <span style="width:7px;height:7px;border-radius:50%;background:#818cf8;animation:pulse 2s infinite;display:inline-block;"></span>
+          AI-Powered · Results in 30 Seconds
         </div>
 
-        <h1 class="text-5xl sm:text-6xl font-black leading-[1.08] tracking-tight text-white mb-6">
-          Bank Statements<br/>
-          <span class="gradient-text">Analyzed Instantly</span><br/>
-          with AI
+        <h1 style="font-size: clamp(2.5rem, 5vw, 3.75rem); font-weight: 900; line-height: 1.07; letter-spacing: -0.02em; color: #fff; margin-bottom: 1.5rem;">
+          Bank Statement<br/>
+          Analysis That<br/>
+          <span style="background: linear-gradient(135deg, #818cf8, #38bdf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Moves at AI Speed</span>
         </h1>
 
-        <p class="text-lg text-slate-400 leading-relaxed mb-8 max-w-lg">
-          Upload a PDF and get a complete financial risk report in seconds. Income verification, NSF flags, balance trends, and approval recommendations — fully automated.
+        <p style="font-size: 1.125rem; color: #94a3b8; line-height: 1.7; margin-bottom: 2rem; max-width: 480px;">
+          Upload a PDF. Get income verification, NSF flags, MCA detection, and an approval recommendation in under 30 seconds. Built for lenders who can't afford to wait.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-3 mb-10">
-          <a href="/auth/register" class="btn-primary text-white font-bold px-6 py-3.5 rounded-xl text-base text-center flex items-center justify-center gap-2">
-            Start Analyzing Free
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          <a href="/auth/register" class="btn-primary text-base px-7 py-4 text-center" style="border-radius: 14px;">
+            Start Free — 3 Analyses Included
           </a>
-          <a href="#instant-demo" class="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/10 text-slate-300 font-semibold hover:bg-white/5 transition-all text-base">
-            <svg class="w-4 h-4 text-sky-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <a href="#demo" class="btn-outline text-base px-6 py-4 text-center flex items-center justify-center gap-2" style="border-color: rgba(255,255,255,0.15); color: #cbd5e1; background: rgba(255,255,255,0.05);">
+            <svg style="width:18px;height:18px;color:#818cf8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             See Live Demo
           </a>
         </div>
 
-        <div class="flex flex-wrap items-center gap-5 text-xs text-slate-500">
-          <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>No credit card required</span>
-          <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 free analyses included</span>
-          <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>PDFs deleted within 24h</span>
+        <div style="display:flex; flex-wrap:wrap; gap:20px; font-size:13px; color:#64748b">
+          {% for t in ["No credit card required","3 free analyses included","PDFs deleted within 24h"] %}
+          <span style="display:flex;align-items:center;gap:6px;">
+            <svg style="width:14px;height:14px;color:#34d399;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            {{ t }}
+          </span>
+          {% endfor %}
         </div>
       </div>
 
-      <!-- Right: Mock Report Card -->
-      <div class="relative animate-fade-in" style="animation-delay:0.2s">
-        <div class="demo-window rounded-2xl overflow-hidden">
-          <div class="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/2">
-            <div class="flex gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
-              <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
-              <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
+      <!-- Right — sample report card -->
+      <div class="animate-float" style="animation-delay: 0.2s">
+        <div class="demo-window">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03)">
+            <div style="display:flex;gap:6px">
+              <span style="width:12px;height:12px;border-radius:50%;background:#ef4444;opacity:0.7"></span>
+              <span style="width:12px;height:12px;border-radius:50%;background:#f59e0b;opacity:0.7"></span>
+              <span style="width:12px;height:12px;border-radius:50%;background:#22c55e;opacity:0.7"></span>
             </div>
-            <span class="text-xs text-slate-500 font-mono">Statement Analysis Report</span>
-            <span class="text-xs text-green-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>Complete</span>
+            <span style="font-size:11px;color:#475569;font-family:monospace">analysis_report.pdf</span>
+            <span style="font-size:11px;color:#34d399;font-weight:700;display:flex;align-items:center;gap:5px">
+              <span style="width:7px;height:7px;background:#34d399;border-radius:50%"></span>Complete
+            </span>
           </div>
-          <div class="p-5 space-y-4">
-            <div class="flex items-start justify-between">
+          <div style="padding: 20px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
               <div>
-                <div class="text-xs text-slate-500 mb-0.5">Account Holder</div>
-                <div class="font-semibold text-white text-sm">James R. Mitchell</div>
-                <div class="text-xs text-slate-500 mt-0.5">Chase Bank · Jan 2024 – Mar 2024</div>
+                <div style="font-size:11px;color:#475569;margin-bottom:3px">Account Holder</div>
+                <div style="font-size:15px;font-weight:700;color:#f1f5f9">James R. Mitchell</div>
+                <div style="font-size:11px;color:#475569;margin-top:2px">Chase Bank · Jan – Mar 2024</div>
               </div>
-              <span class="risk-badge-low px-2.5 py-1 rounded-full text-xs font-bold">LOW RISK</span>
+              <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:800">LOW RISK</span>
             </div>
-            <div class="grid grid-cols-2 gap-2.5">
-              {% for label, value, color in [("Avg Monthly Deposits","$9,840","text-green-400"),("Avg Monthly Withdraw","$7,120","text-slate-300"),("Avg Daily Balance","$4,250","text-sky-400"),("Ending Balance","$6,180","text-sky-400"),("NSF Count","0","text-green-400"),("Overdrafts","0","text-green-400")] %}
-              <div class="bg-white/3 rounded-xl p-3 border border-white/5">
-                <div class="text-xs text-slate-500 mb-1">{{ label }}</div>
-                <div class="text-sm font-bold {{ color }}">{{ value }}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+              {% for label, val, col in [
+                ("Avg Monthly Deposits","$9,840","#4ade80"),
+                ("Avg Monthly Withdrawals","$7,120","#94a3b8"),
+                ("Avg Daily Balance","$4,250","#38bdf8"),
+                ("Ending Balance","$6,180","#38bdf8"),
+                ("NSF Count","0","#4ade80"),
+                ("Overdraft Events","0","#4ade80")
+              ] %}
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 12px">
+                <div style="font-size:10px;color:#475569;margin-bottom:3px">{{ label }}</div>
+                <div style="font-size:13px;font-weight:700;color:{{ col }}">{{ val }}</div>
               </div>
               {% endfor %}
             </div>
-            <div class="bg-green-500/8 border border-green-500/15 rounded-xl p-3 flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-green-500/15 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px">
+              <div style="width:30px;height:30px;background:rgba(34,197,94,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg style="width:16px;height:16px;color:#4ade80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </div>
               <div>
-                <div class="text-xs font-bold text-green-400">Recommended: APPROVE</div>
-                <div class="text-xs text-slate-500">Stable income, no red flags detected</div>
+                <div style="font-size:12px;font-weight:800;color:#4ade80">Recommendation: APPROVE</div>
+                <div style="font-size:11px;color:#475569;margin-top:2px">Stable income · No red flags detected</div>
               </div>
             </div>
           </div>
         </div>
-        <div class="absolute -bottom-4 -right-4 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl px-4 py-2.5 shadow-lg shadow-sky-500/30 text-white text-xs font-bold">
-          ⚡ 23 seconds
-        </div>
+        <!-- Floating badge -->
+        <div style="position:absolute;bottom:-14px;right:10px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:12px;font-weight:800;padding:8px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(99,102,241,0.45)">⚡ 23 seconds</div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- STATS BAR -->
-<section class="border-y border-white/5 bg-white/1">
-  <div class="max-w-7xl mx-auto px-4 py-10">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-      {% for num, label in [("12,400+","Statements Analyzed"),("30s","Average Processing"),("99.2%","Accuracy Rate"),("$0.49","Starting Per Analysis")] %}
-      <div class="stat-card rounded-2xl px-6 py-5">
-        <div class="text-3xl font-black gradient-text-warm mb-1">{{ num }}</div>
-        <div class="text-xs text-slate-500 font-medium">{{ label }}</div>
+<!-- ═══════════════════════ STATS BAR ═══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;">
+  <div class="max-w-6xl mx-auto px-4 py-10">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+      {% for num, label, icon in [
+        ("12,400+","Statements Analyzed","📊"),
+        ("<30s","Average Processing","⚡"),
+        ("99.2%","Accuracy Rate","🎯"),
+        ("$0.49","Lowest Per-Analysis","💰")
+      ] %}
+      <div style="text-align:center;padding:8px 16px;{% if not loop.last %}border-right:1px solid #e2e8f0;{% endif %}">
+        <div style="font-size:13px;margin-bottom:4px">{{ icon }}</div>
+        <div class="stat-number gradient-text">{{ num }}</div>
+        <div style="font-size:12px;color:#64748b;margin-top:3px;font-weight:500">{{ label }}</div>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- INTERACTIVE INSTANT DEMO -->
-<section id="instant-demo" class="py-24 relative overflow-hidden">
-  <div class="absolute inset-0 dot-pattern opacity-50"></div>
-  <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">
-        Interactive Demo · No signup required
+<!-- ═══════════════════════ LIVE DEMO ═══════════════════════ -->
+<section id="demo" style="background:#ffffff;padding:100px 0;">
+  <div class="max-w-5xl mx-auto px-4">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="section-label mb-5" style="background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;">
+        ✨ Interactive Demo · No signup required
       </div>
-      <h2 class="text-4xl font-black text-white mb-4">Try It <span class="gradient-text">Right Now</span></h2>
-      <p class="text-slate-400 max-w-lg mx-auto">See exactly what StatementScrub produces. Click the button to watch a full simulated analysis run in real time.</p>
+      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:16px">
+        Watch It Work — <span class="gradient-text">Live</span>
+      </h2>
+      <p style="color:#64748b;font-size:1.1rem;max-width:500px;margin:0 auto">Click the button to watch a complete analysis run in real time. No account needed.</p>
     </div>
 
-    <div class="demo-window rounded-2xl overflow-hidden max-w-3xl mx-auto">
-      <div class="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-white/2">
-        <div class="flex gap-1.5">
-          <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
-          <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
-          <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
+    <!-- Browser chrome wrapper -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:24px;padding:6px;box-shadow:0 24px 60px rgba(15,23,42,0.1)">
+      <!-- Address bar -->
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;background:#fff;border-radius:16px;margin-bottom:6px;border:1px solid #e2e8f0">
+        <div style="display:flex;gap:5px">
+          <span style="width:11px;height:11px;border-radius:50%;background:#ef4444;opacity:0.7"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#f59e0b;opacity:0.7"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#22c55e;opacity:0.7"></span>
         </div>
-        <span class="text-xs text-slate-500 font-mono">statementscrub.com — Live Analysis</span>
-        <div id="demo-status-badge" class="text-xs text-slate-500 font-medium">Ready</div>
+        <div style="flex:1;background:#f1f5f9;border-radius:8px;padding:4px 12px;font-size:12px;color:#64748b;font-family:monospace">🔒 statementscrub.com/analyze</div>
+        <div id="demo-badge" style="font-size:11px;color:#94a3b8;font-weight:600">Ready</div>
       </div>
 
-      <div class="p-6">
-        <!-- Step 1: Upload prompt -->
-        <div id="demo-step-upload" class="text-center py-8">
-          <div class="upload-drop-zone rounded-2xl p-10 mb-6">
-            <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mx-auto mb-4">
-              <svg class="w-7 h-7 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+      <!-- Demo area -->
+      <div style="background:#0f172a;border-radius:14px;padding:28px;">
+
+        <!-- STEP 1: Upload prompt -->
+        <div id="demo-step-1">
+          <div class="upload-zone" style="border-radius:16px;padding:48px 24px;text-align:center;">
+            <div style="width:56px;height:56px;background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(14,165,233,0.15));border:1px solid rgba(99,102,241,0.3);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+              <svg style="width:26px;height:26px;color:#818cf8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
             </div>
-            <div class="text-white font-semibold mb-1">Drop a bank statement PDF here</div>
-            <div class="text-slate-500 text-sm mb-5">or click the button to run a demo instantly</div>
-            <button onclick="runDemo()" class="btn-primary text-white font-bold px-6 py-3 rounded-xl text-sm">
-              ▶ Run Live Demo
+            <div style="color:#e2e8f0;font-weight:700;font-size:16px;margin-bottom:6px">Drop your bank statement PDF</div>
+            <div style="color:#475569;font-size:13px;margin-bottom:24px">or run a live demo below — no upload required</div>
+            <button onclick="runDemo()" class="btn-primary" style="padding:12px 32px;font-size:14px;cursor:pointer;border:none">
+              ▶ Run Live Demo Now
             </button>
           </div>
         </div>
 
-        <!-- Step 2: Processing -->
-        <div id="demo-step-processing" class="hidden py-6">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-sm font-medium text-white" id="demo-process-label">Uploading PDF...</span>
-            <span class="text-xs text-sky-400 font-mono" id="demo-process-pct">0%</span>
+        <!-- STEP 2: Processing -->
+        <div id="demo-step-2" style="display:none;padding:8px 0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <span id="proc-label" style="font-size:13px;font-weight:600;color:#e2e8f0">Uploading...</span>
+            <span id="proc-pct" style="font-size:12px;color:#818cf8;font-family:monospace;font-weight:700">0%</span>
           </div>
-          <div class="h-1.5 bg-white/5 rounded-full overflow-hidden mb-6">
-            <div class="demo-progress-bar h-full" id="demo-progress-bar" style="width:0%"></div>
+          <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;margin-bottom:20px">
+            <div class="demo-progress-bar" id="proc-bar" style="width:0%;height:100%"></div>
           </div>
-          <div class="space-y-2 text-sm" id="demo-log"></div>
+          <div id="proc-log" style="space-y:6px;font-family:monospace;font-size:12px"></div>
         </div>
 
-        <!-- Step 3: Results -->
-        <div id="demo-step-results" class="hidden">
-          <div class="flex items-start justify-between mb-5">
+        <!-- STEP 3: Results -->
+        <div id="demo-step-3" style="display:none;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
             <div>
-              <div class="text-xs text-slate-500 mb-0.5">Statement Owner</div>
-              <div class="text-white font-bold text-lg">Sarah J. Thompson</div>
-              <div class="text-xs text-slate-500">Wells Fargo · Oct 2024 – Dec 2024</div>
+              <div style="font-size:11px;color:#475569;margin-bottom:3px">Analyzed Statement</div>
+              <div style="font-size:18px;font-weight:800;color:#f1f5f9">Sarah J. Thompson</div>
+              <div style="font-size:11px;color:#475569;margin-top:2px">Wells Fargo · Oct–Dec 2024</div>
             </div>
-            <div class="text-right">
-              <span class="risk-badge-low px-3 py-1 rounded-full text-sm font-bold">LOW RISK</span>
-              <div class="text-xs text-slate-500 mt-1.5">Risk Score: 18/100</div>
+            <div style="text-align:right">
+              <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);padding:5px 14px;border-radius:100px;font-size:12px;font-weight:800">LOW RISK</span>
+              <div style="font-size:11px;color:#475569;margin-top:5px">Score: 18 / 100</div>
             </div>
           </div>
-          <div class="grid grid-cols-3 gap-3 mb-5" id="demo-metrics"></div>
-          <div class="grid grid-cols-2 gap-3 mb-5" id="demo-flags"></div>
-          <div class="bg-green-500/8 border border-green-500/15 rounded-xl p-4 flex items-center gap-3 mb-5">
-            <div class="w-8 h-8 rounded-xl bg-green-500/15 flex items-center justify-center flex-shrink-0">
-              <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+
+          <div id="r-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px"></div>
+          <div id="r-flags"   style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px"></div>
+
+          <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:20px">
+            <div style="width:36px;height:36px;background:rgba(34,197,94,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg style="width:18px;height:18px;color:#4ade80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             </div>
             <div>
-              <div class="font-bold text-green-400">AI Recommendation: APPROVE</div>
-              <div class="text-xs text-slate-400 mt-0.5">Consistent income deposits, minimal variance, no overdraft events detected in 3-month window.</div>
+              <div style="font-weight:800;color:#4ade80;font-size:14px">AI Recommendation: APPROVE</div>
+              <div style="font-size:12px;color:#475569;margin-top:3px">Consistent deposits, no overdrafts, no MCA detected in 90-day window.</div>
             </div>
           </div>
-          <div class="flex gap-3">
-            <button onclick="resetDemo()" class="flex-1 border border-white/10 text-slate-400 hover:text-white text-sm font-medium py-2.5 rounded-xl hover:bg-white/5 transition-all">↺ Run Again</button>
-            <a href="/auth/register" class="flex-1 btn-primary text-white text-sm font-bold py-2.5 rounded-xl text-center">Analyze Your Statements →</a>
+
+          <div style="display:flex;gap:10px">
+            <button onclick="resetDemo()" style="flex:1;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:13px;font-weight:600;padding:11px;border-radius:12px;cursor:pointer;transition:all 0.2s">↺ Run Again</button>
+            <a href="/auth/register" class="btn-primary" style="flex:1;font-size:13px;padding:11px;border-radius:12px;text-align:center;display:block;">Analyze Real Statements →</a>
           </div>
         </div>
       </div>
@@ -234,140 +248,136 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="py-24 bg-white/1 border-y border-white/5">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-black text-white mb-4">How It <span class="gradient-text">Works</span></h2>
-      <p class="text-slate-400 max-w-md mx-auto">Three steps from PDF to decision-ready report.</p>
+<!-- ═══════════════════════ HOW IT WORKS ═══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:100px 0;">
+  <div class="max-w-6xl mx-auto px-4">
+    <div style="text-align:center;margin-bottom:60px">
+      <div class="section-label mb-5" style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;">Step-by-Step</div>
+      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">From PDF to Decision in <span class="gradient-text">3 Steps</span></h2>
     </div>
-    <div class="grid md:grid-cols-3 gap-6">
-      {% for step, icon, title, desc in [
-        ("01","M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12","Upload PDF","Drag and drop any bank statement PDF — 3 months, 6 months, or more. All major banks supported."),
-        ("02","M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z","AI Analysis","Our AI reads every transaction, calculates trends, detects risk signals, and compiles a structured report."),
-        ("03","M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0","Get Report","Receive income averages, NSF count, overdraft history, balance trends, and a clear APPROVE / REVIEW / DECLINE recommendation.")
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative">
+      {% for num, color_bg, color_txt, icon_path, title, desc in [
+        ("1","#eff6ff","#2563eb","M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12","Upload the PDF","Drag and drop any bank statement — 3 months, 6 months, or more. Chase, Wells Fargo, BofA, and hundreds more supported."),
+        ("2","#fdf4ff","#9333ea","M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z","AI Analyzes Everything","Our model reads every transaction, calculates income trends, detects NSF events, MCA repayments, and unusual activity."),
+        ("3","#f0fdf4","#16a34a","M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0","Get Your Report","Income averages, red flags, balance trends, and a clear APPROVE / REVIEW / DECLINE recommendation — in under 30 seconds.")
       ] %}
-      <div class="card-glass rounded-2xl p-7 relative">
-        <div class="absolute top-5 right-5 text-6xl font-black text-white/3 leading-none">{{ step }}</div>
-        <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-5">
-          <svg class="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon }}"/></svg>
+      <div class="card" style="padding:32px;position:relative;">
+        <div style="width:48px;height:48px;border-radius:14px;background:{{ color_bg }};border:1px solid;border-color:{{ color_bg }};display:flex;align-items:center;justify-content:center;margin-bottom:20px">
+          <svg style="width:24px;height:24px;color:{{ color_txt }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon_path }}"/></svg>
         </div>
-        <h3 class="text-lg font-bold text-white mb-2">{{ title }}</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">{{ desc }}</p>
+        <div style="position:absolute;top:28px;right:28px;font-size:52px;font-weight:900;color:#f1f5f9;line-height:1">{{ num }}</div>
+        <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:8px">{{ title }}</h3>
+        <p style="font-size:14px;color:#64748b;line-height:1.6">{{ desc }}</p>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="py-24">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-black text-white mb-4">Everything You Need to <span class="gradient-text">Underwrite Faster</span></h2>
-      <p class="text-slate-400 max-w-md mx-auto">Built for mortgage brokers, lenders, and underwriting teams who need speed and accuracy.</p>
+<!-- ═══════════════════════ FEATURES ═══════════════════════ -->
+<section style="background:#ffffff;padding:100px 0;">
+  <div class="max-w-6xl mx-auto px-4">
+    <div style="text-align:center;margin-bottom:60px">
+      <div class="section-label mb-5" style="background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;">Features</div>
+      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">Built for <span class="gradient-text">Serious Lenders</span></h2>
+      <p style="color:#64748b;margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto">Everything an underwriting team needs to move faster and catch more risk.</p>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {% for icon, title, desc in [
-        ("M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z","Income Verification","Automatically calculates average monthly deposits, income consistency score, and flags irregular patterns."),
-        ("M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z","NSF & Overdraft Detection","Every NSF charge and overdraft event is identified, counted, and contextualized in the risk score."),
-        ("M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z","Balance Trend Analysis","Daily balance trajectory, minimum balance events, and 30/60/90-day trend visualization."),
-        ("M13 10V3L4 14h7v7l9-11h-7z","MCA Loan Detection","Identifies Merchant Cash Advance repayments — a critical flag for small business lending decisions."),
-        ("M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z","Telegram Alerts","Get instant Telegram notifications when analysis completes. Perfect for teams across time zones."),
-        ("M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z","Approval Recommendation","APPROVE, MANUAL REVIEW, or DECLINE recommendation with confidence score and supporting evidence.")
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      {% for cls, icon_col, icon_path, title, desc in [
+        ("feature-card-1","#2563eb","M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z","Income Verification","Average monthly deposits, income consistency score, and irregular pattern flags."),
+        ("feature-card-2","#9333ea","M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z","NSF & Overdraft Detection","Every NSF charge and overdraft event identified, counted, and scored."),
+        ("feature-card-3","#16a34a","M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z","Balance Trend Analysis","Daily trajectory, 30/60/90-day trends, and minimum balance events."),
+        ("feature-card-4","#d97706","M13 10V3L4 14h7v7l9-11h-7z","MCA Loan Detection","Merchant Cash Advance repayments flagged automatically — critical for small business lending."),
+        ("feature-card-5","#db2777","M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z","Telegram Alerts","Instant Telegram notification the moment an analysis completes."),
+        ("feature-card-6","#0891b2","M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z","Approval Recommendation","APPROVE / MANUAL REVIEW / DECLINE with confidence score and evidence.")
       ] %}
-      <div class="card-glass rounded-2xl p-6 card-hover">
-        <div class="feature-icon w-10 h-10 rounded-xl flex items-center justify-center mb-4">
-          <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon }}"/></svg>
+      <div class="card-colored {{ cls }}" style="padding:28px;">
+        <div style="width:42px;height:42px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+          <svg style="width:22px;height:22px;color:{{ icon_col }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon_path }}"/></svg>
         </div>
-        <h3 class="font-bold text-white mb-2">{{ title }}</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">{{ desc }}</p>
+        <h3 style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px">{{ title }}</h3>
+        <p style="font-size:13px;color:#475569;line-height:1.6">{{ desc }}</p>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
-<section id="pricing" class="py-24 bg-white/1 border-y border-white/5">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-14">
-      <h2 class="text-4xl font-black text-white mb-4">Simple, <span class="gradient-text">Pay-Per-Use</span> Pricing</h2>
-      <p class="text-slate-400 max-w-md mx-auto">No monthly fees. Buy credits, use them whenever. Bigger packs = lower cost per analysis.</p>
+<!-- ═══════════════════════ PRICING ═══════════════════════ -->
+<section id="pricing" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:100px 0;">
+  <div class="max-w-5xl mx-auto px-4">
+    <div style="text-align:center;margin-bottom:60px">
+      <div class="section-label mb-5" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Pricing</div>
+      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">Pay Only for What <span class="gradient-text-2">You Use</span></h2>
+      <p style="color:#64748b;margin-top:12px">No subscriptions. No minimums. Credits never expire.</p>
     </div>
-    <div class="grid sm:grid-cols-3 gap-5">
-      <div class="card-glass rounded-2xl p-6">
-        <div class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Starter</div>
-        <div class="flex items-end gap-1 mb-1">
-          <span class="text-4xl font-black text-white">$5</span>
-          <span class="text-slate-500 pb-1 text-sm">/ pack</span>
-        </div>
-        <div class="text-sky-400 text-sm font-semibold mb-5">5 analyses — $1.00 each</div>
-        <ul class="space-y-2.5 text-sm text-slate-400 mb-6">
-          {% for item in ["Full AI analysis report","30-second results","Credits never expire"] %}
-          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start">
+
+      <!-- Starter -->
+      <div class="card" style="padding:28px;">
+        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Starter</div>
+        <div style="margin-bottom:6px"><span style="font-size:3rem;font-weight:900;color:#0f172a">$5</span><span style="font-size:14px;color:#94a3b8;margin-left:4px">/ pack</span></div>
+        <div style="font-size:13px;font-weight:700;color:#6366f1;margin-bottom:22px">5 analyses · $1.00 each</div>
+        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#475569">
+          {% for item in ["Full AI report","30-second results","Credits never expire"] %}
+          <li style="display:flex;align-items:center;gap:8px"><svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
           {% endfor %}
         </ul>
-        <a href="/auth/register" class="block w-full text-center border border-white/10 text-slate-300 hover:bg-white/5 font-semibold py-2.5 rounded-xl text-sm transition-all">Get Started</a>
+        <a href="/auth/register" class="btn-outline" style="display:block;text-align:center;padding:11px;font-size:14px;">Get Started</a>
       </div>
 
-      <div class="pricing-popular rounded-2xl p-6 relative">
-        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">MOST POPULAR</span>
-        </div>
-        <div class="text-sm font-bold text-sky-400 uppercase tracking-widest mb-4">Pro Pack</div>
-        <div class="flex items-end gap-1 mb-1">
-          <span class="text-4xl font-black text-white">$49</span>
-          <span class="text-slate-500 pb-1 text-sm">/ pack</span>
-        </div>
-        <div class="text-sky-400 text-sm font-semibold mb-5">100 analyses — $0.49 each</div>
-        <ul class="space-y-2.5 text-sm text-slate-400 mb-6">
+      <!-- Pro (Popular) -->
+      <div class="pricing-popular" style="padding:28px;position:relative;">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:11px;font-weight:800;padding:4px 16px;border-radius:100px;white-space:nowrap;box-shadow:0 4px 16px rgba(99,102,241,0.4)">⭐ MOST POPULAR</div>
+        <div style="font-size:11px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Pro Pack</div>
+        <div style="margin-bottom:6px"><span style="font-size:3rem;font-weight:900;color:#fff">$49</span><span style="font-size:14px;color:#64748b;margin-left:4px">/ pack</span></div>
+        <div style="font-size:13px;font-weight:700;color:#38bdf8;margin-bottom:22px">100 analyses · $0.49 each</div>
+        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#94a3b8">
           {% for item in ["Everything in Starter","Telegram notifications","Priority processing"] %}
-          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg style="width:14px;height:14px;color:#4ade80;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
           {% endfor %}
         </ul>
-        <a href="/credits" class="btn-primary block w-full text-center text-white font-bold py-2.5 rounded-xl text-sm">Get Pro Pack</a>
+        <a href="/credits" class="btn-primary" style="display:block;text-align:center;padding:11px;font-size:14px;">Get Pro Pack</a>
       </div>
 
-      <div class="card-glass rounded-2xl p-6">
-        <div class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Enterprise</div>
-        <div class="flex items-end gap-1 mb-1">
-          <span class="text-4xl font-black text-white">$499</span>
-          <span class="text-slate-500 pb-1 text-sm">/ pack</span>
-        </div>
-        <div class="text-indigo-400 text-sm font-semibold mb-5">1,500 analyses — $0.33 each</div>
-        <ul class="space-y-2.5 text-sm text-slate-400 mb-6">
-          {% for item in ["Everything in Pro","Dedicated support","Volume invoice billing"] %}
-          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
+      <!-- Enterprise -->
+      <div class="card" style="padding:28px;">
+        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Enterprise</div>
+        <div style="margin-bottom:6px"><span style="font-size:3rem;font-weight:900;color:#0f172a">$499</span><span style="font-size:14px;color:#94a3b8;margin-left:4px">/ pack</span></div>
+        <div style="font-size:13px;font-weight:700;color:#8b5cf6;margin-bottom:22px">1,500 analyses · $0.33 each</div>
+        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#475569">
+          {% for item in ["Everything in Pro","Dedicated support","Invoice billing"] %}
+          <li style="display:flex;align-items:center;gap:8px"><svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
           {% endfor %}
         </ul>
-        <a href="/contact" class="block w-full text-center border border-white/10 text-slate-300 hover:bg-white/5 font-semibold py-2.5 rounded-xl text-sm transition-all">Contact Sales</a>
+        <a href="/contact" class="btn-outline" style="display:block;text-align:center;padding:11px;font-size:14px;">Contact Sales</a>
       </div>
     </div>
-    <p class="text-center text-slate-600 text-xs mt-6">All plans include: 30-second results · Secure PDF handling · Credits never expire</p>
+    <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:20px">All packs: 30-second results · Secure handling · Credits never expire · <a href="/credits" style="color:#6366f1">See all 6 plans →</a></p>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="py-24">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-14">
-      <h2 class="text-4xl font-black text-white mb-4">Trusted by <span class="gradient-text">Lending Professionals</span></h2>
+<!-- ═══════════════════════ TESTIMONIALS ═══════════════════════ -->
+<section style="background:#ffffff;padding:100px 0;">
+  <div class="max-w-6xl mx-auto px-4">
+    <div style="text-align:center;margin-bottom:60px">
+      <div class="section-label mb-5" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;">Testimonials</div>
+      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">Lending Pros <span class="gradient-text">Love It</span></h2>
     </div>
-    <div class="grid md:grid-cols-3 gap-5">
-      {% for quote, name, role in [
-        ("StatementScrub cut our underwriting time from 45 minutes to under 2. The NSF detection alone has saved us from three bad loans this quarter.","Michael Torres","Senior Loan Officer, Regional Bank"),
-        ("We process 80+ statements a week. At $0.49 each it's genuinely the cheapest decision tool we have. The accuracy is remarkable.","Amanda Chen","Mortgage Broker, IndieHome Lending"),
-        ("The approval recommendation feature is exactly what I needed. I still make the final call, but having the AI context saves enormous time.","David Okonkwo","Underwriter, CapitalBridge Finance")
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      {% for quote, name, role, initials, from_color, to_color in [
+        ("StatementScrub cut our underwriting time from 45 minutes to under 2. The NSF detection has saved us from three bad loans this quarter.","Michael Torres","Senior Loan Officer, Regional Bank","MT","#6366f1","#0ea5e9"),
+        ("We process 80+ statements a week. At $0.49 each it's the cheapest, most accurate decision tool we have. Remarkable.","Amanda Chen","Mortgage Broker, IndieHome Lending","AC","#db2777","#9333ea"),
+        ("The approval recommendation feature is exactly what I needed. The AI context saves enormous time while I retain final judgment.","David Okonkwo","Underwriter, CapitalBridge Finance","DO","#16a34a","#0891b2")
       ] %}
-      <div class="card-glass rounded-2xl p-6 card-hover">
-        <div class="flex gap-0.5 mb-3">{% for _ in range(5) %}<svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}</div>
-        <p class="text-slate-300 text-sm leading-relaxed mb-5">"{{ quote }}"</p>
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">{{ name[0] }}</div>
+      <div class="card" style="padding:28px;">
+        <div style="display:flex;gap:2px;margin-bottom:14px">{% for _ in range(5) %}<svg style="width:15px;height:15px;color:#f59e0b" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}</div>
+        <p style="font-size:14px;color:#334155;line-height:1.7;margin-bottom:20px">"{{ quote }}"</p>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,{{ from_color }},{{ to_color }});display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px">{{ initials }}</div>
           <div>
-            <div class="text-white font-semibold text-sm">{{ name }}</div>
-            <div class="text-slate-500 text-xs">{{ role }}</div>
+            <div style="font-weight:700;font-size:14px;color:#0f172a">{{ name }}</div>
+            <div style="font-size:12px;color:#64748b">{{ role }}</div>
           </div>
         </div>
       </div>
@@ -376,141 +386,129 @@
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="py-24 bg-white/1 border-y border-white/5">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-black text-white mb-4">Frequently Asked <span class="gradient-text">Questions</span></h2>
+<!-- ═══════════════════════ FAQ ═══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:100px 0;">
+  <div class="max-w-3xl mx-auto px-4">
+    <div style="text-align:center;margin-bottom:50px">
+      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a">Common <span class="gradient-text">Questions</span></h2>
     </div>
-    <div class="space-y-3" id="faq-list">
+    <div style="display:flex;flex-direction:column;gap:8px">
       {% for q, a in [
-        ("What banks are supported?","StatementScrub supports PDFs from all major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, and hundreds more. If it's a PDF bank statement, we can read it."),
-        ("How accurate is the AI analysis?","Our AI achieves 99.2% accuracy on standard bank statement formats. Transaction extraction, income calculation, and NSF detection are all validated against manual reviews."),
-        ("Is my data secure?","All PDFs are processed over encrypted HTTPS, stored in isolated environments, and automatically deleted within 24 hours. We never share your data with third parties."),
-        ("Can I use this for mortgage underwriting?","Yes. StatementScrub is built specifically for mortgage brokers and underwriters. Reports include all fields required for standard income documentation."),
-        ("What if I need more than 1,500 analyses per month?","Contact our sales team at the link above. We offer custom volume pricing and white-label API integrations for high-volume operations.")
+        ("What banks are supported?","All major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, and hundreds of regional banks. If it exports a PDF, we can read it."),
+        ("How accurate is the AI analysis?","99.2% accuracy on standard bank statement formats. Transaction extraction, income calculation, and NSF detection are validated against manual reviews."),
+        ("Is my customers' data secure?","PDFs are processed over encrypted HTTPS, stored in isolated environments, and deleted within 24 hours. We never share or train on your customers' data."),
+        ("Can I use this for mortgage underwriting?","Yes — built specifically for mortgage brokers and underwriters. Reports include all standard income documentation fields."),
+        ("What if I need more than 1,500 analyses/month?","Contact our sales team. We offer custom volume pricing and white-label API integrations for high-volume operations.")
       ] %}
-      <div class="card-glass rounded-xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between px-5 py-4 text-left">
-          <span class="font-semibold text-white text-sm">{{ q }}</span>
-          <svg class="w-4 h-4 text-slate-500 transition-transform flex-shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      <div class="card" style="overflow:hidden;border-radius:14px;">
+        <button onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;text-align:left;background:transparent;border:none;cursor:pointer;">
+          <span style="font-weight:700;color:#0f172a;font-size:14px">{{ q }}</span>
+          <svg style="width:16px;height:16px;color:#94a3b8;flex-shrink:0;margin-left:12px;transition:transform 0.2s" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div class="faq-answer hidden px-5 pb-4 text-sm text-slate-400 leading-relaxed border-t border-white/5 pt-3">{{ a }}</div>
+        <div class="faq-body" style="display:none;padding:0 22px 18px;font-size:14px;color:#475569;line-height:1.7;border-top:1px solid #f1f5f9">{{ a }}</div>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="py-24 relative overflow-hidden">
-  <div class="absolute inset-0 hero-bg opacity-70"></div>
-  <div class="relative max-w-3xl mx-auto px-4 text-center">
-    <div class="card-glass rounded-3xl p-12">
-      <h2 class="text-4xl font-black text-white mb-4">Analyze Your First Statement <span class="gradient-text">Free</span></h2>
-      <p class="text-slate-400 mb-8 max-w-md mx-auto">Start with 3 free analyses. No credit card. No commitment. See results in under 30 seconds.</p>
-      <a href="/auth/register" class="btn-primary inline-flex items-center gap-2 text-white font-bold px-8 py-4 rounded-xl text-lg">
-        Get Started Free
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-      </a>
-      <p class="text-slate-600 text-xs mt-5">3 free analyses · No credit card · Cancel anytime</p>
-    </div>
+<!-- ═══════════════════════ FINAL CTA ═══════════════════════ -->
+<section style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f,#0c4a6e);padding:100px 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%, rgba(99,102,241,0.2) 0%, transparent 70%)"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:30px 30px"></div>
+  <div class="relative max-w-2xl mx-auto px-4 text-center">
+    <div style="font-size:40px;margin-bottom:16px">🚀</div>
+    <h2 style="font-size:2.75rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:16px">
+      Start Analyzing<br/><span style="background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">For Free Today</span>
+    </h2>
+    <p style="color:#94a3b8;font-size:1.1rem;margin-bottom:36px">3 free analyses. No credit card. Results in 30 seconds.</p>
+    <a href="/auth/register" class="btn-primary" style="font-size:1.1rem;padding:16px 40px;border-radius:16px;display:inline-block;">
+      Create Free Account →
+    </a>
+    <p style="color:#475569;font-size:12px;margin-top:16px">No commitment · Credits never expire · Cancel any time</p>
   </div>
 </section>
 
 <script>
-const DEMO_STEPS = [
-  { pct: 15, label: "Uploading PDF...", log: "📄 Reading: statement_wells_fargo_q4_2024.pdf" },
-  { pct: 30, label: "Extracting transactions...", log: "🔍 Found 247 transactions over 92 days" },
-  { pct: 48, label: "Calculating income averages...", log: "💰 Avg monthly deposits: $11,240" },
-  { pct: 62, label: "Scanning for NSF events...", log: "✅ NSF count: 0  |  Overdraft events: 0" },
-  { pct: 75, label: "Detecting risk signals...", log: "🔎 MCA loans: None detected" },
-  { pct: 88, label: "Generating recommendation...", log: "📊 Risk score: 18/100 — LOW RISK" },
-  { pct: 100, label: "Report complete!", log: "✅ Analysis complete in 24.3 seconds" },
+const STEPS = [
+  { pct: 15, label:"Uploading PDF...",               log:"📄  Reading: statement_wells_fargo_q4_2024.pdf" },
+  { pct: 30, label:"Extracting transactions...",      log:"🔍  Found 247 transactions over 92 days" },
+  { pct: 48, label:"Calculating income averages...", log:"💰  Avg monthly deposits: $11,240" },
+  { pct: 63, label:"Scanning for NSF events...",     log:"✅  NSF count: 0  |  Overdraft events: 0" },
+  { pct: 77, label:"Detecting risk signals...",      log:"🔎  MCA loans: None detected" },
+  { pct: 90, label:"Generating recommendation...",  log:"📊  Risk score: 18 / 100 — LOW RISK" },
+  { pct:100, label:"Analysis complete!",             log:"✅  Done in 24.3 seconds" },
 ];
-const METRICS = [
-  { label: "Avg Monthly Income", value: "$11,240", color: "text-green-400" },
-  { label: "Avg Monthly Spend",  value: "$8,870",  color: "text-slate-300" },
-  { label: "Avg Daily Balance",  value: "$5,310",  color: "text-sky-400" },
-  { label: "Ending Balance",     value: "$7,840",  color: "text-sky-400" },
-  { label: "NSF Events",         value: "0",       color: "text-green-400" },
-  { label: "Overdrafts",         value: "0",       color: "text-green-400" },
+const METRICS=[
+  {l:"Avg Income/mo",v:"$11,240",c:"#4ade80"},
+  {l:"Avg Spend/mo",v:"$8,870",c:"#94a3b8"},
+  {l:"Avg Daily Bal",v:"$5,310",c:"#38bdf8"},
+  {l:"Ending Balance",v:"$7,840",c:"#38bdf8"},
+  {l:"NSF Events",v:"0",c:"#4ade80"},
+  {l:"Overdrafts",v:"0",c:"#4ade80"},
 ];
-const FLAGS = [
-  { label: "MCA Loans Detected",          value: "None",     ok: true },
-  { label: "Large Unusual Withdrawals",   value: "None",     ok: true },
-  { label: "Income Consistency",          value: "High (94%)", ok: true },
-  { label: "Balance Trend",               value: "Stable ↗", ok: true },
+const FLAGS=[
+  {l:"MCA Loans",v:"None detected",ok:true},
+  {l:"Unusual Withdrawals",v:"None",ok:true},
+  {l:"Income Consistency",v:"High (94%)",ok:true},
+  {l:"Balance Trend",v:"Stable ↗",ok:true},
 ];
-
-let demoRunning = false;
-
-function runDemo() {
-  if (demoRunning) return;
-  demoRunning = true;
-  document.getElementById('demo-step-upload').classList.add('hidden');
-  document.getElementById('demo-step-processing').classList.remove('hidden');
-  document.getElementById('demo-step-results').classList.add('hidden');
-  document.getElementById('demo-status-badge').textContent = 'Analyzing...';
-  document.getElementById('demo-status-badge').className = 'text-xs text-sky-400 font-medium';
-  document.getElementById('demo-log').innerHTML = '';
-  document.getElementById('demo-progress-bar').style.width = '0%';
-  let step = 0;
-  function runStep() {
-    if (step >= DEMO_STEPS.length) { showResults(); return; }
-    const s = DEMO_STEPS[step];
-    document.getElementById('demo-process-label').textContent = s.label;
-    document.getElementById('demo-process-pct').textContent = s.pct + '%';
-    document.getElementById('demo-progress-bar').style.width = s.pct + '%';
-    const logEl = document.createElement('div');
-    logEl.className = 'text-xs text-slate-500 font-mono animate-fade-in';
-    logEl.textContent = s.log;
-    document.getElementById('demo-log').appendChild(logEl);
-    step++;
-    setTimeout(runStep, step < 4 ? 600 : 500);
+let running=false;
+function runDemo(){
+  if(running)return; running=true;
+  show('demo-step-2');hide('demo-step-1');hide('demo-step-3');
+  badge('Analyzing...','#818cf8');
+  document.getElementById('proc-log').innerHTML='';
+  document.getElementById('proc-bar').style.width='0%';
+  let i=0;
+  function tick(){
+    if(i>=STEPS.length){showResults();return;}
+    const s=STEPS[i];
+    document.getElementById('proc-label').textContent=s.label;
+    document.getElementById('proc-pct').textContent=s.pct+'%';
+    document.getElementById('proc-bar').style.width=s.pct+'%';
+    const el=document.createElement('div');
+    el.style.cssText='color:#475569;font-size:11px;margin-bottom:4px;animation:fade-in 0.3s ease both';
+    el.textContent=s.log; document.getElementById('proc-log').appendChild(el);
+    i++; setTimeout(tick,i<4?620:520);
   }
-  runStep();
+  tick();
 }
-
-function showResults() {
-  document.getElementById('demo-step-processing').classList.add('hidden');
-  document.getElementById('demo-step-results').classList.remove('hidden');
-  document.getElementById('demo-status-badge').textContent = '✓ Complete';
-  document.getElementById('demo-status-badge').className = 'text-xs text-green-400 font-semibold';
-  const metricsEl = document.getElementById('demo-metrics');
-  metricsEl.innerHTML = '';
-  METRICS.forEach((m, i) => {
-    const el = document.createElement('div');
-    el.className = 'bg-white/3 rounded-xl p-3 border border-white/5 result-row';
-    el.style.animationDelay = (i * 60) + 'ms';
-    el.innerHTML = `<div class="text-xs text-slate-500 mb-1">${m.label}</div><div class="text-sm font-bold ${m.color}">${m.value}</div>`;
-    metricsEl.appendChild(el);
+function showResults(){
+  hide('demo-step-2');show('demo-step-3');
+  badge('✓ Complete','#4ade80');
+  const me=document.getElementById('r-metrics'); me.innerHTML='';
+  METRICS.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.style.cssText='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 12px';
+    d.className='result-row'; d.style.animationDelay=(i*55)+'ms';
+    d.innerHTML=`<div style="font-size:10px;color:#475569;margin-bottom:3px">${m.l}</div><div style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</div>`;
+    me.appendChild(d);
   });
-  const flagsEl = document.getElementById('demo-flags');
-  flagsEl.innerHTML = '';
-  FLAGS.forEach((f, i) => {
-    const el = document.createElement('div');
-    el.className = `rounded-xl p-3 border result-row ${f.ok ? 'bg-green-500/5 border-green-500/15' : 'bg-red-500/5 border-red-500/15'}`;
-    el.style.animationDelay = (METRICS.length * 60 + i * 60) + 'ms';
-    el.innerHTML = `<div class="text-xs text-slate-500 mb-1">${f.label}</div><div class="text-sm font-semibold ${f.ok ? 'text-green-400' : 'text-red-400'}">${f.value}</div>`;
-    flagsEl.appendChild(el);
+  const fe=document.getElementById('r-flags'); fe.innerHTML='';
+  FLAGS.forEach((f,i)=>{
+    const d=document.createElement('div');
+    const ok=f.ok;
+    d.style.cssText=`background:${ok?'rgba(34,197,94,0.06)':'rgba(239,68,68,0.06)'};border:1px solid ${ok?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)'};border-radius:12px;padding:10px 12px`;
+    d.className='result-row'; d.style.animationDelay=(METRICS.length*55+i*55)+'ms';
+    d.innerHTML=`<div style="font-size:10px;color:#475569;margin-bottom:3px">${f.l}</div><div style="font-size:13px;font-weight:600;color:${ok?'#4ade80':'#f87171'}">${f.v}</div>`;
+    fe.appendChild(d);
   });
 }
-
-function resetDemo() {
-  demoRunning = false;
-  document.getElementById('demo-step-upload').classList.remove('hidden');
-  document.getElementById('demo-step-processing').classList.add('hidden');
-  document.getElementById('demo-step-results').classList.add('hidden');
-  document.getElementById('demo-status-badge').textContent = 'Ready';
-  document.getElementById('demo-status-badge').className = 'text-xs text-slate-500 font-medium';
+function resetDemo(){
+  running=false;
+  show('demo-step-1');hide('demo-step-2');hide('demo-step-3');
+  badge('Ready','#94a3b8');
 }
-
-function toggleFaq(btn) {
-  const answer = btn.nextElementSibling;
-  const arrow = btn.querySelector('svg');
-  answer.classList.toggle('hidden');
-  arrow.style.transform = answer.classList.contains('hidden') ? '' : 'rotate(180deg)';
+function show(id){document.getElementById(id).style.display='block';}
+function hide(id){document.getElementById(id).style.display='none';}
+function badge(txt,col){const b=document.getElementById('demo-badge');b.textContent=txt;b.style.color=col;}
+function toggleFaq(btn){
+  const body=btn.nextElementSibling;
+  const arr=btn.querySelector('svg');
+  const open=body.style.display==='block';
+  body.style.display=open?'none':'block';
+  arr.style.transform=open?'':'rotate(180deg)';
 }
 </script>
 

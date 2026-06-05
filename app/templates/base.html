@@ -5,201 +5,199 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: { 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' }
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          animation: {
-            'glow': 'glow 3s ease-in-out infinite alternate',
-            'float': 'float 6s ease-in-out infinite',
-            'counter': 'counter 0.5s ease forwards',
-          }
-        }
-      }
-    }
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * { -webkit-font-smoothing: antialiased; }
-    body { font-family: 'Inter', sans-serif; }
+    * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #0f172a; }
 
     .gradient-text {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 50%, #06b6d4 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .gradient-text-warm {
-      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+    .gradient-text-2 {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+
     .btn-primary {
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      box-shadow: 0 0 20px rgba(14,165,233,0.3), 0 4px 15px rgba(99,102,241,0.2);
+      background: linear-gradient(135deg, #6366f1, #0ea5e9);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 12px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.45); opacity: 0.95; }
+
+    .btn-outline {
+      border: 2px solid #e2e8f0;
+      color: #334155;
+      font-weight: 600;
+      border-radius: 12px;
+      background: #fff;
       transition: all 0.2s;
     }
-    .btn-primary:hover { opacity: 0.9; box-shadow: 0 0 30px rgba(14,165,233,0.5), 0 8px 25px rgba(99,102,241,0.3); transform: translateY(-1px); }
+    .btn-outline:hover { border-color: #6366f1; color: #6366f1; background: #f5f3ff; }
 
-    .card-glass {
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
       transition: all 0.25s;
     }
-    .card-glass:hover { background: rgba(255,255,255,0.07); border-color: rgba(14,165,233,0.3); transform: translateY(-2px); }
+    .card:hover { border-color: #c7d2fe; box-shadow: 0 12px 40px rgba(99,102,241,0.1); transform: translateY(-3px); }
 
-    .card-hover { transition: all 0.25s; }
-    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+    .card-colored {
+      border-radius: 20px;
+      transition: all 0.25s;
+    }
+    .card-colored:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
 
-    .dot-pattern {
-      background-image: radial-gradient(circle, rgba(148,163,184,0.15) 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
-    .dot-pattern-dark {
-      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 28px 28px;
-    }
-    .glow-orb {
-      background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%);
-      filter: blur(60px);
-    }
-    .glow-orb-purple {
-      background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
-      filter: blur(80px);
+    .nav-bar {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid #f1f5f9;
     }
 
-    @keyframes glow { from { opacity: 0.5; } to { opacity: 1; } }
-    @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
-    @keyframes slide-up { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fade-in { from { opacity:0; } to { opacity:1; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-    @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-
-    .animate-slide-up { animation: slide-up 0.5s ease forwards; }
-    .animate-fade-in { animation: fade-in 0.4s ease forwards; }
-    .spinner { width:36px;height:36px;border:3px solid rgba(14,165,233,0.2);border-top-color:#0ea5e9;border-radius:50%;animation:spin 0.8s linear infinite; }
-
-    .shimmer-btn {
-      background: linear-gradient(90deg, #0ea5e9, #6366f1, #0ea5e9);
-      background-size: 200% 100%;
-      animation: shimmer 3s linear infinite;
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
-    .nav-blur { background: rgba(2,8,23,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .demo-window {
+      background: #0f172a;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(15,23,42,0.25), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    }
+    .demo-progress-bar {
+      background: linear-gradient(90deg, #6366f1, #0ea5e9);
+      transition: width 0.35s ease;
+      border-radius: 4px;
+    }
+    .result-row { animation: slide-up 0.4s ease forwards; opacity: 0; }
 
-    .badge-glow { box-shadow: 0 0 12px rgba(14,165,233,0.4); }
+    @keyframes slide-up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fade-in  { from { opacity:0; } to { opacity:1; } }
+    @keyframes float    { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes spin     { to { transform: rotate(360deg); } }
 
-    /* Scrollbar */
+    .animate-slide-up { animation: slide-up 0.5s ease both; }
+    .animate-fade-in  { animation: fade-in 0.4s ease both; }
+    .animate-float    { animation: float 5s ease-in-out infinite; }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #1e1b4b 0%, #1e3a5f 40%, #0c4a6e 70%, #0f172a 100%);
+    }
+    .hero-glow {
+      background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(99,102,241,0.35) 0%, transparent 65%),
+                  radial-gradient(ellipse 50% 40% at 20% 70%, rgba(14,165,233,0.2) 0%, transparent 60%);
+    }
+
+    .stat-number { font-size: 2.25rem; font-weight: 900; line-height: 1; }
+
+    .feature-icon-wrap {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .check-green { color: #16a34a; }
+    .cross-red   { color: #dc2626; }
+    .partial-yellow { color: #d97706; }
+
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #020817; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-track { background: #f8fafc; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
   </style>
   {% block head %}{% endblock %}
 </head>
-<body class="bg-[#020817] min-h-screen flex flex-col text-slate-100">
+<body>
 
-  <!-- Navigation -->
-  <nav class="nav-blur sticky top-0 z-50">
+  <!-- NAV -->
+  <nav class="nav-bar sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
-      <!-- Logo -->
       <a href="/" class="flex items-center gap-2.5 group">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 group-hover:shadow-sky-500/40 transition-shadow">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #6366f1, #0ea5e9)">
           <span class="text-white font-black text-sm">S</span>
         </div>
-        <span class="text-lg font-bold text-white tracking-tight">Statement<span class="gradient-text-warm">Scrub</span></span>
+        <span class="text-xl font-black text-slate-900 tracking-tight">Statement<span class="gradient-text">Scrub</span></span>
       </a>
 
-      <!-- Nav Links -->
       <div class="hidden md:flex items-center gap-1">
         {% for label, href in [("How It Works","/how-it-works"),("Compare","/compare"),("Credits","/credits"),("Blog","/blog"),("Contact","/contact")] %}
-        <a href="{{ href }}" class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">{{ label }}</a>
+        <a href="{{ href }}" class="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">{{ label }}</a>
         {% endfor %}
       </div>
 
-      <!-- Auth -->
       <div class="flex items-center gap-2.5">
         {% if user %}
-          <span class="hidden sm:block text-slate-500 text-xs">{{ user.email }}</span>
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide border
-            {% if user.plan == 'pro' %}bg-violet-500/10 text-violet-400 border-violet-500/20
-            {% elif user.plan == 'starter' %}bg-sky-500/10 text-sky-400 border-sky-500/20
-            {% else %}bg-white/5 text-slate-400 border-white/10{% endif %}">
+          <span class="hidden sm:block text-xs text-slate-500">{{ user.email }}</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold
+            {% if user.plan == 'pro' %}bg-violet-100 text-violet-700
+            {% elif user.plan == 'starter' %}bg-sky-100 text-sky-700
+            {% else %}bg-slate-100 text-slate-600{% endif %}">
             {{ user.plan | upper }}
           </span>
-          <a href="/dashboard" class="text-sm font-medium text-slate-300 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5">Dashboard</a>
-          <a href="/auth/logout" class="text-sm text-slate-500 hover:text-red-400 transition-colors">Logout</a>
+          <a href="/dashboard" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors px-3 py-2 rounded-xl hover:bg-indigo-50">Dashboard</a>
+          <a href="/auth/logout" class="text-sm text-slate-400 hover:text-red-500 transition-colors">Logout</a>
         {% else %}
-          <a href="/auth/login" class="text-sm font-medium text-slate-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5">Login</a>
-          <a href="/auth/register" class="btn-primary text-white text-sm font-semibold px-4 py-2 rounded-xl">
-            Start Free →
-          </a>
+          <a href="/auth/login" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors px-3 py-2 rounded-xl hover:bg-indigo-50">Login</a>
+          <a href="/auth/register" class="btn-primary text-sm px-5 py-2.5 inline-block">Start Free →</a>
         {% endif %}
       </div>
     </div>
   </nav>
 
-  <main class="flex-1">
-    {% block content %}{% endblock %}
-  </main>
+  <main>{% block content %}{% endblock %}</main>
 
-  <!-- Footer -->
-  <footer class="border-t border-white/5 bg-[#020817]">
-    <div class="max-w-7xl mx-auto px-4 pt-14 pb-8">
+  <!-- FOOTER -->
+  <footer style="background: #0f172a; color: #94a3b8;">
+    <div class="max-w-7xl mx-auto px-4 pt-16 pb-8">
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-8 mb-12">
         <div class="col-span-2">
-          <a href="/" class="flex items-center gap-2 mb-4">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center">
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #6366f1, #0ea5e9)">
               <span class="text-white font-black text-sm">S</span>
             </div>
-            <span class="font-bold text-white">Statement<span class="gradient-text-warm">Scrub</span></span>
-          </a>
-          <p class="text-slate-500 text-sm leading-relaxed max-w-xs">AI-powered bank statement analysis for lenders, mortgage brokers, and underwriters. Results in 30 seconds.</p>
+            <span class="text-xl font-black text-white">Statement<span class="gradient-text">Scrub</span></span>
+          </div>
+          <p class="text-sm leading-relaxed max-w-xs" style="color:#64748b">AI-powered bank statement analysis for lenders, mortgage brokers, and underwriters. Results in 30 seconds.</p>
           <div class="flex items-center gap-2 mt-5">
-            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            <span class="text-xs text-slate-500">All systems operational</span>
+            <span class="w-2 h-2 bg-green-400 rounded-full" style="animation: pulse 2s infinite"></span>
+            <span class="text-xs" style="color:#475569">All systems operational</span>
           </div>
         </div>
+        {% for heading, links in [
+          ("Product",[("How It Works","/how-it-works"),("Pricing","/#pricing"),("Buy Credits","/credits"),("Compare","/compare")]),
+          ("Company",[("Blog","/blog"),("Testimonials","/testimonials"),("Book Demo","/demo"),("Contact","/contact")]),
+          ("Legal",[("Terms of Service","/terms"),("Privacy Policy","/privacy")])
+        ] %}
         <div>
-          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Product</div>
-          <ul class="space-y-2.5 text-sm text-slate-500">
-            <li><a href="/how-it-works" class="hover:text-sky-400 transition-colors">How It Works</a></li>
-            <li><a href="/#pricing" class="hover:text-sky-400 transition-colors">Pricing</a></li>
-            <li><a href="/credits" class="hover:text-sky-400 transition-colors">Buy Credits</a></li>
-            <li><a href="/compare" class="hover:text-sky-400 transition-colors">Compare</a></li>
+          <div class="text-xs font-bold uppercase tracking-widest mb-4" style="color:#475569">{{ heading }}</div>
+          <ul class="space-y-2.5 text-sm">
+            {% for label, href in links %}
+            <li><a href="{{ href }}" class="hover:text-indigo-400 transition-colors" style="color:#64748b">{{ label }}</a></li>
+            {% endfor %}
           </ul>
         </div>
-        <div>
-          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Company</div>
-          <ul class="space-y-2.5 text-sm text-slate-500">
-            <li><a href="/blog" class="hover:text-sky-400 transition-colors">Blog</a></li>
-            <li><a href="/testimonials" class="hover:text-sky-400 transition-colors">Testimonials</a></li>
-            <li><a href="/demo" class="hover:text-sky-400 transition-colors">Book Demo</a></li>
-            <li><a href="/contact" class="hover:text-sky-400 transition-colors">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Legal</div>
-          <ul class="space-y-2.5 text-sm text-slate-500">
-            <li><a href="/terms" class="hover:text-sky-400 transition-colors">Terms of Service</a></li>
-            <li><a href="/privacy" class="hover:text-sky-400 transition-colors">Privacy Policy</a></li>
-          </ul>
-          <div class="mt-6 p-3 bg-white/3 border border-white/6 rounded-xl">
-            <div class="text-xs text-slate-500 leading-relaxed">🔒 SOC 2-level security. PDFs deleted within 24h.</div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
-      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+      <div class="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style="border-color:#1e293b; color:#475569">
         <span>© 2025 StatementScrub. All rights reserved.</span>
         <div class="flex gap-5">
-          <a href="/terms" class="hover:text-sky-400 transition-colors">Terms</a>
-          <a href="/privacy" class="hover:text-sky-400 transition-colors">Privacy</a>
-          <a href="/contact" class="hover:text-sky-400 transition-colors">Contact</a>
+          <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a>
+          <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a>
+          <a href="/contact" class="hover:text-indigo-400 transition-colors">Contact</a>
         </div>
-        <span class="text-slate-600">Not financial advice. For professional use only.</span>
+        <span>Not financial advice. For professional use only.</span>
       </div>
     </div>
   </footer>
