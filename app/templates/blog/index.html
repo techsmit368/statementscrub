@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Blog — Bank Statement Analysis Tips & Guides | StatementScrub{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+
+  <!-- Header -->
+  <div class="text-center mb-14">
+    <p class="text-sky-600 text-sm font-semibold uppercase tracking-widest mb-2">StatementScrub Blog</p>
+    <h1 class="text-4xl sm:text-5xl font-black text-slate-900 mb-4">
+      Bank Statement Analysis<br/>Tips, Guides & Resources
+    </h1>
+    <p class="text-slate-500 text-lg max-w-2xl mx-auto">
+      Expert guides for mortgage brokers, lenders, underwriters, and bookkeepers on bank statement analysis, income verification, MCA detection, and more.
+    </p>
+  </div>
+
+  <!-- Posts grid -->
+  {% if posts %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for post in posts %}
+    <a href="/blog/{{ post.slug }}" class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden group card-hover">
+      <div class="bg-gradient-to-br
+        {% if post.category == 'Income Verification' %}from-green-500 to-emerald-600
+        {% elif post.category == 'MCA Loans' %}from-orange-500 to-red-500
+        {% elif post.category == 'Mortgage' %}from-blue-500 to-sky-600
+        {% elif post.category == 'NSF & Overdrafts' %}from-red-500 to-rose-600
+        {% elif post.category == 'Technology' %}from-indigo-500 to-purple-600
+        {% elif post.category == 'Small Business' %}from-teal-500 to-cyan-600
+        {% else %}from-sky-500 to-indigo-600{% endif %}
+        h-2 w-full"></div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">{{ post.category }}</span>
+          <span class="text-xs text-slate-400">{{ post.read_time }} min read</span>
+        </div>
+        <h2 class="font-bold text-slate-900 text-lg leading-tight mb-2 group-hover:text-sky-600 transition-colors">{{ post.title }}</h2>
+        <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">{{ post.meta }}</p>
+        <div class="mt-4 text-sky-600 text-sm font-semibold group-hover:underline">Read more →</div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center text-slate-400 py-20">No posts yet.</div>
+  {% endif %}
+
+  <!-- CTA -->
+  <div class="mt-20 bg-gradient-to-r from-sky-600 to-indigo-700 rounded-2xl p-10 text-center text-white">
+    <h2 class="text-3xl font-black mb-3">Ready to analyze your first statement?</h2>
+    <p class="text-sky-200 mb-6">Free to start — 3 full reports, no credit card needed.</p>
+    <a href="/auth/register" class="bg-white text-sky-700 px-8 py-3 rounded-xl font-bold hover:bg-sky-50 transition inline-block">
+      Try StatementScrub Free →
+    </a>
+  </div>
+</div>
+{% endblock %}

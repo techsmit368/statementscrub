@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | StatementScrub Blog{% endblock %}
+
+{% block content %}
+<meta name="description" content="{{ post.meta }}" />
+<meta property="og:title" content="{{ post.title }}" />
+<meta property="og:description" content="{{ post.meta }}" />
+<meta property="og:url" content="https://statementscrub.com/blog/{{ post.slug }}" />
+<link rel="canonical" href="https://statementscrub.com/blog/{{ post.slug }}" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ post.title }}",
+  "description": "{{ post.meta }}",
+  "datePublished": "{{ post.date }}",
+  "author": {"@type": "Organization", "name": "StatementScrub"},
+  "publisher": {"@type": "Organization", "name": "StatementScrub", "url": "https://statementscrub.com"}
+}
+</script>
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+
+  <!-- Breadcrumb -->
+  <nav class="text-sm text-slate-400 mb-8">
+    <a href="/" class="hover:text-sky-600">Home</a> /
+    <a href="/blog" class="hover:text-sky-600">Blog</a> /
+    <span class="text-slate-600">{{ post.title[:50] }}...</span>
+  </nav>
+
+  <!-- Header -->
+  <div class="mb-8">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-100 text-sky-700">{{ post.category }}</span>
+      <span class="text-xs text-slate-400">{{ post.read_time }} min read</span>
+      <span class="text-xs text-slate-400">{{ post.date }}</span>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight mb-4">{{ post.title }}</h1>
+    <p class="text-xl text-slate-500 leading-relaxed">{{ post.meta }}</p>
+  </div>
+
+  <hr class="border-slate-200 mb-8"/>
+
+  <!-- Content -->
+  <div class="prose prose-slate max-w-none
+    prose-h2:text-2xl prose-h2:font-bold prose-h2:text-slate-900 prose-h2:mt-8 prose-h2:mb-4
+    prose-h3:text-xl prose-h3:font-bold prose-h3:text-slate-800 prose-h3:mt-6 prose-h3:mb-3
+    prose-p:text-slate-600 prose-p:leading-relaxed prose-p:mb-4
+    prose-ul:text-slate-600 prose-li:mb-1
+    prose-strong:text-slate-900
+    prose-a:text-sky-600 prose-a:no-underline hover:prose-a:underline">
+    {{ post.content | safe }}
+  </div>
+
+  <!-- CTA Box -->
+  <div class="mt-12 bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 rounded-2xl p-8 text-center">
+    <h3 class="text-2xl font-black text-slate-900 mb-2">Analyze bank statements in 30 seconds</h3>
+    <p class="text-slate-500 mb-6">StatementScrub does everything in this article automatically — income verification, MCA detection, NSF counts, risk scoring.</p>
+    <a href="/auth/register" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:opacity-90 transition inline-block shadow-lg">
+      Try Free — 3 Reports No Card →
+    </a>
+  </div>
+
+  <!-- Prev / Next -->
+  <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {% if prev_post %}
+    <a href="/blog/{{ prev_post.slug }}" class="bg-white border border-slate-200 rounded-xl p-5 hover:border-sky-300 transition group">
+      <div class="text-xs text-slate-400 mb-1">← Previous</div>
+      <div class="font-semibold text-slate-700 group-hover:text-sky-600 transition text-sm">{{ prev_post.title }}</div>
+    </a>
+    {% endif %}
+    {% if next_post %}
+    <a href="/blog/{{ next_post.slug }}" class="bg-white border border-slate-200 rounded-xl p-5 hover:border-sky-300 transition group text-right sm:col-start-2">
+      <div class="text-xs text-slate-400 mb-1">Next →</div>
+      <div class="font-semibold text-slate-700 group-hover:text-sky-600 transition text-sm">{{ next_post.title }}</div>
+    </a>
+    {% endif %}
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href="/blog" class="text-sm text-slate-400 hover:text-sky-600">← Back to all posts</a>
+  </div>
+</div>
+{% endblock %}
