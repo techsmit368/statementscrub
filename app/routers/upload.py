@@ -1,7 +1,7 @@
 import uuid
 import os
 import secrets
-from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, Request, UploadFile, File, HTTPException, BackgroundTasks
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -12,6 +12,7 @@ from app.services.auth import require_user, check_usage_limit
 from app.services.pdf_extractor import extract_text_from_pdf, truncate_for_analysis
 from app.services.ai_analyzer import analyze_bank_statement
 from app.config import settings
+from app.services.notifications import notify_analysis_complete
 
 router = APIRouter(tags=["upload"])
 templates = Jinja2Templates(directory="app/templates")
@@ -39,6 +40,7 @@ async def dashboard(
 @router.post("/upload")
 async def upload_statement(
     request: Request,
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
@@ -100,6 +102,19 @@ async def upload_statement(
 
         user.analyses_used += 1
         db.commit()
+
+        background_tasks.add_task(
+            notify_analysis_complete,
+            user.email,
+            analysis.bank_name or "Unknown Bank",
+            analysis.account_holder or "Unknown",
+            red_flags.get("risk_level", "unknown"),
+            red_flags.get("risk_score", 0),
+            result.get("approval_recommendation", "review"),
+            summary.get("avg_monthly_deposits", 0),
+            red_flags.get("nsf_count", 0),
+            red_flags.get("mca_loans_detected", False),
+        )
 
     except Exception as e:
         analysis.status = "failed"

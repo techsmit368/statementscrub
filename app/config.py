@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     upload_dir: str = "uploads"
     max_upload_size_mb: int = 20
     telegram_bot_token: str = ""
+    smtp_user: str = ""
+    smtp_password: str = ""
+    notify_email: str = "patelsmit368@gmail.com"
 
     class Config:
         env_file = ".env"
