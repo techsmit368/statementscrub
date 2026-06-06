@@ -48,3 +48,8 @@ async def sitemap():
 @app.get("/robots.txt")
 async def robots():
     return FileResponse("static/robots.txt", media_type="text/plain")
+
+
+@app.get("/google63008f57257cc8ac.html")
+async def google_verify():
+    return FileResponse("static/google63008f57257cc8ac.html", media_type="text/html")
