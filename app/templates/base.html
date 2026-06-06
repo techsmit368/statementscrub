@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-site-verification" content="63008f57257cc8ac" />
   <title>{% block title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}</title>
+
+  <!-- Default SEO meta (overridden per-page via block meta) -->
+  <meta name="description" content="{% block meta_description %}StatementScrub analyzes any bank statement PDF in under 30 seconds. AI-powered income verification, NSF detection, risk scoring, and APPROVE/REVIEW/DECLINE for mortgage brokers and lenders.{% endblock %}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="{% block canonical %}https://statementscrub.com{% endblock %}" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="StatementScrub" />
+  <meta property="og:title" content="{% block og_title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Analyze any bank statement PDF in 30 seconds. Income verification, NSF detection, risk scoring — built for mortgage brokers and lenders.{% endblock %}" />
+  <meta property="og:url" content="{% block og_url %}https://statementscrub.com{% endblock %}" />
+  <meta property="og:image" content="{% block og_image %}https://statementscrub.com/static/og-image.png{% endblock %}" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{% block tw_title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}" />
+  <meta name="twitter:description" content="{% block tw_description %}Analyze any bank statement PDF in 30 seconds. Built for mortgage brokers.{% endblock %}" />
+  <meta name="twitter:image" content="{% block tw_image %}https://statementscrub.com/static/og-image.png{% endblock %}" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">

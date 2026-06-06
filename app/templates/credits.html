@@ -1,5 +1,44 @@
 ﻿{% extends "base.html" %}
 {% block title %}Buy Analysis Credits — StatementScrub{% endblock %}
+{% block meta_description %}Buy AI bank statement analysis credits starting at $1.00 per report. No subscription. Credits never expire. Cheaper than every major alternative. Try 3 reports free.{% endblock %}
+{% block canonical %}https://statementscrub.com/credits{% endblock %}
+{% block og_title %}Buy Bank Statement Analysis Credits — From $1.00/report{% endblock %}
+{% block og_description %}No subscription required. Credits never expire. AI analysis starting at $1.00/report — significantly cheaper than alternatives.{% endblock %}
+{% block og_url %}https://statementscrub.com/credits{% endblock %}
+{% block tw_title %}Bank Statement Analysis Credits — $1.00/report{% endblock %}
+{% block tw_description %}No subscription. Credits never expire. Try 3 reports free.{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "Do credits expire?", "acceptedAnswer": {"@type": "Answer", "text": "No. Credits never expire. Once purchased, they stay in your account until you use them — no time limit, no pressure."}},
+        {"@type": "Question", "name": "Can I buy multiple credit packs?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Credits stack. Buy a 100-credit pack and a 50-credit pack and you will have 150 credits total. They combine automatically."}},
+        {"@type": "Question", "name": "What counts as 1 credit?", "acceptedAnswer": {"@type": "Answer", "text": "One credit equals one full bank statement analysis. Upload a PDF, AI processes it, you get a complete structured report with income, NSF, risk score, and recommendation."}},
+        {"@type": "Question", "name": "Is there a refund policy?", "acceptedAnswer": {"@type": "Answer", "text": "Unused credits can be refunded within 14 days of purchase. Email support@statementscrub.com with your order details."}}
+      ]
+    },
+    {
+      "@type": "Product",
+      "name": "StatementScrub Bank Statement Analysis Credits",
+      "description": "AI-powered bank statement analysis credits. 1 credit = 1 full analysis. Credits never expire.",
+      "url": "https://statementscrub.com/credits",
+      "brand": {"@type": "Brand", "name": "StatementScrub"},
+      "offers": [
+        {"@type": "Offer", "name": "Starter Pack", "price": "14.90", "priceCurrency": "USD", "description": "10 analysis credits"},
+        {"@type": "Offer", "name": "Standard Pack", "price": "54.90", "priceCurrency": "USD", "description": "50 analysis credits"},
+        {"@type": "Offer", "name": "Scale Pack", "price": "499.90", "priceCurrency": "USD", "description": "500 analysis credits — $1.00 per report"}
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 
 <!-- Hero -->

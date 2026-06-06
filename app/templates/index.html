@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block title %}StatementScrub — AI Bank Statement Analyzer | 30-Second Reports{% endblock %}
 
+{% block meta_description %}StatementScrub analyzes any bank statement PDF in under 30 seconds. AI-powered income verification, NSF detection, MCA detection, risk scoring, and APPROVE/REVIEW/DECLINE recommendations — built for mortgage brokers and lenders.{% endblock %}
+{% block canonical %}https://statementscrub.com/{% endblock %}
+{% block og_title %}StatementScrub — AI Bank Statement Analyzer | 30-Second Reports{% endblock %}
+{% block og_description %}Analyze any bank statement PDF in 30 seconds. Income verification, NSF detection, risk scoring — built for mortgage brokers and lenders. Try free.{% endblock %}
+{% block og_url %}https://statementscrub.com/{% endblock %}
+{% block tw_title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}
+{% block tw_description %}Analyze any bank statement PDF in 30 seconds. Try 3 reports free — no credit card needed.{% endblock %}
+
 {% block head %}
 <style>
   .upload-zone { border: 2px dashed rgba(99,102,241,0.35); transition: all 0.3s; }
@@ -509,6 +517,51 @@ function toggleFaq(btn){
   const open=body.style.display==='block';
   body.style.display=open?'none':'block';
   arr.style.transform=open?'':'rotate(180deg)';
+}
+</script>
+
+<!-- Organization + WebSite schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://statementscrub.com/#organization",
+      "name": "StatementScrub",
+      "url": "https://statementscrub.com",
+      "logo": "https://statementscrub.com/static/og-image.png",
+      "description": "AI-powered bank statement analysis for mortgage brokers and lenders. Instant income verification, NSF detection, and risk scoring.",
+      "contactPoint": {"@type": "ContactPoint", "email": "support@statementscrub.com", "contactType": "customer support"}
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://statementscrub.com/#website",
+      "url": "https://statementscrub.com",
+      "name": "StatementScrub",
+      "publisher": {"@id": "https://statementscrub.com/#organization"},
+      "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://statementscrub.com/blog?q={search_term_string}"}, "query-input": "required name=search_term_string"}
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "StatementScrub",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "url": "https://statementscrub.com",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "3 free reports included"},
+      "description": "AI bank statement analyzer for mortgage brokers. Analyze any PDF in under 30 seconds."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "What banks are supported?", "acceptedAnswer": {"@type": "Answer", "text": "All major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, and hundreds of regional banks. If it exports a PDF, we can read it."}},
+        {"@type": "Question", "name": "How accurate is the AI analysis?", "acceptedAnswer": {"@type": "Answer", "text": "99.2% accuracy on standard bank statement formats. Transaction extraction, income calculation, and NSF detection are validated against manual reviews."}},
+        {"@type": "Question", "name": "Is my customers data secure?", "acceptedAnswer": {"@type": "Answer", "text": "PDFs are processed over encrypted HTTPS, stored in isolated environments, and deleted within 24 hours. We never share or train on your customers data."}},
+        {"@type": "Question", "name": "Can I use this for mortgage underwriting?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — built specifically for mortgage brokers and underwriters. Reports include all standard income documentation fields."}},
+        {"@type": "Question", "name": "What if I need more than 1500 analyses per month?", "acceptedAnswer": {"@type": "Answer", "text": "Contact our sales team. We offer custom volume pricing and white-label API integrations for high-volume operations."}}
+      ]
+    }
+  ]
 }
 </script>
 
