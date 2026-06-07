@@ -25,13 +25,76 @@
     {
       "@type": "Product",
       "name": "StatementScrub Bank Statement Analysis Credits",
-      "description": "AI-powered bank statement analysis credits. 1 credit = 1 full analysis. Credits never expire.",
+      "description": "AI-powered bank statement analysis credits. 1 credit = 1 full analysis. Income verification, NSF detection, MCA detection, fraud indicators, and risk score. Credits never expire.",
       "url": "https://statementscrub.com/credits",
+      "image": "https://statementscrub.com/static/og-image.png",
       "brand": {"@type": "Brand", "name": "StatementScrub"},
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "US",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 14,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      },
       "offers": [
-        {"@type": "Offer", "name": "Starter Pack", "price": "14.90", "priceCurrency": "USD", "description": "10 analysis credits"},
-        {"@type": "Offer", "name": "Standard Pack", "price": "54.90", "priceCurrency": "USD", "description": "50 analysis credits"},
-        {"@type": "Offer", "name": "Scale Pack", "price": "499.90", "priceCurrency": "USD", "description": "500 analysis credits — $1.00 per report"}
+        {
+          "@type": "Offer",
+          "name": "Starter Pack",
+          "price": "14.90",
+          "priceCurrency": "USD",
+          "description": "10 bank statement analysis credits",
+          "availability": "https://schema.org/InStock",
+          "url": "https://statementscrub.com/credits",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
+            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"},
+              "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Standard Pack",
+          "price": "54.90",
+          "priceCurrency": "USD",
+          "description": "50 bank statement analysis credits",
+          "availability": "https://schema.org/InStock",
+          "url": "https://statementscrub.com/credits",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
+            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"},
+              "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "name": "Scale Pack",
+          "price": "499.90",
+          "priceCurrency": "USD",
+          "description": "500 bank statement analysis credits — $1.00 per report",
+          "availability": "https://schema.org/InStock",
+          "url": "https://statementscrub.com/credits",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
+            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"},
+              "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}
+            }
+          }
+        }
       ]
     }
   ]
