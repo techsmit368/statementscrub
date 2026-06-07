@@ -44,7 +44,7 @@
 
       <!-- Stats row -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px">
-        {% for num, label in [("12,400+","Reports Generated"),("<30s","Avg Processing"),("$0.49","Per Analysis")] %}
+        {% for num, label in [("12,400+","Reports Generated"),("<30s","Avg Processing"),("$1.00","Per Analysis")] %}
         <div style="text-align:center">
           <div style="font-size:1.25rem;font-weight:900;background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">{{ num }}</div>
           <div style="font-size:10px;color:#64748b;margin-top:3px;font-weight:500">{{ label }}</div>
@@ -60,7 +60,7 @@
         <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff">MT</div>
         <div>
           <div style="font-size:13px;font-weight:700;color:#e2e8f0">Michael Torres</div>
-          <div style="font-size:11px;color:#64748b">Senior Loan Officer, Regional Bank</div>
+          <div style="font-size:11px;color:#64748b">Senior Loan Officer, Lending Industry</div>
         </div>
         <div style="margin-left:auto;display:flex;gap:1px">{% for _ in range(5) %}<svg style="width:12px;height:12px;color:#f59e0b" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}</div>
       </div>
@@ -83,11 +83,11 @@
       </div>
       {% endif %}
 
-      <form method="POST" action="/auth/login" style="display:flex;flex-direction:column;gap:18px">
+      <form method="POST" action="https://statementscrub.com/auth/login" autocomplete="on" style="display:flex;flex-direction:column;gap:18px">
 
         <div>
           <label style="display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:7px">Email address</label>
-          <input type="email" name="email" required placeholder="you@company.com"
+          <input type="email" name="email" autocomplete="username email" required placeholder="you@company.com"
             style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
             onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
             onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
@@ -99,7 +99,7 @@
             <a href="/contact" style="font-size:12px;color:#6366f1;text-decoration:none;font-weight:600">Forgot password?</a>
           </div>
           <div style="position:relative">
-            <input type="password" name="password" id="pw-input" required placeholder="••••••••"
+            <input type="password" name="password" id="pw-input" autocomplete="current-password" required placeholder="••••••••"
               style="width:100%;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 44px 12px 16px;font-size:14px;color:#0f172a;background:#fff;outline:none;transition:border-color 0.2s,box-shadow 0.2s;font-family:inherit"
               onfocus="this.style.borderColor='#6366f1';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.12)'"
               onblur="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'"/>
