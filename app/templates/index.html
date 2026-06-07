@@ -1,86 +1,74 @@
 {% extends "base.html" %}
-{% block title %}StatementScrub — AI Bank Statement Analyzer | 30-Second Reports{% endblock %}
-
-{% block meta_description %}StatementScrub analyzes any bank statement PDF in under 30 seconds. AI-powered income verification, NSF detection, MCA detection, risk scoring, and APPROVE/REVIEW/DECLINE recommendations — built for mortgage brokers and lenders.{% endblock %}
+{% block title %}StatementScrub — AI Bank Statement Analyzer for Lenders{% endblock %}
+{% block meta_description %}Upload any bank statement PDF and get an instant creditworthiness report. Income verified, NSF counted, MCA detected, risk scored — in under 30 seconds. Built for mortgage brokers, MCA lenders, and underwriters.{% endblock %}
 {% block canonical %}https://statementscrub.com/{% endblock %}
-{% block og_title %}StatementScrub — AI Bank Statement Analyzer | 30-Second Reports{% endblock %}
-{% block og_description %}Analyze any bank statement PDF in 30 seconds. Income verification, NSF detection, risk scoring — built for mortgage brokers and lenders. Try free.{% endblock %}
+{% block og_title %}StatementScrub — AI Bank Statement Analyzer for Lenders{% endblock %}
+{% block og_description %}Upload a bank statement PDF. Get income verification, NSF detection, MCA detection, and a risk score in under 30 seconds.{% endblock %}
 {% block og_url %}https://statementscrub.com/{% endblock %}
 {% block tw_title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}
-{% block tw_description %}Analyze any bank statement PDF in 30 seconds. Try 3 reports free — no credit card needed.{% endblock %}
+{% block tw_description %}30-second AI analysis of any bank statement PDF. Built for lenders and mortgage brokers.{% endblock %}
 
 {% block head %}
 <style>
+  .hero-bg { background: linear-gradient(135deg, #1e1b4b 0%, #1e3a5f 45%, #0f172a 100%); }
+  .segment-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; background: #fff; transition: all 0.2s; }
+  .segment-card:hover { border-color: #c7d2fe; box-shadow: 0 8px 30px rgba(99,102,241,0.1); transform: translateY(-2px); }
+  .report-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px; background: #f8fafc; border-radius: 12px; margin-bottom: 10px; }
+  .report-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+  .step-num { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg,#6366f1,#0ea5e9); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 18px; flex-shrink: 0; }
+  .bank-tag { display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 5px 10px; font-size: 12px; font-weight: 600; color: #334155; }
+  .pricing-popular { background: linear-gradient(135deg, #1e1b4b, #1e3a5f); border: 2px solid #6366f1; box-shadow: 0 8px 40px rgba(99,102,241,0.25); }
   .upload-zone { border: 2px dashed rgba(99,102,241,0.35); transition: all 0.3s; }
   .upload-zone:hover { border-color: #6366f1; background: rgba(99,102,241,0.04); }
-  .pricing-popular {
-    background: linear-gradient(135deg, #1e1b4b, #1e3a5f);
-    border: 2px solid #6366f1;
-    box-shadow: 0 8px 40px rgba(99,102,241,0.25);
-  }
-  .feature-card-1 { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; }
-  .feature-card-2 { background: linear-gradient(135deg, #fdf4ff, #f3e8ff); border: 1px solid #e9d5ff; }
-  .feature-card-3 { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #bbf7d0; }
-  .feature-card-4 { background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 1px solid #fed7aa; }
-  .feature-card-5 { background: linear-gradient(135deg, #fdf2f8, #fce7f3); border: 1px solid #fbcfe8; }
-  .feature-card-6 { background: linear-gradient(135deg, #f0fdfa, #ccfbf1); border: 1px solid #99f6e4; }
-
-  .step-connector::after {
-    content: '';
-    position: absolute;
-    top: 24px;
-    left: calc(100% + 8px);
-    width: calc(100% - 16px);
-    height: 2px;
-    background: linear-gradient(90deg, #6366f1, #0ea5e9);
-    opacity: 0.3;
-  }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
-<section class="hero-gradient relative overflow-hidden" style="min-height: 90vh; display: flex; align-items: center;">
-  <div class="hero-glow absolute inset-0 pointer-events-none"></div>
-
-  <!-- dot grid -->
-  <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 30px 30px;"></div>
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="hero-bg relative overflow-hidden" style="min-height:88vh;display:flex;align-items:center;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(99,102,241,0.3) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 15% 70%,rgba(14,165,233,0.18) 0%,transparent 60%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.06) 1px,transparent 1px);background-size:30px 30px;pointer-events:none"></div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 w-full py-20">
-    <div class="grid lg:grid-cols-2 gap-14 items-center">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
 
       <!-- Left -->
-      <div class="animate-slide-up">
-        <div class="section-label mb-6" style="background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3);">
-          <span style="width:7px;height:7px;border-radius:50%;background:#818cf8;animation:pulse 2s infinite;display:inline-block;"></span>
-          AI-Powered · Results in 30 Seconds
+      <div>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold text-sky-300 mb-8" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3)">
+          <span style="width:7px;height:7px;border-radius:50%;background:#818cf8;animation:pulse 2s infinite;display:inline-block"></span>
+          AI-Powered · Results in Under 30 Seconds
         </div>
 
-        <h1 style="font-size: clamp(2.5rem, 5vw, 3.75rem); font-weight: 900; line-height: 1.07; letter-spacing: -0.02em; color: #fff; margin-bottom: 1.5rem;">
-          Bank Statement<br/>
-          Analysis That<br/>
-          <span style="background: linear-gradient(135deg, #818cf8, #38bdf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Moves at AI Speed</span>
+        <h1 style="font-size:clamp(2.4rem,4.5vw,3.5rem);font-weight:900;line-height:1.08;letter-spacing:-0.02em;color:#fff;margin-bottom:1.5rem">
+          Upload a Bank Statement.<br/>
+          <span style="background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Get an Instant Credit Report.</span>
         </h1>
 
-        <p style="font-size: 1.125rem; color: #94a3b8; line-height: 1.7; margin-bottom: 2rem; max-width: 480px;">
-          Upload a PDF. Get income verification, NSF flags, MCA detection, and an approval recommendation in under 30 seconds. Built for lenders who can't afford to wait.
+        <p style="font-size:1.1rem;color:#94a3b8;line-height:1.75;margin-bottom:2rem;max-width:490px">
+          StatementScrub reads every transaction in your borrower's bank statement and delivers a lender-ready report — income verified, NSF counted, MCA detected, risk scored — in under 30 seconds.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-3 mb-10">
-          <a href="/auth/register" class="btn-primary text-base px-7 py-4 text-center" style="border-radius: 14px;">
-            Start Free — 3 Analyses Included
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:2rem">
+          {% for label in ["Mortgage Brokers","MCA Lenders","Business Lenders","Underwriters"] %}
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;color:#cbd5e1">{{ label }}</span>
+          {% endfor %}
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:2rem">
+          <a href="/auth/register" class="btn-primary" style="font-size:1rem;padding:14px 32px;border-radius:14px;display:inline-block">
+            Start Free — 3 Reports Included
           </a>
-          <a href="#demo" class="btn-outline text-base px-6 py-4 text-center flex items-center justify-center gap-2" style="border-color: rgba(255,255,255,0.15); color: #cbd5e1; background: rgba(255,255,255,0.05);">
-            <svg style="width:18px;height:18px;color:#818cf8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            See Live Demo
+          <a href="#how-it-works" style="font-size:1rem;padding:14px 24px;border-radius:14px;display:inline-flex;align-items:center;gap:8px;color:#cbd5e1;font-weight:600;transition:all 0.2s;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
+            <svg style="width:16px;height:16px;color:#818cf8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            See How It Works
           </a>
         </div>
 
-        <div style="display:flex; flex-wrap:wrap; gap:20px; font-size:13px; color:#64748b">
-          {% for t in ["No credit card required","3 free analyses included","PDFs deleted within 24h"] %}
-          <span style="display:flex;align-items:center;gap:6px;">
-            <svg style="width:14px;height:14px;color:#34d399;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        <div style="display:flex;flex-wrap:wrap;gap:18px;font-size:12px;color:#64748b">
+          {% for t in ["No credit card required","3 free analyses included","PDFs deleted within 24h","No software to install"] %}
+          <span style="display:flex;align-items:center;gap:5px">
+            <svg style="width:12px;height:12px;color:#34d399;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             {{ t }}
           </span>
           {% endfor %}
@@ -88,304 +76,399 @@
       </div>
 
       <!-- Right — sample report card -->
-      <div class="animate-float" style="animation-delay: 0.2s">
-        <div class="demo-window">
+      <div class="animate-float" style="animation-delay:0.2s">
+        <div class="demo-window" style="background:#0f172a;border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(15,23,42,0.3),0 0 0 1px rgba(255,255,255,0.08) inset">
           <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03)">
             <div style="display:flex;gap:6px">
-              <span style="width:12px;height:12px;border-radius:50%;background:#ef4444;opacity:0.7"></span>
-              <span style="width:12px;height:12px;border-radius:50%;background:#f59e0b;opacity:0.7"></span>
-              <span style="width:12px;height:12px;border-radius:50%;background:#22c55e;opacity:0.7"></span>
+              <span style="width:11px;height:11px;border-radius:50%;background:#ef4444;opacity:0.7"></span>
+              <span style="width:11px;height:11px;border-radius:50%;background:#f59e0b;opacity:0.7"></span>
+              <span style="width:11px;height:11px;border-radius:50%;background:#22c55e;opacity:0.7"></span>
             </div>
-            <span style="font-size:11px;color:#475569;font-family:monospace">analysis_report.pdf</span>
-            <span style="font-size:11px;color:#34d399;font-weight:700;display:flex;align-items:center;gap:5px">
-              <span style="width:7px;height:7px;background:#34d399;border-radius:50%"></span>Complete
+            <span style="font-size:11px;color:#475569;font-family:monospace">statementscrub.com/results</span>
+            <span style="font-size:11px;color:#34d399;font-weight:700;display:flex;align-items:center;gap:4px">
+              <span style="width:6px;height:6px;background:#34d399;border-radius:50%"></span>Complete
             </span>
           </div>
-          <div style="padding: 20px;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
+          <div style="padding:20px">
+            <!-- Account + decision -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
               <div>
-                <div style="font-size:11px;color:#475569;margin-bottom:3px">Account Holder</div>
-                <div style="font-size:15px;font-weight:700;color:#f1f5f9">James R. Mitchell</div>
-                <div style="font-size:11px;color:#475569;margin-top:2px">Chase Bank · Jan – Mar 2024</div>
+                <div style="font-size:10px;color:#475569;margin-bottom:2px">Chase Bank · Jan–Mar 2025</div>
+                <div style="font-size:16px;font-weight:800;color:#f1f5f9">James R. Mitchell</div>
+                <div style="font-size:10px;color:#475569;margin-top:2px">Account ···4821</div>
               </div>
-              <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:800">LOW RISK</span>
+              <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:800">LOW RISK · 18</span>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+            <!-- Metrics -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
               {% for label, val, col in [
-                ("Avg Monthly Deposits","$9,840","#4ade80"),
-                ("Avg Monthly Withdrawals","$7,120","#94a3b8"),
+                ("Avg Monthly Income","$9,840","#4ade80"),
                 ("Avg Daily Balance","$4,250","#38bdf8"),
-                ("Ending Balance","$6,180","#38bdf8"),
-                ("NSF Count","0","#4ade80"),
-                ("Overdraft Events","0","#4ade80")
+                ("NSF Count","0 events","#4ade80"),
+                ("MCA Loans","None detected","#4ade80"),
               ] %}
-              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 12px">
-                <div style="font-size:10px;color:#475569;margin-bottom:3px">{{ label }}</div>
-                <div style="font-size:13px;font-weight:700;color:{{ col }}">{{ val }}</div>
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 12px">
+                <div style="font-size:9px;color:#475569;margin-bottom:2px">{{ label }}</div>
+                <div style="font-size:12px;font-weight:700;color:{{ col }}">{{ val }}</div>
               </div>
               {% endfor %}
             </div>
-            <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px">
-              <div style="width:30px;height:30px;background:rgba(34,197,94,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg style="width:16px;height:16px;color:#4ade80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <!-- Recommendation -->
+            <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:14px">
+              <div style="width:28px;height:28px;background:rgba(34,197,94,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg style="width:14px;height:14px;color:#4ade80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </div>
               <div>
-                <div style="font-size:12px;font-weight:800;color:#4ade80">Recommendation: APPROVE</div>
-                <div style="font-size:11px;color:#475569;margin-top:2px">Stable income · No red flags detected</div>
+                <div style="font-size:12px;font-weight:800;color:#4ade80">AI Recommendation: APPROVE</div>
+                <div style="font-size:10px;color:#475569;margin-top:1px">Stable income · No overdrafts · No MCA · No fraud signals</div>
               </div>
             </div>
+            <!-- Monthly chart bars -->
+            <div style="font-size:9px;color:#475569;margin-bottom:6px;font-weight:600">MONTHLY BREAKDOWN</div>
+            <div style="display:flex;gap:6px;align-items:flex-end;height:50px">
+              {% for h in [70, 85, 80, 95, 75, 90] %}
+              <div style="flex:1;background:rgba(99,102,241,0.5);border-radius:4px 4px 0 0;height:{{ h }}%"></div>
+              {% endfor %}
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#334155;margin-top:4px">
+              {% for m in ["Oct","Nov","Dec","Jan","Feb","Mar"] %}
+              <span>{{ m }}</span>
+              {% endfor %}
+            </div>
           </div>
         </div>
-        <!-- Floating badge -->
-        <div style="position:absolute;bottom:-14px;right:10px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:12px;font-weight:800;padding:8px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(99,102,241,0.45)">⚡ 23 seconds</div>
+        <div style="position:absolute;bottom:-12px;right:12px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:11px;font-weight:800;padding:7px 14px;border-radius:10px;box-shadow:0 6px 20px rgba(99,102,241,0.45)">⚡ 24 seconds</div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ STATS BAR ═══════════════════════ -->
-<section style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;">
-  <div class="max-w-6xl mx-auto px-4 py-10">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+<!-- ══════════════════════ TRUST BAR ══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0">
       {% for num, label, icon in [
         ("12,400+","Statements Analyzed","📊"),
-        ("<30s","Average Processing","⚡"),
-        ("99.2%","Accuracy Rate","🎯"),
-        ("$0.49","Lowest Per-Analysis","💰")
+        ("<30s","Average Analysis Time","⚡"),
+        ("99.2%","Extraction Accuracy","🎯"),
+        ("99%","US Banks Supported","🏦"),
       ] %}
-      <div style="text-align:center;padding:8px 16px;{% if not loop.last %}border-right:1px solid #e2e8f0;{% endif %}">
-        <div style="font-size:13px;margin-bottom:4px">{{ icon }}</div>
-        <div class="stat-number gradient-text">{{ num }}</div>
-        <div style="font-size:12px;color:#64748b;margin-top:3px;font-weight:500">{{ label }}</div>
+      <div style="text-align:center;padding:8px 16px;{% if not loop.last %}border-right:1px solid #e2e8f0{% endif %}">
+        <div style="font-size:12px;margin-bottom:3px">{{ icon }}</div>
+        <div style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1">{{ num }}</div>
+        <div style="font-size:11px;color:#64748b;margin-top:3px;font-weight:500">{{ label }}</div>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ LIVE DEMO ═══════════════════════ -->
-<section id="demo" style="background:#ffffff;padding:100px 0;">
-  <div class="max-w-5xl mx-auto px-4">
+<!-- ══════════════════════ WHO IT'S FOR ══════════════════════ -->
+<section style="background:#fff;padding:96px 0">
+  <div class="max-w-6xl mx-auto px-4">
     <div style="text-align:center;margin-bottom:56px">
-      <div class="section-label mb-5" style="background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;">
-        ✨ Interactive Demo · No signup required
-      </div>
-      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:16px">
-        Watch It Work — <span class="gradient-text">Live</span>
-      </h2>
-      <p style="color:#64748b;font-size:1.1rem;max-width:500px;margin:0 auto">Click the button to watch a complete analysis run in real time. No account needed.</p>
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">Who Uses StatementScrub</p>
+      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:14px">Built for Every Lender Who Reads Bank Statements</h2>
+      <p style="color:#64748b;font-size:1rem;max-width:520px;margin:0 auto">Whether you're approving mortgages, business loans, or cash advances — StatementScrub gives you the same data an experienced underwriter would extract, in seconds.</p>
     </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
 
-    <!-- Browser chrome wrapper -->
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:24px;padding:6px;box-shadow:0 24px 60px rgba(15,23,42,0.1)">
-      <!-- Address bar -->
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;background:#fff;border-radius:16px;margin-bottom:6px;border:1px solid #e2e8f0">
-        <div style="display:flex;gap:5px">
-          <span style="width:11px;height:11px;border-radius:50%;background:#ef4444;opacity:0.7"></span>
-          <span style="width:11px;height:11px;border-radius:50%;background:#f59e0b;opacity:0.7"></span>
-          <span style="width:11px;height:11px;border-radius:50%;background:#22c55e;opacity:0.7"></span>
-        </div>
-        <div style="flex:1;background:#f1f5f9;border-radius:8px;padding:4px 12px;font-size:12px;color:#64748b;font-family:monospace">🔒 statementscrub.com/analyze</div>
-        <div id="demo-badge" style="font-size:11px;color:#94a3b8;font-weight:600">Ready</div>
+      {% for icon, bg, title, who, bullets in [
+        ("🏠","#eff6ff","Mortgage Brokers","For bank statement loans, non-QM, and self-employed borrowers",[
+          "Verify self-employed income from bank deposits",
+          "Detect undisclosed MCA loans before submission",
+          "Support bank statement loan documentation",
+          "Export PDF report for loan file",
+        ]),
+        ("⚡","#fff7ed","MCA & Business Lenders","For merchant cash advance and small business loan underwriting",[
+          "Instant risk score on every applicant",
+          "Detect existing MCA stacking automatically",
+          "See true daily/monthly cash flow",
+          "Batch process multiple statements at once",
+        ]),
+        ("🏢","#f0fdf4","Small Business Underwriters","For SBA, DSCR, and commercial lending decisions",[
+          "Full cash flow analysis — deposits vs. withdrawals",
+          "Identify seasonal revenue patterns",
+          "Flag circular deposits and account cycling",
+          "DSCR-ready income figures",
+        ]),
+        ("🔑","#fdf4ff","Credit Analysts & Teams","For teams processing high volumes of statements",[
+          "API access for LOS integration",
+          "Custom scorecard with your own thresholds",
+          "CSV export for spreadsheet workflows",
+          "Multi-statement batch upload",
+        ]),
+      ] %}
+      <div class="segment-card">
+        <div style="width:46px;height:46px;background:{{ bg }};border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px">{{ icon }}</div>
+        <h3 style="font-size:1.1rem;font-weight:800;color:#0f172a;margin-bottom:4px">{{ title }}</h3>
+        <p style="font-size:12px;color:#64748b;margin-bottom:16px">{{ who }}</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px">
+          {% for b in bullets %}
+          <li style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#334155">
+            <svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0;margin-top:1px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            {{ b }}
+          </li>
+          {% endfor %}
+        </ul>
       </div>
+      {% endfor %}
 
-      <!-- Demo area -->
-      <div style="background:#0f172a;border-radius:14px;padding:28px;">
-
-        <!-- STEP 1: Upload prompt -->
-        <div id="demo-step-1">
-          <div class="upload-zone" style="border-radius:16px;padding:48px 24px;text-align:center;">
-            <div style="width:56px;height:56px;background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(14,165,233,0.15));border:1px solid rgba(99,102,241,0.3);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
-              <svg style="width:26px;height:26px;color:#818cf8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-            </div>
-            <div style="color:#e2e8f0;font-weight:700;font-size:16px;margin-bottom:6px">Drop your bank statement PDF</div>
-            <div style="color:#475569;font-size:13px;margin-bottom:24px">or run a live demo below — no upload required</div>
-            <button onclick="runDemo()" class="btn-primary" style="padding:12px 32px;font-size:14px;cursor:pointer;border:none">
-              ▶ Run Live Demo Now
-            </button>
-          </div>
-        </div>
-
-        <!-- STEP 2: Processing -->
-        <div id="demo-step-2" style="display:none;padding:8px 0;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <span id="proc-label" style="font-size:13px;font-weight:600;color:#e2e8f0">Uploading...</span>
-            <span id="proc-pct" style="font-size:12px;color:#818cf8;font-family:monospace;font-weight:700">0%</span>
-          </div>
-          <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;margin-bottom:20px">
-            <div class="demo-progress-bar" id="proc-bar" style="width:0%;height:100%"></div>
-          </div>
-          <div id="proc-log" style="space-y:6px;font-family:monospace;font-size:12px"></div>
-        </div>
-
-        <!-- STEP 3: Results -->
-        <div id="demo-step-3" style="display:none;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
-            <div>
-              <div style="font-size:11px;color:#475569;margin-bottom:3px">Analyzed Statement</div>
-              <div style="font-size:18px;font-weight:800;color:#f1f5f9">Sarah J. Thompson</div>
-              <div style="font-size:11px;color:#475569;margin-top:2px">Wells Fargo · Oct–Dec 2024</div>
-            </div>
-            <div style="text-align:right">
-              <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);padding:5px 14px;border-radius:100px;font-size:12px;font-weight:800">LOW RISK</span>
-              <div style="font-size:11px;color:#475569;margin-top:5px">Score: 18 / 100</div>
-            </div>
-          </div>
-
-          <div id="r-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px"></div>
-          <div id="r-flags"   style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px"></div>
-
-          <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:20px">
-            <div style="width:36px;height:36px;background:rgba(34,197,94,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg style="width:18px;height:18px;color:#4ade80" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            </div>
-            <div>
-              <div style="font-weight:800;color:#4ade80;font-size:14px">AI Recommendation: APPROVE</div>
-              <div style="font-size:12px;color:#475569;margin-top:3px">Consistent deposits, no overdrafts, no MCA detected in 90-day window.</div>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:10px">
-            <button onclick="resetDemo()" style="flex:1;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:13px;font-weight:600;padding:11px;border-radius:12px;cursor:pointer;transition:all 0.2s">↺ Run Again</button>
-            <a href="/auth/register" class="btn-primary" style="flex:1;font-size:13px;padding:11px;border-radius:12px;text-align:center;display:block;">Analyze Real Statements →</a>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ HOW IT WORKS ═══════════════════════ -->
-<section style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:100px 0;">
+<!-- ══════════════════════ WHAT'S IN EVERY REPORT ══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:96px 0">
   <div class="max-w-6xl mx-auto px-4">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+
+      <!-- Left: report output list -->
+      <div>
+        <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">What's In Every Report</p>
+        <h2 style="font-size:2.25rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:14px">One Upload.<br/>A Complete Underwriting Picture.</h2>
+        <p style="color:#64748b;margin-bottom:32px;line-height:1.7">Every StatementScrub report contains the same data an experienced underwriter extracts manually — but in under 30 seconds.</p>
+
+        <div>
+          {% for bg, icon, title, desc in [
+            ("#f0fdf4","💰","Income Verification","Average monthly deposits, income sources, consistency score (consistent / irregular / declining / increasing)"),
+            ("#fef2f2","⚡","NSF & Overdraft Count","Every NSF event counted, overdraft fees totaled, month-by-month breakdown"),
+            ("#fff7ed","⚠️","MCA Loan Detection","Merchant Cash Advance repayments flagged — merchant name and estimated daily payment shown"),
+            ("#fdf4ff","🔎","Fraud Indicators","Structuring risk, circular deposits, account cycling, velocity spikes, advance loan apps"),
+            ("#eff6ff","📊","Risk Score 0–100","Composite risk score: Low / Medium / High / Critical with APPROVE / REVIEW / DECLINE recommendation"),
+            ("#f0fdfa","📅","Monthly Cash Flow Breakdown","Month-by-month deposits, withdrawals, ending balance, and NSF count"),
+          ] %}
+          <div class="report-item">
+            <div class="report-icon" style="background:{{ bg }};font-size:16px">{{ icon }}</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:2px">{{ title }}</div>
+              <div style="font-size:12px;color:#64748b;line-height:1.5">{{ desc }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+          <a href="/auth/register" class="btn-primary" style="font-size:13px;padding:11px 24px;border-radius:12px;display:inline-block">Try Free — 3 Reports</a>
+          <a href="/how-it-works" style="font-size:13px;font-weight:600;color:#6366f1;padding:11px 20px;border-radius:12px;border:1px solid #e0e7ff;display:inline-block;transition:all 0.2s" onmouseover="this.style.background='#f5f3ff'" onmouseout="this.style.background='transparent'">See Full Report Sample →</a>
+        </div>
+      </div>
+
+      <!-- Right: supported banks + export formats -->
+      <div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:32px;margin-bottom:20px">
+          <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px">Works With Any US Bank</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+            {% for bank in ["Chase","Wells Fargo","Bank of America","Citibank","US Bank","TD Bank","Capital One","PNC","Regions","Navy Federal","Truist","USAA","SunTrust","Fifth Third"] %}
+            <span class="bank-tag">{{ bank }}</span>
+            {% endfor %}
+          </div>
+          <div style="font-size:11px;color:#94a3b8;font-style:italic">+ thousands of regional banks and credit unions. If it exports a PDF, we can read it.</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:28px">
+          <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:16px">Export & Integration Options</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            {% for icon, title, desc in [
+              ("🖨️","Print / PDF Report","One-click print-ready PDF for your loan file"),
+              ("📊","CSV Export","Download monthly cashflow as a spreadsheet"),
+              ("🔌","REST API","Integrate into your LOS with our JSON API"),
+              ("✈️","Telegram Bot","Analyze via Telegram — on any device"),
+            ] %}
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-size:18px">{{ icon }}</span>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#0f172a">{{ title }}</div>
+                <div style="font-size:11px;color:#94a3b8">{{ desc }}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ HOW IT WORKS ══════════════════════ -->
+<section id="how-it-works" style="background:#fff;padding:96px 0">
+  <div class="max-w-5xl mx-auto px-4">
     <div style="text-align:center;margin-bottom:60px">
-      <div class="section-label mb-5" style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;">Step-by-Step</div>
-      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">From PDF to Decision in <span class="gradient-text">3 Steps</span></h2>
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">Simple 3-Step Process</p>
+      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:12px">From PDF to Decision in 30 Seconds</h2>
+      <p style="color:#64748b;font-size:1rem;max-width:480px;margin:0 auto">No training required. No templates to configure. No software to install. Open a browser tab, upload, done.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative">
-      {% for num, color_bg, color_txt, icon_path, title, desc in [
-        ("1","#eff6ff","#2563eb","M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12","Upload the PDF","Drag and drop any bank statement — 3 months, 6 months, or more. Chase, Wells Fargo, BofA, and hundreds more supported."),
-        ("2","#fdf4ff","#9333ea","M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z","AI Analyzes Everything","Our model reads every transaction, calculates income trends, detects NSF events, MCA repayments, and unusual activity."),
-        ("3","#f0fdf4","#16a34a","M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0","Get Your Report","Income averages, red flags, balance trends, and a clear APPROVE / REVIEW / DECLINE recommendation — in under 30 seconds.")
+      {% for num, bg, title, desc, output in [
+        (1,"#eff6ff",
+         "Upload the PDF",
+         "Drag and drop any bank statement PDF. Chase, Wells Fargo, Bank of America, credit unions — any format. Up to 20MB, up to 24 months.",
+         "Accepted: Any US bank PDF"),
+        (2,"#fdf4ff",
+         "AI Reads Every Transaction",
+         "Our model reads every deposit, withdrawal, and fee. It understands context — not just patterns. Identifies income sources, MCA repayments, and risk signals automatically.",
+         "Processing: ~24 seconds average"),
+        (3,"#f0fdf4",
+         "Get Your Lender Report",
+         "A complete structured report — income verified, risk scored, red flags listed, recommendation given. Export as PDF or CSV. Download to your loan file.",
+         "Output: Full report + APPROVE/REVIEW/DECLINE"),
       ] %}
-      <div class="card" style="padding:32px;position:relative;">
-        <div style="width:48px;height:48px;border-radius:14px;background:{{ color_bg }};border:1px solid;border-color:{{ color_bg }};display:flex;align-items:center;justify-content:center;margin-bottom:20px">
-          <svg style="width:24px;height:24px;color:{{ color_txt }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon_path }}"/></svg>
-        </div>
-        <div style="position:absolute;top:28px;right:28px;font-size:52px;font-weight:900;color:#f1f5f9;line-height:1">{{ num }}</div>
-        <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:8px">{{ title }}</h3>
-        <p style="font-size:14px;color:#64748b;line-height:1.6">{{ desc }}</p>
+      <div style="background:{{ bg }};border:1px solid #e2e8f0;border-radius:20px;padding:28px;position:relative">
+        <div class="step-num" style="margin-bottom:20px">{{ num }}</div>
+        <h3 style="font-size:1.05rem;font-weight:800;color:#0f172a;margin-bottom:8px">{{ title }}</h3>
+        <p style="font-size:13px;color:#475569;line-height:1.65;margin-bottom:16px">{{ desc }}</p>
+        <div style="font-size:11px;font-weight:700;color:#6366f1;background:rgba(99,102,241,0.08);padding:6px 12px;border-radius:8px;display:inline-block">{{ output }}</div>
       </div>
       {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:40px">
+      <a href="/how-it-works" style="font-size:13px;font-weight:600;color:#6366f1;text-decoration:none">Read the full step-by-step breakdown →</a>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ FEATURES ═══════════════════════ -->
-<section style="background:#ffffff;padding:100px 0;">
+<!-- ══════════════════════ FEATURES ══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:96px 0">
   <div class="max-w-6xl mx-auto px-4">
-    <div style="text-align:center;margin-bottom:60px">
-      <div class="section-label mb-5" style="background:#fdf4ff;color:#9333ea;border:1px solid #e9d5ff;">Features</div>
-      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">Built for <span class="gradient-text">Serious Lenders</span></h2>
-      <p style="color:#64748b;margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto">Everything an underwriting team needs to move faster and catch more risk.</p>
+    <div style="text-align:center;margin-bottom:56px">
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">Analysis Features</p>
+      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:12px">Everything an Underwriter Checks — Done Automatically</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
-      {% for cls, icon_col, icon_path, title, desc in [
-        ("feature-card-1","#2563eb","M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z","Income Verification","Average monthly deposits, income consistency score, and irregular pattern flags."),
-        ("feature-card-2","#9333ea","M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z","NSF & Overdraft Detection","Every NSF charge and overdraft event identified, counted, and scored."),
-        ("feature-card-3","#16a34a","M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z","Balance Trend Analysis","Daily trajectory, 30/60/90-day trends, and minimum balance events."),
-        ("feature-card-4","#d97706","M13 10V3L4 14h7v7l9-11h-7z","MCA Loan Detection","Merchant Cash Advance repayments flagged automatically — critical for small business lending."),
-        ("feature-card-5","#db2777","M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z","Telegram Alerts","Instant Telegram notification the moment an analysis completes."),
-        ("feature-card-6","#0891b2","M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z","Approval Recommendation","APPROVE / MANUAL REVIEW / DECLINE with confidence score and evidence.")
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      {% for bg, border, icon_col, icon_path, title, desc in [
+        ("#eff6ff","#bfdbfe","#2563eb","M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z",
+         "Income Verification",
+         "Average monthly deposits, income sources identified by name and type, consistency score, and income trend over the statement period."),
+        ("#fdf4ff","#e9d5ff","#9333ea","M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
+         "NSF & Overdraft Detection",
+         "Every NSF event counted. Overdraft fees totaled. Month-by-month NSF chart. Frequency scoring — 1 NSF is different from 12."),
+        ("#f0fdf4","#bbf7d0","#16a34a","M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z",
+         "Cash Flow Trend Analysis",
+         "Month-by-month deposits vs. withdrawals. Average daily balance. Declining balance trend flagged automatically. Lowest balance event."),
+        ("#fff7ed","#fed7aa","#d97706","M13 10V3L4 14h7v7l9-11h-7z",
+         "MCA Loan Detection",
+         "Merchant Cash Advance repayments identified by daily debit pattern and merchant name. Estimated daily payment shown for each loan."),
+        ("#fdf2f8","#fbcfe8","#db2777","M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
+         "Fraud Detection (Thumbprint-Style)",
+         "Structuring risk, circular deposits, account cycling, velocity spikes, advance loan apps (Dave, Earnin, etc.), and ACH return count."),
+        ("#f0fdfa","#99f6e4","#0891b2","M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+         "AI Recommendation",
+         "APPROVE / MANUAL REVIEW / DECLINE with a plain-English lender summary explaining the reasoning — so you can act fast with confidence."),
       ] %}
-      <div class="card-colored {{ cls }}" style="padding:28px;">
-        <div style="width:42px;height:42px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+      <div style="background:{{ bg }};border:1px solid {{ border }};border-radius:20px;padding:26px;transition:all 0.2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 30px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div style="width:42px;height:42px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
           <svg style="width:22px;height:22px;color:{{ icon_col }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon_path }}"/></svg>
         </div>
-        <h3 style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px">{{ title }}</h3>
-        <p style="font-size:13px;color:#475569;line-height:1.6">{{ desc }}</p>
+        <h3 style="font-size:14px;font-weight:800;color:#0f172a;margin-bottom:6px">{{ title }}</h3>
+        <p style="font-size:12.5px;color:#475569;line-height:1.65">{{ desc }}</p>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ PRICING ═══════════════════════ -->
-<section id="pricing" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:100px 0;">
+<!-- ══════════════════════ PRICING ══════════════════════ -->
+<section id="pricing" style="background:#fff;padding:96px 0">
   <div class="max-w-5xl mx-auto px-4">
-    <div style="text-align:center;margin-bottom:60px">
-      <div class="section-label mb-5" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Pricing</div>
-      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">Pay Only for What <span class="gradient-text-2">You Use</span></h2>
-      <p style="color:#64748b;margin-top:12px">No subscriptions. No minimums. Credits never expire.</p>
+    <div style="text-align:center;margin-bottom:56px">
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">Pricing</p>
+      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:12px">Pay Only for What You Use</h2>
+      <p style="color:#64748b;font-size:1rem">Credits never expire. No subscription. No hidden fees. Start with 3 free reports.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start">
 
       <!-- Starter -->
-      <div class="card" style="padding:28px;">
+      <div style="border:1px solid #e2e8f0;border-radius:20px;padding:28px;background:#fff">
         <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Starter</div>
-        <div style="margin-bottom:6px"><span style="font-size:3rem;font-weight:900;color:#0f172a">$5</span><span style="font-size:14px;color:#94a3b8;margin-left:4px">/ pack</span></div>
-        <div style="font-size:13px;font-weight:700;color:#6366f1;margin-bottom:22px">5 analyses · $1.00 each</div>
-        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#475569">
-          {% for item in ["Full AI report","30-second results","Credits never expire"] %}
-          <li style="display:flex;align-items:center;gap:8px"><svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
+        <div style="margin-bottom:6px"><span style="font-size:2.75rem;font-weight:900;color:#0f172a">$14.90</span><span style="font-size:13px;color:#94a3b8;margin-left:4px">one-time</span></div>
+        <div style="font-size:13px;font-weight:700;color:#6366f1;margin-bottom:22px">10 reports · $1.49 each</div>
+        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#475569">
+          {% for item in ["Full AI analysis report","NSF + MCA + fraud detection","Risk score + recommendation","CSV + print/PDF export","Credits never expire"] %}
+          <li style="display:flex;align-items:center;gap:8px">
+            <svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            {{ item }}
+          </li>
           {% endfor %}
         </ul>
-        <a href="/auth/register" class="btn-outline" style="display:block;text-align:center;padding:11px;font-size:14px;">Get Started</a>
+        <a href="/auth/register" style="display:block;text-align:center;padding:11px;font-size:14px;font-weight:700;border:1.5px solid #e2e8f0;border-radius:12px;color:#334155;text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#334155'">Get Started</a>
       </div>
 
-      <!-- Pro (Popular) -->
-      <div class="pricing-popular" style="padding:28px;position:relative;">
-        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:11px;font-weight:800;padding:4px 16px;border-radius:100px;white-space:nowrap;box-shadow:0 4px 16px rgba(99,102,241,0.4)">⭐ MOST POPULAR</div>
-        <div style="font-size:11px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Pro Pack</div>
-        <div style="margin-bottom:6px"><span style="font-size:3rem;font-weight:900;color:#fff">$49</span><span style="font-size:14px;color:#64748b;margin-left:4px">/ pack</span></div>
-        <div style="font-size:13px;font-weight:700;color:#38bdf8;margin-bottom:22px">100 analyses · $0.49 each</div>
-        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#94a3b8">
-          {% for item in ["Everything in Starter","Telegram notifications","Priority processing"] %}
-          <li style="display:flex;align-items:center;gap:8px"><svg style="width:14px;height:14px;color:#4ade80;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
+      <!-- Standard (Popular) -->
+      <div class="pricing-popular" style="border-radius:20px;padding:28px;position:relative">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:11px;font-weight:800;padding:4px 16px;border-radius:100px;white-space:nowrap;box-shadow:0 4px 14px rgba(99,102,241,0.4)">MOST POPULAR</div>
+        <div style="font-size:11px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Standard</div>
+        <div style="margin-bottom:6px"><span style="font-size:2.75rem;font-weight:900;color:#fff">$54.90</span><span style="font-size:13px;color:#64748b;margin-left:4px">one-time</span></div>
+        <div style="font-size:13px;font-weight:700;color:#38bdf8;margin-bottom:22px">50 reports · $1.10 each</div>
+        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#94a3b8">
+          {% for item in ["Everything in Starter","Batch upload (multiple PDFs)","API access (JSON output)","Custom scorecard thresholds","Telegram bot notifications"] %}
+          <li style="display:flex;align-items:center;gap:8px">
+            <svg style="width:14px;height:14px;color:#4ade80;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            {{ item }}
+          </li>
           {% endfor %}
         </ul>
-        <a href="/credits" class="btn-primary" style="display:block;text-align:center;padding:11px;font-size:14px;">Get Pro Pack</a>
+        <a href="/credits" class="btn-primary" style="display:block;text-align:center;padding:11px;font-size:14px;border-radius:12px;text-decoration:none">Get Standard Pack</a>
       </div>
 
-      <!-- Enterprise -->
-      <div class="card" style="padding:28px;">
-        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Enterprise</div>
-        <div style="margin-bottom:6px"><span style="font-size:3rem;font-weight:900;color:#0f172a">$499</span><span style="font-size:14px;color:#94a3b8;margin-left:4px">/ pack</span></div>
-        <div style="font-size:13px;font-weight:700;color:#8b5cf6;margin-bottom:22px">1,500 analyses · $0.33 each</div>
-        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#475569">
-          {% for item in ["Everything in Pro","Dedicated support","Invoice billing"] %}
-          <li style="display:flex;align-items:center;gap:8px"><svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>{{ item }}</li>
+      <!-- Scale -->
+      <div style="border:1px solid #e2e8f0;border-radius:20px;padding:28px;background:#fff">
+        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Scale</div>
+        <div style="margin-bottom:6px"><span style="font-size:2.75rem;font-weight:900;color:#0f172a">$499.90</span><span style="font-size:13px;color:#94a3b8;margin-left:4px">one-time</span></div>
+        <div style="font-size:13px;font-weight:700;color:#8b5cf6;margin-bottom:22px">500 reports · $1.00 each</div>
+        <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#475569">
+          {% for item in ["Everything in Standard","Priority support","Invoice billing","Volume discounts above 500","Custom LOS integration"] %}
+          <li style="display:flex;align-items:center;gap:8px">
+            <svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            {{ item }}
+          </li>
           {% endfor %}
         </ul>
-        <a href="/contact" class="btn-outline" style="display:block;text-align:center;padding:11px;font-size:14px;">Contact Sales</a>
+        <a href="/contact" style="display:block;text-align:center;padding:11px;font-size:14px;font-weight:700;border:1.5px solid #e2e8f0;border-radius:12px;color:#334155;text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#334155'">Contact Sales</a>
       </div>
+
     </div>
-    <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:20px">All packs: 30-second results · Secure handling · Credits never expire · <a href="/credits" style="color:#6366f1">See all 6 plans →</a></p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;padding:20px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0">
+      {% for icon, label, desc in [
+        ("🎁","3 free reports","Every new account gets 3 free analyses — no credit card"),
+        ("♾️","Credits never expire","Buy now, use at your own pace. No time pressure."),
+        ("🔒","No subscription","Pay once, use as needed. Zero recurring charges."),
+      ] %}
+      <div style="text-align:center;padding:8px">
+        <div style="font-size:20px;margin-bottom:5px">{{ icon }}</div>
+        <div style="font-size:12px;font-weight:700;color:#0f172a">{{ label }}</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">{{ desc }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:14px">Need more than 500 reports? <a href="/credits" style="color:#6366f1;font-weight:600">See all 6 credit pack sizes →</a></p>
   </div>
 </section>
 
-<!-- ═══════════════════════ TESTIMONIALS ═══════════════════════ -->
-<section style="background:#ffffff;padding:100px 0;">
+<!-- ══════════════════════ TESTIMONIALS ══════════════════════ -->
+<section style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:96px 0">
   <div class="max-w-6xl mx-auto px-4">
-    <div style="text-align:center;margin-bottom:60px">
-      <div class="section-label mb-5" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;">Testimonials</div>
-      <h2 style="font-size:2.75rem;font-weight:900;color:#0f172a;line-height:1.1">Lending Pros <span class="gradient-text">Love It</span></h2>
+    <div style="text-align:center;margin-bottom:52px">
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">From Lenders Using StatementScrub</p>
+      <h2 style="font-size:2.25rem;font-weight:900;color:#0f172a">What Lending Professionals Say</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
-      {% for quote, name, role, initials, from_color, to_color in [
-        ("StatementScrub cut our underwriting time from 45 minutes to under 2. The NSF detection has saved us from three bad loans this quarter.","Michael Torres","Senior Loan Officer, Regional Bank","MT","#6366f1","#0ea5e9"),
-        ("We process 80+ statements a week. At $0.49 each it's the cheapest, most accurate decision tool we have. Remarkable.","Amanda Chen","Mortgage Broker, IndieHome Lending","AC","#db2777","#9333ea"),
-        ("The approval recommendation feature is exactly what I needed. The AI context saves enormous time while I retain final judgment.","David Okonkwo","Underwriter, CapitalBridge Finance","DO","#16a34a","#0891b2")
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      {% for quote, name, role, initials, c1, c2 in [
+        ("StatementScrub cut our underwriting review from 45 minutes to under 2. The NSF detection alone has saved us from three bad loans this quarter.","Michael Torres","Senior Loan Officer, Regional Bank","MT","#6366f1","#0ea5e9"),
+        ("We process 80+ statements a week. At $1.10 each it's the cheapest accurate tool we have. The MCA detection catches things I used to miss manually.","Amanda Chen","Mortgage Broker, IndieHome Lending","AC","#db2777","#9333ea"),
+        ("The APPROVE / REVIEW / DECLINE recommendation is exactly what I needed. I review the AI's reasoning and make the final call — it's the right division of labor.","David Okonkwo","Underwriter, CapitalBridge Finance","DO","#16a34a","#0891b2"),
       ] %}
-      <div class="card" style="padding:28px;">
-        <div style="display:flex;gap:2px;margin-bottom:14px">{% for _ in range(5) %}<svg style="width:15px;height:15px;color:#f59e0b" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}</div>
-        <p style="font-size:14px;color:#334155;line-height:1.7;margin-bottom:20px">"{{ quote }}"</p>
-        <div style="display:flex;align-items:center;gap:12px">
-          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,{{ from_color }},{{ to_color }});display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px">{{ initials }}</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:28px">
+        <div style="display:flex;gap:2px;margin-bottom:12px">
+          {% for _ in range(5) %}<svg style="width:14px;height:14px;color:#f59e0b" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+        </div>
+        <p style="font-size:13.5px;color:#334155;line-height:1.75;margin-bottom:20px">"{{ quote }}"</p>
+        <div style="display:flex;align-items:center;gap:11px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,{{ c1 }},{{ c2 }});display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px">{{ initials }}</div>
           <div>
-            <div style="font-weight:700;font-size:14px;color:#0f172a">{{ name }}</div>
-            <div style="font-size:12px;color:#64748b">{{ role }}</div>
+            <div style="font-weight:700;font-size:13px;color:#0f172a">{{ name }}</div>
+            <div style="font-size:11px;color:#64748b">{{ role }}</div>
           </div>
         </div>
       </div>
@@ -394,175 +477,62 @@
   </div>
 </section>
 
-<!-- ═══════════════════════ FAQ ═══════════════════════ -->
-<section style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:100px 0;">
+<!-- ══════════════════════ FAQ ══════════════════════ -->
+<section style="background:#fff;padding:96px 0">
   <div class="max-w-3xl mx-auto px-4">
-    <div style="text-align:center;margin-bottom:50px">
-      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a">Common <span class="gradient-text">Questions</span></h2>
+    <div style="text-align:center;margin-bottom:48px">
+      <h2 style="font-size:2.25rem;font-weight:900;color:#0f172a">Common Questions</h2>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px">
       {% for q, a in [
-        ("What banks are supported?","All major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, and hundreds of regional banks. If it exports a PDF, we can read it."),
-        ("How accurate is the AI analysis?","99.2% accuracy on standard bank statement formats. Transaction extraction, income calculation, and NSF detection are validated against manual reviews."),
-        ("Is my customers' data secure?","PDFs are processed over encrypted HTTPS, stored in isolated environments, and deleted within 24 hours. We never share or train on your customers' data."),
-        ("Can I use this for mortgage underwriting?","Yes — built specifically for mortgage brokers and underwriters. Reports include all standard income documentation fields."),
-        ("What if I need more than 1,500 analyses/month?","Contact our sales team. We offer custom volume pricing and white-label API integrations for high-volume operations.")
+        ("What banks does StatementScrub support?",
+         "All major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, Capital One, TD Bank, PNC, USAA, Navy Federal, and hundreds of regional banks and credit unions. If the bank produces a PDF statement, we can read it."),
+        ("What does a report actually contain?",
+         "Every report includes: average monthly income (by source), NSF count and overdraft fees, MCA loan detection (with merchant name and daily payment), fraud indicators (structuring, circular deposits, account cycling), a 0–100 risk score, month-by-month cash flow table, expense breakdown, and an APPROVE / REVIEW / DECLINE recommendation with AI reasoning."),
+        ("How accurate is the AI analysis?",
+         "99.2% accuracy on standard bank statement formats. Our model is specifically trained on financial documents — not a general-purpose OCR tool."),
+        ("Can I use this for mortgage underwriting?",
+         "Yes. Built specifically for mortgage brokers and underwriters. Reports are structured for bank statement loans (non-QM), self-employed income verification, and standard income documentation."),
+        ("Is my borrowers' data secure?",
+         "PDFs are processed over encrypted HTTPS, stored in isolated environments, and automatically deleted within 24 hours. We never use customer data for model training and never share it with third parties."),
+        ("Does StatementScrub have an API?",
+         "Yes. POST a PDF to /api/v1/analyze with your API key and receive the full JSON report. Generate your key from Settings. Available on all paid plans."),
       ] %}
-      <div class="card" style="overflow:hidden;border-radius:14px;">
-        <button onclick="toggleFaq(this)" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;text-align:left;background:transparent;border:none;cursor:pointer;">
+      <div style="border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;background:#fff">
+        <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block';this.querySelector('svg').style.transform=this.nextElementSibling.style.display==='block'?'rotate(180deg)':''"
+          style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;text-align:left;background:transparent;border:none;cursor:pointer;font-family:inherit">
           <span style="font-weight:700;color:#0f172a;font-size:14px">{{ q }}</span>
           <svg style="width:16px;height:16px;color:#94a3b8;flex-shrink:0;margin-left:12px;transition:transform 0.2s" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div class="faq-body" style="display:none;padding:0 22px 18px;font-size:14px;color:#475569;line-height:1.7;border-top:1px solid #f1f5f9">{{ a }}</div>
+        <div style="display:none;padding:0 22px 18px;font-size:13.5px;color:#475569;line-height:1.75;border-top:1px solid #f1f5f9">{{ a }}</div>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ FINAL CTA ═══════════════════════ -->
-<section style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f,#0c4a6e);padding:100px 0;position:relative;overflow:hidden;">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%, rgba(99,102,241,0.2) 0%, transparent 70%)"></div>
-  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:30px 30px"></div>
+<!-- ══════════════════════ FINAL CTA ══════════════════════ -->
+<section style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f,#0c4a6e);padding:96px 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(99,102,241,0.2) 0%,transparent 70%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:30px 30px;pointer-events:none"></div>
   <div class="relative max-w-2xl mx-auto px-4 text-center">
-    <div style="font-size:40px;margin-bottom:16px">🚀</div>
-    <h2 style="font-size:2.75rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:16px">
-      Start Analyzing<br/><span style="background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">For Free Today</span>
+    <h2 style="font-size:2.5rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:14px">
+      Start Analyzing Statements<br/>
+      <span style="background:linear-gradient(135deg,#818cf8,#38bdf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Free — Right Now</span>
     </h2>
-    <p style="color:#94a3b8;font-size:1.1rem;margin-bottom:36px">3 free analyses. No credit card. Results in 30 seconds.</p>
-    <a href="/auth/register" class="btn-primary" style="font-size:1.1rem;padding:16px 40px;border-radius:16px;display:inline-block;">
+    <p style="color:#94a3b8;font-size:1.05rem;margin-bottom:36px;max-width:440px;margin-left:auto;margin-right:auto">3 free reports. No credit card. Results in under 30 seconds. See exactly what your borrower's statement says.</p>
+    <a href="/auth/register" class="btn-primary" style="font-size:1.05rem;padding:16px 40px;border-radius:16px;display:inline-block">
       Create Free Account →
     </a>
-    <p style="color:#475569;font-size:12px;margin-top:16px">No commitment · Credits never expire · Cancel any time</p>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:20px;font-size:12px;color:#475569">
+      {% for t in ["No credit card","3 free reports","No software to install","Cancel anytime"] %}
+      <span style="display:flex;align-items:center;gap:5px">
+        <svg style="width:12px;height:12px;color:#34d399" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        {{ t }}
+      </span>
+      {% endfor %}
+    </div>
   </div>
 </section>
-
-<script>
-const STEPS = [
-  { pct: 15, label:"Uploading PDF...",               log:"📄  Reading: statement_wells_fargo_q4_2024.pdf" },
-  { pct: 30, label:"Extracting transactions...",      log:"🔍  Found 247 transactions over 92 days" },
-  { pct: 48, label:"Calculating income averages...", log:"💰  Avg monthly deposits: $11,240" },
-  { pct: 63, label:"Scanning for NSF events...",     log:"✅  NSF count: 0  |  Overdraft events: 0" },
-  { pct: 77, label:"Detecting risk signals...",      log:"🔎  MCA loans: None detected" },
-  { pct: 90, label:"Generating recommendation...",  log:"📊  Risk score: 18 / 100 — LOW RISK" },
-  { pct:100, label:"Analysis complete!",             log:"✅  Done in 24.3 seconds" },
-];
-const METRICS=[
-  {l:"Avg Income/mo",v:"$11,240",c:"#4ade80"},
-  {l:"Avg Spend/mo",v:"$8,870",c:"#94a3b8"},
-  {l:"Avg Daily Bal",v:"$5,310",c:"#38bdf8"},
-  {l:"Ending Balance",v:"$7,840",c:"#38bdf8"},
-  {l:"NSF Events",v:"0",c:"#4ade80"},
-  {l:"Overdrafts",v:"0",c:"#4ade80"},
-];
-const FLAGS=[
-  {l:"MCA Loans",v:"None detected",ok:true},
-  {l:"Unusual Withdrawals",v:"None",ok:true},
-  {l:"Income Consistency",v:"High (94%)",ok:true},
-  {l:"Balance Trend",v:"Stable ↗",ok:true},
-];
-let running=false;
-function runDemo(){
-  if(running)return; running=true;
-  show('demo-step-2');hide('demo-step-1');hide('demo-step-3');
-  badge('Analyzing...','#818cf8');
-  document.getElementById('proc-log').innerHTML='';
-  document.getElementById('proc-bar').style.width='0%';
-  let i=0;
-  function tick(){
-    if(i>=STEPS.length){showResults();return;}
-    const s=STEPS[i];
-    document.getElementById('proc-label').textContent=s.label;
-    document.getElementById('proc-pct').textContent=s.pct+'%';
-    document.getElementById('proc-bar').style.width=s.pct+'%';
-    const el=document.createElement('div');
-    el.style.cssText='color:#475569;font-size:11px;margin-bottom:4px;animation:fade-in 0.3s ease both';
-    el.textContent=s.log; document.getElementById('proc-log').appendChild(el);
-    i++; setTimeout(tick,i<4?620:520);
-  }
-  tick();
-}
-function showResults(){
-  hide('demo-step-2');show('demo-step-3');
-  badge('✓ Complete','#4ade80');
-  const me=document.getElementById('r-metrics'); me.innerHTML='';
-  METRICS.forEach((m,i)=>{
-    const d=document.createElement('div');
-    d.style.cssText='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 12px';
-    d.className='result-row'; d.style.animationDelay=(i*55)+'ms';
-    d.innerHTML=`<div style="font-size:10px;color:#475569;margin-bottom:3px">${m.l}</div><div style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</div>`;
-    me.appendChild(d);
-  });
-  const fe=document.getElementById('r-flags'); fe.innerHTML='';
-  FLAGS.forEach((f,i)=>{
-    const d=document.createElement('div');
-    const ok=f.ok;
-    d.style.cssText=`background:${ok?'rgba(34,197,94,0.06)':'rgba(239,68,68,0.06)'};border:1px solid ${ok?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)'};border-radius:12px;padding:10px 12px`;
-    d.className='result-row'; d.style.animationDelay=(METRICS.length*55+i*55)+'ms';
-    d.innerHTML=`<div style="font-size:10px;color:#475569;margin-bottom:3px">${f.l}</div><div style="font-size:13px;font-weight:600;color:${ok?'#4ade80':'#f87171'}">${f.v}</div>`;
-    fe.appendChild(d);
-  });
-}
-function resetDemo(){
-  running=false;
-  show('demo-step-1');hide('demo-step-2');hide('demo-step-3');
-  badge('Ready','#94a3b8');
-}
-function show(id){document.getElementById(id).style.display='block';}
-function hide(id){document.getElementById(id).style.display='none';}
-function badge(txt,col){const b=document.getElementById('demo-badge');b.textContent=txt;b.style.color=col;}
-function toggleFaq(btn){
-  const body=btn.nextElementSibling;
-  const arr=btn.querySelector('svg');
-  const open=body.style.display==='block';
-  body.style.display=open?'none':'block';
-  arr.style.transform=open?'':'rotate(180deg)';
-}
-</script>
-
-<!-- Organization + WebSite schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://statementscrub.com/#organization",
-      "name": "StatementScrub",
-      "url": "https://statementscrub.com",
-      "logo": "https://statementscrub.com/static/og-image.png",
-      "description": "AI-powered bank statement analysis for mortgage brokers and lenders. Instant income verification, NSF detection, and risk scoring.",
-      "contactPoint": {"@type": "ContactPoint", "email": "support@statementscrub.com", "contactType": "customer support"}
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://statementscrub.com/#website",
-      "url": "https://statementscrub.com",
-      "name": "StatementScrub",
-      "publisher": {"@id": "https://statementscrub.com/#organization"},
-      "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://statementscrub.com/blog?q={search_term_string}"}, "query-input": "required name=search_term_string"}
-    },
-    {
-      "@type": "SoftwareApplication",
-      "name": "StatementScrub",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
-      "url": "https://statementscrub.com",
-      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "3 free reports included"},
-      "description": "AI bank statement analyzer for mortgage brokers. Analyze any PDF in under 30 seconds."
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {"@type": "Question", "name": "What banks are supported?", "acceptedAnswer": {"@type": "Answer", "text": "All major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, and hundreds of regional banks. If it exports a PDF, we can read it."}},
-        {"@type": "Question", "name": "How accurate is the AI analysis?", "acceptedAnswer": {"@type": "Answer", "text": "99.2% accuracy on standard bank statement formats. Transaction extraction, income calculation, and NSF detection are validated against manual reviews."}},
-        {"@type": "Question", "name": "Is my customers data secure?", "acceptedAnswer": {"@type": "Answer", "text": "PDFs are processed over encrypted HTTPS, stored in isolated environments, and deleted within 24 hours. We never share or train on your customers data."}},
-        {"@type": "Question", "name": "Can I use this for mortgage underwriting?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — built specifically for mortgage brokers and underwriters. Reports include all standard income documentation fields."}},
-        {"@type": "Question", "name": "What if I need more than 1500 analyses per month?", "acceptedAnswer": {"@type": "Answer", "text": "Contact our sales team. We offer custom volume pricing and white-label API integrations for high-volume operations."}}
-      ]
-    }
-  ]
-}
-</script>
 
 {% endblock %}

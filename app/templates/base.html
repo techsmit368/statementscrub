@@ -153,9 +153,12 @@
       </a>
 
       <div class="hidden md:flex items-center gap-1">
-        {% for label, href in [("How It Works","/how-it-works"),("Compare","/compare"),("Credits","/credits"),("Blog","/blog"),("Contact","/contact")] %}
+        {% for label, href in [("How It Works","/how-it-works"),("Pricing","/#pricing"),("Compare","/compare"),("Credits","/credits"),("Blog","/blog"),("Contact","/contact")] %}
         <a href="{{ href }}" class="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">{{ label }}</a>
         {% endfor %}
+        {% if user %}
+        <a href="/settings" class="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">Settings</a>
+        {% endif %}
       </div>
 
       <div class="flex items-center gap-2.5">
@@ -197,7 +200,7 @@
           </div>
         </div>
         {% for heading, links in [
-          ("Product",[("How It Works","/how-it-works"),("Pricing","/#pricing"),("Buy Credits","/credits"),("Compare","/compare")]),
+          ("Product",[("How It Works","/how-it-works"),("Pricing","/#pricing"),("Buy Credits","/credits"),("Compare","/compare"),("API Docs","/settings")]),
           ("Company",[("Blog","/blog"),("Testimonials","/testimonials"),("Book Demo","/demo"),("Contact","/contact")]),
           ("Legal",[("Terms of Service","/terms"),("Privacy Policy","/privacy")])
         ] %}
@@ -212,7 +215,7 @@
         {% endfor %}
       </div>
       <div class="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style="border-color:#1e293b; color:#475569">
-        <span>© 2025 StatementScrub. All rights reserved.</span>
+        <span>© 2026 StatementScrub. All rights reserved.</span>
         <div class="flex gap-5">
           <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a>
           <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a>

@@ -3,16 +3,20 @@
 
 {% block content %}
 
-<!-- Hidden upload form -->
+<!-- Single upload form -->
 <form method="POST" action="/upload" enctype="multipart/form-data" id="globalUploadForm" style="display:none">
   <input type="file" name="file" id="fileInputGlobal" accept=".pdf" onchange="submitGlobalUpload(this)"/>
+</form>
+<!-- Batch upload form -->
+<form method="POST" action="/upload/batch" enctype="multipart/form-data" id="batchUploadForm" style="display:none">
+  <input type="file" name="files" id="fileInputBatch" accept=".pdf" multiple onchange="submitBatchUpload(this)"/>
 </form>
 
 <!-- Upload loading overlay -->
 <div id="uploadingOverlay" style="display:none;background:#fff;border:1px solid #e0e7ff;border-radius:16px;padding:44px;text-align:center;margin-bottom:24px;box-shadow:0 4px 20px rgba(99,102,241,0.08)">
   <div class="spinner" style="margin:0 auto 16px"></div>
-  <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px">Analyzing statement…</div>
-  <div style="font-size:13px;color:#64748b;margin-bottom:18px">Reading transactions, calculating income, detecting risk flags</div>
+  <div id="overlayTitle" style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px">Analyzing statement…</div>
+  <div id="overlaySubtitle" style="font-size:13px;color:#64748b;margin-bottom:18px">Reading transactions, calculating income, detecting risk flags</div>
   <div style="display:inline-flex;gap:0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
     {% for step in ["Reading PDF","AI Analysis","Building Report"] %}
     <div class="upload-step" style="padding:10px 18px;font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:6px;font-weight:600;{% if not loop.last %}border-right:1px solid #e2e8f0{% endif %}">
@@ -21,6 +25,16 @@
     {% endfor %}
   </div>
 </div>
+
+<!-- Batch done notice -->
+{% set batch_done = request.query_params.get('batch_done') %}
+{% set batch_failed = request.query_params.get('batch_failed') %}
+{% if batch_done %}
+<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#15803d">
+  <svg style="width:16px;height:16px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+  Batch complete — {{ batch_done }} statement{{ 's' if batch_done != '1' }} analyzed{% if batch_failed and batch_failed != '0' %}, {{ batch_failed }} skipped{% endif %}.
+</div>
+{% endif %}
 
 {% if error %}
 <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:8px">
@@ -191,23 +205,47 @@
     <!-- Quick Upload -->
     <div class="card" style="overflow:hidden">
       <div style="padding:16px 18px 0;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:2px">Quick Upload</div>
-        <div style="font-size:11px;color:#64748b">Add a new bank statement for analysis</div>
+        <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:2px">Upload</div>
+        <div style="font-size:11px;color:#64748b">Single or batch — any major bank PDF</div>
       </div>
-      <div style="padding:0 18px 18px">
+      <div style="padding:0 18px 18px;display:flex;flex-direction:column;gap:8px">
         <label for="fileInputGlobal" style="cursor:pointer;display:block">
-          <div style="border:2px dashed #e0e7ff;border-radius:12px;padding:20px;text-align:center;transition:all 0.2s"
+          <div style="border:2px dashed #e0e7ff;border-radius:12px;padding:16px;text-align:center;transition:all 0.2s"
                onmouseover="this.style.borderColor='#6366f1';this.style.background='#fafbff'"
                onmouseout="this.style.borderColor='#e0e7ff';this.style.background='transparent'">
-            <div style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 2px 10px rgba(99,102,241,0.25)">
-              <svg style="width:18px;height:18px;color:#fff" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:9px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;box-shadow:0 2px 10px rgba(99,102,241,0.25)">
+              <svg style="width:16px;height:16px;color:#fff" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
             </div>
-            <div style="font-size:12px;font-weight:700;color:#374151">Drop PDF or click to browse</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:2px">Any bank · up to 20MB</div>
+            <div style="font-size:11px;font-weight:700;color:#374151">Single PDF</div>
+            <div style="font-size:10px;color:#94a3b8">Click to browse</div>
+          </div>
+        </label>
+        <label for="fileInputBatch" style="cursor:pointer;display:block">
+          <div style="border:2px dashed #d1fae5;border-radius:12px;padding:12px;text-align:center;transition:all 0.2s"
+               onmouseover="this.style.borderColor='#10b981';this.style.background='#f0fdf4'"
+               onmouseout="this.style.borderColor='#d1fae5';this.style.background='transparent'">
+            <div style="font-size:11px;font-weight:700;color:#065f46;display:flex;align-items:center;justify-content:center;gap:5px">
+              <svg style="width:13px;height:13px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              Batch Upload (multiple PDFs)
+            </div>
+            <div style="font-size:10px;color:#6ee7b7;margin-top:2px">Select multiple files at once</div>
           </div>
         </label>
       </div>
     </div>
+
+    <!-- Settings link -->
+    <a href="/settings" style="text-decoration:none;display:block">
+      <div class="card" style="padding:13px 16px;display:flex;align-items:center;gap:10px;transition:all 0.15s"
+           onmouseover="this.style.borderColor='#c7d2fe'" onmouseout="this.style.borderColor='#e2e8f0'">
+        <div style="width:32px;height:32px;background:#f5f3ff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚙️</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:700;color:#0f172a">Scorecard &amp; API Settings</div>
+          <div style="font-size:10px;color:#94a3b8">Custom thresholds · API key · REST access</div>
+        </div>
+        <svg style="width:13px;height:13px;color:#c7d2fe;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </div>
+    </a>
 
     <!-- Plan usage -->
     <div class="card" style="padding:18px">
@@ -372,7 +410,7 @@
 <script>
 function submitGlobalUpload(input) {
   if (!input.files || !input.files[0]) return;
-  document.getElementById('uploadingOverlay').style.display = 'block';
+  showOverlay('Analyzing statement…', 'Reading transactions, calculating income, detecting risk flags');
   const dots = document.querySelectorAll('.step-dot');
   const steps = document.querySelectorAll('.upload-step');
   function activate(i) {
@@ -389,6 +427,22 @@ function submitGlobalUpload(input) {
   setTimeout(() => { done(0); activate(1); }, 3500);
   setTimeout(() => { done(1); activate(2); }, 9000);
   document.getElementById('globalUploadForm').submit();
+}
+
+function submitBatchUpload(input) {
+  if (!input.files || !input.files.length) return;
+  const count = input.files.length;
+  showOverlay(
+    `Batch analyzing ${count} statement${count !== 1 ? 's' : ''}…`,
+    'Processing each PDF in sequence. This may take a minute.'
+  );
+  document.getElementById('batchUploadForm').submit();
+}
+
+function showOverlay(title, subtitle) {
+  document.getElementById('uploadingOverlay').style.display = 'block';
+  document.getElementById('overlayTitle').textContent = title;
+  document.getElementById('overlaySubtitle').textContent = subtitle;
 }
 
 function filterMerchants(q) {

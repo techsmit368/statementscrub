@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Report — {{ result.get('account_holder', analysis.filename) }} — StatementScrub</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11pt;color:#1e293b;background:#fff;padding:24px 32px}
+    h1{font-size:18pt;font-weight:900;color:#0f172a}
+    h2{font-size:12pt;font-weight:800;color:#0f172a;margin:18px 0 8px;border-bottom:1px solid #e2e8f0;padding-bottom:4px}
+    h3{font-size:11pt;font-weight:700;color:#334155;margin:10px 0 4px}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #6366f1}
+    .brand{font-size:13pt;font-weight:900;color:#6366f1}
+    .brand span{color:#0ea5e9}
+    .meta{font-size:9pt;color:#64748b;text-align:right}
+    .decision-bar{padding:12px 18px;border-radius:8px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+    .decision-bar.approve{background:#dcfce7;border:1px solid #86efac}
+    .decision-bar.review{background:#fef9c3;border:1px solid #fde047}
+    .decision-bar.decline{background:#fee2e2;border:1px solid #fca5a5}
+    .decision-label{font-size:16pt;font-weight:900}
+    .approve .decision-label{color:#15803d}
+    .review .decision-label{color:#a16207}
+    .decline .decision-label{color:#b91c1c}
+    .risk-box{text-align:right}
+    .risk-score{font-size:22pt;font-weight:900}
+    .approve .risk-score{color:#15803d}
+    .review .risk-score{color:#a16207}
+    .decline .risk-score{color:#b91c1c}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+    .metric{border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;background:#f8fafc}
+    .metric-label{font-size:8pt;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px}
+    .metric-value{font-size:14pt;font-weight:900;color:#0f172a}
+    table{width:100%;border-collapse:collapse;font-size:9.5pt;margin-bottom:12px}
+    th{background:#f1f5f9;text-align:left;padding:6px 8px;font-size:8.5pt;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid #e2e8f0}
+    td{padding:5px 8px;border-bottom:1px solid #f1f5f9;color:#334155}
+    tr:last-child td{border-bottom:none}
+    .flag-row{display:flex;justify-content:space-between;padding:5px 8px;border-radius:4px;margin-bottom:4px;font-size:9.5pt}
+    .flag-ok{background:#f0fdf4;color:#15803d}
+    .flag-bad{background:#fef2f2;color:#b91c1c}
+    .flag-val{font-weight:700}
+    .fraud-box{background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 12px;margin-bottom:14px}
+    .fraud-box-title{font-size:10pt;font-weight:800;color:#c2410c;margin-bottom:4px}
+    .fraud-box p{font-size:9.5pt;color:#7c2d12;line-height:1.5}
+    .ai-summary{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 12px;margin-bottom:14px}
+    .ai-summary-label{font-size:8.5pt;font-weight:800;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
+    .ai-summary p{font-size:9.5pt;color:#1e40af;line-height:1.6}
+    .bar{height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-top:3px}
+    .bar-fill{height:100%;border-radius:4px;background:#6366f1}
+    .section-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .footer{margin-top:24px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:8pt;color:#94a3b8;display:flex;justify-content:space-between}
+    .no-print{display:flex;gap:10px;margin-bottom:20px}
+    .btn{padding:10px 20px;border-radius:8px;font-size:10pt;font-weight:700;cursor:pointer;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary{background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff}
+    .btn-secondary{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+    @media print{
+      .no-print{display:none!important}
+      body{padding:12px 18px}
+      @page{margin:1.2cm;size:letter}
+    }
+  </style>
+</head>
+<body>
+
+{% set rf = result.get('red_flags', {}) %}
+{% set summary = result.get('summary', {}) %}
+{% set income = result.get('income', {}) %}
+{% set expenses = result.get('expenses', {}) %}
+{% set period = result.get('statement_period', {}) %}
+{% set risk = rf.get('risk_level', 'low') %}
+{% set rec = result.get('approval_recommendation', 'review') %}
+
+<!-- Print/Back buttons (hidden when printing) -->
+<div class="no-print">
+  <button class="btn btn-primary" onclick="window.print()">
+    <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+    Print / Save as PDF
+  </button>
+  <a href="/results/{{ analysis.id }}" class="btn btn-secondary">← Back to Report</a>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <div class="brand">Statement<span>Scrub</span></div>
+    <div style="font-size:8.5pt;color:#64748b;margin-top:2px">AI Bank Statement Analysis Report</div>
+  </div>
+  <div class="meta">
+    Generated: {{ analysis.created_at.strftime('%B %d, %Y') if analysis.created_at else 'N/A' }}<br/>
+    File: {{ analysis.filename }}<br/>
+    Report ID: #{{ analysis.id }}
+  </div>
+</div>
+
+<!-- Decision banner -->
+<div class="decision-bar {{ rec }}">
+  <div>
+    <div style="font-size:8.5pt;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px">AI Recommendation</div>
+    <div class="decision-label">{{ rec | upper }}</div>
+    <div style="font-size:9pt;color:#475569;margin-top:2px">
+      {{ result.get('bank_name', '') }}
+      {% if period.get('from') %} &middot; {{ period.from }} – {{ period.get('to', '') }}{% endif %}
+      {% if period.get('months_covered') %} &middot; {{ period.months_covered }} months{% endif %}
+    </div>
+  </div>
+  <div class="risk-box">
+    <div style="font-size:8pt;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:2px">Risk Score</div>
+    <div class="risk-score">{{ rf.get('risk_score', 0) }}</div>
+    <div style="font-size:9pt;font-weight:700;color:#475569">{{ risk | upper }}</div>
+  </div>
+</div>
+
+<!-- Account info -->
+<h1 style="margin-bottom:4px">{{ result.get('account_holder', analysis.filename) }}</h1>
+{% if result.get('account_number_last4') %}
+<div style="font-size:9.5pt;color:#64748b;margin-bottom:14px">Account ending {{ result.account_number_last4 }}</div>
+{% else %}
+<div style="margin-bottom:14px"></div>
+{% endif %}
+
+<!-- AI summary -->
+{% if result.get('lender_summary') %}
+<div class="ai-summary">
+  <div class="ai-summary-label">AI Lender Summary</div>
+  <p>{{ result.lender_summary }}</p>
+</div>
+{% endif %}
+
+<!-- Fraud warning (if detected) -->
+{% if result.get('fraud_summary') %}
+<div class="fraud-box">
+  <div class="fraud-box-title">⚠ Fraud / Structuring Indicators Detected</div>
+  <p>{{ result.fraud_summary }}</p>
+</div>
+{% endif %}
+
+<!-- Key metrics -->
+<h2>Key Financial Metrics</h2>
+<div class="metrics">
+  {% for label, value in [
+    ("Avg Monthly Deposits", "$" ~ "{:,.0f}".format(summary.get('avg_monthly_deposits', 0))),
+    ("Avg Monthly Expenses", "$" ~ "{:,.0f}".format(summary.get('avg_monthly_withdrawals', 0))),
+    ("Avg Daily Balance", "$" ~ "{:,.0f}".format(summary.get('avg_daily_balance', 0))),
+    ("Ending Balance", "$" ~ "{:,.0f}".format(summary.get('ending_balance', 0))),
+  ] %}
+  <div class="metric">
+    <div class="metric-label">{{ label }}</div>
+    <div class="metric-value">{{ value }}</div>
+  </div>
+  {% endfor %}
+</div>
+<div class="metrics">
+  {% for label, value in [
+    ("Lowest Balance", "$" ~ "{:,.0f}".format(summary.get('lowest_balance', 0))),
+    ("Highest Balance", "$" ~ "{:,.0f}".format(summary.get('highest_balance', 0))),
+    ("Net Cash Flow", "$" ~ "{:,.0f}".format(summary.get('net_cash_flow', 0))),
+    ("Confidence Score", "{:.0f}%".format(result.get('confidence_score', 0))),
+  ] %}
+  <div class="metric">
+    <div class="metric-label">{{ label }}</div>
+    <div class="metric-value">{{ value }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="section-2col">
+
+  <!-- Income Sources -->
+  <div>
+    <h2>Income Sources</h2>
+    <div style="font-size:9pt;color:#64748b;margin-bottom:6px">
+      Total avg: <strong>${{ "{:,.0f}".format(income.get('total_avg_monthly_income', 0)) }}/mo</strong>
+      &nbsp;·&nbsp; Consistency: <strong>{{ income.get('income_consistency', 'unknown') | title }}</strong>
+    </div>
+    {% if income.get('sources') %}
+    <table>
+      <thead><tr><th>Source</th><th>Type</th><th>Avg/mo</th></tr></thead>
+      <tbody>
+        {% for src in income.sources %}
+        <tr>
+          <td>{{ src.get('name', '') }}</td>
+          <td>{{ src.get('type', '') | title }}</td>
+          <td style="font-weight:700;color:#15803d">${{ "{:,.0f}".format(src.get('avg_monthly_amount', 0)) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="font-size:9pt;color:#94a3b8">No income sources identified.</p>
+    {% endif %}
+  </div>
+
+  <!-- Risk Flags -->
+  <div>
+    <h2>Risk Flags</h2>
+    {% set nsf = rf.get('nsf_count', 0) %}
+    {% set od = rf.get('overdraft_count', 0) %}
+    {% set mca = rf.get('mca_loans_detected', false) %}
+    {% set gamble = rf.get('gambling_transactions', false) %}
+    {% set decline = rf.get('declining_balance_trend', false) %}
+    {% set struct = rf.get('structuring_risk', false) %}
+    {% set circular = rf.get('circular_deposits_detected', false) %}
+    {% set cycling = rf.get('account_cycling_detected', false) %}
+    {% set velocity = rf.get('velocity_spike_detected', false) %}
+
+    {% for label, bad, value in [
+      ("NSF / Bounced Checks", nsf > 0, nsf ~ " event" ~ ("s" if nsf != 1 else "")),
+      ("Overdrafts", od > 0, od ~ " event" ~ ("s" if od != 1 else "")),
+      ("Overdraft Fees", (rf.get('overdraft_fees_total', 0) or 0) > 0, "$" ~ "{:,.0f}".format(rf.get('overdraft_fees_total', 0) or 0)),
+      ("MCA Loans", mca, "Detected" if mca else "None"),
+      ("Gambling Activity", gamble, ("$" ~ "{:,.0f}".format(rf.get('gambling_total', 0) or 0)) if gamble else "None"),
+      ("Declining Balance", decline, "Yes" if decline else "Stable"),
+      ("Structuring Risk", struct, "Flagged" if struct else "None"),
+      ("Circular Deposits", circular, "Flagged" if circular else "None"),
+      ("Account Cycling", cycling, "Flagged" if cycling else "None"),
+      ("Velocity Spike", velocity, "Flagged" if velocity else "None"),
+      ("Advance Loan Apps", rf.get('advance_loan_indicators', []) | length > 0, (rf.get('advance_loan_indicators', []) | join(', ')) if rf.get('advance_loan_indicators', []) else "None"),
+      ("ACH Returns", rf.get('ach_returns_count', 0) > 0, (rf.get('ach_returns_count', 0) | string) ~ " return" ~ ("s" if rf.get('ach_returns_count', 0) != 1 else "")),
+    ] %}
+    <div class="flag-row {% if bad %}flag-bad{% else %}flag-ok{% endif %}">
+      <span>{{ label }}</span>
+      <span class="flag-val">{{ value }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Monthly Breakdown -->
+{% if result.get('monthly_breakdown') %}
+<h2>Monthly Breakdown</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Total Deposits</th>
+      <th>Total Withdrawals</th>
+      <th>Ending Balance</th>
+      <th>NSFs</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for mo in result.monthly_breakdown %}
+    <tr>
+      <td style="font-weight:600">{{ mo.get('month', '') }}</td>
+      <td style="color:#15803d;font-weight:600">${{ "{:,.0f}".format(mo.get('total_deposits', 0)) }}</td>
+      <td>${{ "{:,.0f}".format(mo.get('total_withdrawals', 0)) }}</td>
+      <td style="font-weight:600;color:{% if mo.get('ending_balance', 0) < 0 %}#b91c1c{% else %}#0f172a{% endif %}">
+        ${{ "{:,.0f}".format(mo.get('ending_balance', 0)) }}
+      </td>
+      <td style="{% if mo.get('nsf_count', 0) > 0 %}color:#b91c1c;font-weight:700{% else %}color:#94a3b8{% endif %}">
+        {{ mo.get('nsf_count', 0) or '—' }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<!-- Expense Breakdown -->
+{% if expenses.get('categories') %}
+<h2>Expense Breakdown</h2>
+{% for cat in expenses.categories | sort(attribute='avg_monthly_amount', reverse=True) %}
+{% set pct = [cat.get('percentage_of_income', 0), 100] | min %}
+<div style="margin-bottom:7px">
+  <div style="display:flex;justify-content:space-between;font-size:9.5pt;margin-bottom:2px">
+    <span style="font-weight:600;color:#334155">{{ cat.get('category', '') }}</span>
+    <span style="font-weight:700">${{ "{:,.0f}".format(cat.get('avg_monthly_amount', 0)) }}/mo <span style="font-weight:400;color:#64748b">({{ "%.0f"|format(pct) }}%)</span></span>
+  </div>
+  <div class="bar"><div class="bar-fill" style="width:{{ pct }}%;background:{% if pct > 70 %}#ef4444{% elif pct > 40 %}#f59e0b{% else %}#6366f1{% endif %}"></div></div>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- MCA Details -->
+{% if rf.get('mca_details') %}
+<h2>MCA Loan Details</h2>
+<table>
+  <thead><tr><th>Merchant</th><th>Est. Daily Payment</th><th>Detected From</th></tr></thead>
+  <tbody>
+    {% for mca_item in rf.mca_details %}
+    <tr>
+      <td style="font-weight:600">{{ mca_item.get('merchant', 'Unknown') }}</td>
+      <td style="color:#c2410c;font-weight:700">~${{ "{:,.0f}".format(mca_item.get('estimated_daily_payment', 0)) }}/day</td>
+      <td style="font-size:9pt;color:#64748b">{{ mca_item.get('detected_from', '') }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<!-- Large Unusual Withdrawals -->
+{% if rf.get('large_unusual_withdrawals') %}
+<h2>Large / Unusual Withdrawals</h2>
+<table>
+  <thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
+  <tbody>
+    {% for w in rf.large_unusual_withdrawals %}
+    <tr>
+      <td>{{ w.get('date', '') }}</td>
+      <td>{{ w.get('description', '') }}</td>
+      <td style="font-weight:700">${{ "{:,.0f}".format(w.get('amount', 0)) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<!-- Footer -->
+<div class="footer">
+  <span>Generated by StatementScrub &mdash; statementscrub.com &mdash; AI-powered bank statement analysis</span>
+  <span>Report #{{ analysis.id }} &middot; Confidential</span>
+</div>
+
+</body>
+</html>
