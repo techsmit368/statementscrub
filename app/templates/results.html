@@ -1,466 +1,434 @@
 {% extends "base_app.html" %}
 {% block title %}Report: {{ analysis.account_holder or analysis.filename }} — StatementScrub{% endblock %}
+{% block page_title %}{{ analysis.account_holder or analysis.filename }}{% endblock %}
+{% block page_subtitle %}Analysis report · {{ analysis.bank_name or '' }}{% endblock %}
 
 {% block content %}
-{% set rf = result.get('red_flags', {}) %}
+{% set rf      = result.get('red_flags', {}) %}
 {% set summary = result.get('summary', {}) %}
-{% set income = result.get('income', {}) %}
-{% set expenses = result.get('expenses', {}) %}
-{% set period = result.get('statement_period', {}) %}
-{% set risk = rf.get('risk_level', 'low') %}
-{% set rec = result.get('approval_recommendation', 'review') %}
+{% set income  = result.get('income', {}) %}
+{% set expenses= result.get('expenses', {}) %}
+{% set period  = result.get('statement_period', {}) %}
+{% set risk    = rf.get('risk_level', 'low') %}
+{% set rec     = result.get('approval_recommendation', 'review') %}
+{% set _cr     = user.credits or 0 if user else 0 %}
 
-<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 animate-slide-up">
+<!-- Credit alerts -->
+{% if _cr == 0 and user and user.plan == 'free' and user.analyses_used >= 3 %}
+<div class="alert alert-danger d-flex align-items-center justify-content-between gap-3 mb-4 flex-wrap" role="alert">
+  <div class="d-flex align-items-center gap-2"><i class="bi bi-x-octagon-fill fs-5 flex-shrink-0"></i><div>You're out of credits — this was your last free analysis.</div></div>
+  <a href="/credits" class="btn btn-danger btn-sm fw-bold flex-shrink-0">Buy Credits →</a>
+</div>
+{% elif _cr == 1 %}
+<div class="alert alert-warning d-flex align-items-center justify-content-between gap-3 mb-4 flex-wrap" role="alert">
+  <div class="d-flex align-items-center gap-2"><i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0"></i><div>Only <strong>1 credit remaining</strong> — top up before your next analysis.</div></div>
+  <a href="/credits" class="btn btn-warning btn-sm fw-bold text-dark flex-shrink-0">Top Up →</a>
+</div>
+{% elif _cr == 2 %}
+<div class="alert alert-warning d-flex align-items-center justify-content-between gap-3 mb-4 flex-wrap" role="alert">
+  <div class="d-flex align-items-center gap-2"><i class="bi bi-exclamation-circle-fill fs-5 flex-shrink-0"></i><div><strong>2 credits remaining</strong> — consider topping up soon.</div></div>
+  <a href="/credits" class="btn btn-outline-warning btn-sm fw-bold flex-shrink-0">Buy More</a>
+</div>
+{% elif _cr > 0 %}
+<div class="alert d-flex align-items-center gap-2 mb-4" style="background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d" role="alert">
+  <i class="bi bi-check-circle-fill flex-shrink-0"></i>
+  <span class="fw-semibold">{{ _cr }} credit{{ 's' if _cr != 1 }} remaining after this analysis</span>
+</div>
+{% endif %}
 
-  <!-- Credits remaining reminder -->
-  {% set _cr = user.credits or 0 if user else 0 %}
-  {% if _cr == 0 and user and user.plan == 'free' and user.analyses_used >= 3 %}
-  <div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:1px solid #fecaca;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#991b1b">
-      <svg style="width:15px;height:15px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-      You're out of credits — this was your last free analysis.
-    </div>
-    <a href="/credits" style="font-size:12px;font-weight:800;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:7px 16px;border-radius:9px;text-decoration:none;white-space:nowrap">Buy Credits →</a>
-  </div>
-  {% elif _cr == 1 %}
-  <div style="background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1px solid #fed7aa;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#9a3412">
-      <svg style="width:15px;height:15px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-      Only <strong>1 credit remaining</strong> — top up before your next analysis.
-    </div>
-    <a href="/credits" style="font-size:12px;font-weight:800;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;padding:7px 16px;border-radius:9px;text-decoration:none;white-space:nowrap">Top Up →</a>
-  </div>
-  {% elif _cr == 2 %}
-  <div style="background:linear-gradient(135deg,#fefce8,#fff7ed);border:1px solid #fde68a;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#92400e">
-      <svg style="width:15px;height:15px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-      <strong>2 credits remaining</strong> — consider topping up soon.
-    </div>
-    <a href="/credits" style="font-size:12px;font-weight:700;color:#92400e;text-decoration:none;border:1px solid #fde68a;background:#fef9c3;padding:7px 16px;border-radius:9px;white-space:nowrap">Buy More →</a>
-  </div>
-  {% elif _cr > 0 %}
-  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:8px">
-    <svg style="width:13px;height:13px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-    <span style="font-size:12px;font-weight:700;color:#15803d">{{ _cr }} credit{{ 's' if _cr != 1 }} remaining after this analysis</span>
-  </div>
-  {% endif %}
-
-  <!-- Back -->
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
+<!-- Breadcrumb -->
+<nav class="mb-4">
+  <div class="d-flex align-items-center gap-2" style="font-size:13px">
+    <a href="/dashboard" class="text-muted text-decoration-none d-flex align-items-center gap-1">
+      <i class="bi bi-grid-1x2-fill" style="font-size:11px"></i> Dashboard
+    </a>
     {% if analysis.account_holder %}
-    <a href="/merchant/{{ analysis.account_holder | urlencode }}" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#64748b;text-decoration:none;font-weight:600;padding:5px 10px;border-radius:8px;transition:all 0.15s"
-       onmouseover="this.style.background='#f1f5f9';this.style.color='#0f172a'"
-       onmouseout="this.style.background='transparent';this.style.color='#64748b'">
-      <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-      {{ analysis.account_holder }}
-    </a>
-    <span style="color:#e2e8f0">/</span>
+    <i class="bi bi-chevron-right text-muted" style="font-size:10px"></i>
+    <a href="/merchant/{{ analysis.account_holder|urlencode }}" class="text-muted text-decoration-none">{{ analysis.account_holder }}</a>
     {% endif %}
-    <a href="/dashboard" style="font-size:12px;color:#94a3b8;text-decoration:none;font-weight:500;padding:5px 10px;border-radius:8px;transition:all 0.15s"
-       onmouseover="this.style.background='#f1f5f9';this.style.color='#64748b'"
-       onmouseout="this.style.background='transparent';this.style.color='#94a3b8'">
-      Dashboard
-    </a>
+    <i class="bi bi-chevron-right text-muted" style="font-size:10px"></i>
+    <span class="text-muted">Report #{{ analysis.id }}</span>
   </div>
+</nav>
 
-  <!-- Report Header -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-    <div class="
-      {% if rec == 'approve' %}bg-gradient-to-r from-green-500 to-emerald-600
-      {% elif rec == 'review' %}bg-gradient-to-r from-yellow-500 to-orange-500
-      {% else %}bg-gradient-to-r from-red-500 to-rose-600{% endif %}
-      p-6 text-white">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div class="text-white/70 text-sm font-medium mb-1">
-            {{ result.get('bank_name', '') }}
-            {% if period.get('from') %} &middot; {{ period.from }} – {{ period.get('to', '') }}{% endif %}
-            {% if period.get('months_covered') %} &middot; {{ period.months_covered }} months{% endif %}
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-black">{{ result.get('account_holder', analysis.filename) }}</h1>
-          {% if result.get('account_number_last4') %}
-          <div class="text-white/60 text-sm mt-1">Account ending {{ result.account_number_last4 }}</div>
-          {% endif %}
+<!-- ── REPORT HEADER ── -->
+<div class="card shadow-sm mb-4 overflow-hidden" style="border:none">
+  <!-- Gradient header based on decision -->
+  <div style="background:{% if rec=='approve' %}linear-gradient(135deg,#16a34a,#059669){% elif rec=='review' %}linear-gradient(135deg,#d97706,#ea580c){% else %}linear-gradient(135deg,#dc2626,#b91c1c){% endif %};padding:28px 28px 24px">
+    <div class="d-flex align-items-start justify-content-between gap-4 flex-wrap">
+      <div>
+        <div class="mb-2" style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,0.65)">
+          {{ result.get('bank_name', '') }}
+          {% if period.get('from') %} &middot; {{ period.from }} – {{ period.get('to','') }}{% endif %}
+          {% if period.get('months_covered') %} &middot; {{ period.months_covered }} mo{% endif %}
         </div>
-        <div class="flex items-center gap-3 flex-shrink-0">
-          <!-- Risk badge -->
-          <div class="bg-white/20 backdrop-blur rounded-xl px-4 py-3 text-center">
-            <div class="text-white/70 text-xs uppercase tracking-widest mb-0.5">Risk Score</div>
-            <div class="text-3xl font-black">{{ rf.get('risk_score', 0) }}</div>
-            <div class="text-xs font-semibold text-white/80">{{ risk | upper }}</div>
-          </div>
-          <!-- Recommendation -->
-          <div class="bg-white/20 backdrop-blur rounded-xl px-4 py-3 text-center">
-            <div class="text-white/70 text-xs uppercase tracking-widest mb-0.5">Decision</div>
-            <div class="text-xl font-black">{{ rec | upper }}</div>
-            <div class="text-xs font-semibold text-white/80">
-              {% if rec == 'approve' %}Low risk{% elif rec == 'review' %}Needs review{% else %}High risk{% endif %}
-            </div>
+        <h2 class="text-white fw-bold mb-1" style="font-size:1.7rem;letter-spacing:-0.03em;line-height:1.1">{{ result.get('account_holder', analysis.filename) }}</h2>
+        {% if result.get('account_number_last4') %}
+        <div style="font-size:12.5px;color:rgba(255,255,255,0.55)">Account ending {{ result.account_number_last4 }}</div>
+        {% endif %}
+      </div>
+      <div class="d-flex align-items-center gap-3 flex-shrink-0">
+        <div class="text-center px-4 py-3 rounded-3" style="background:rgba(255,255,255,0.18);min-width:80px">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.65);margin-bottom:2px">Risk Score</div>
+          <div class="fw-bold text-white" style="font-size:2rem;line-height:1;letter-spacing:-0.04em">{{ rf.get('risk_score', 0) }}</div>
+          <div style="font-size:10.5px;font-weight:700;color:rgba(255,255,255,0.75)">{{ risk|upper }}</div>
+        </div>
+        <div class="text-center px-4 py-3 rounded-3" style="background:rgba(255,255,255,0.18);min-width:80px">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.65);margin-bottom:2px">Decision</div>
+          <div class="fw-bold text-white" style="font-size:1.4rem;line-height:1;letter-spacing:-0.02em">{{ rec|upper }}</div>
+          <div style="font-size:10.5px;font-weight:700;color:rgba(255,255,255,0.75)">
+            {% if rec=='approve' %}Low risk{% elif rec=='review' %}Needs review{% else %}High risk{% endif %}
           </div>
         </div>
       </div>
     </div>
-
-    <!-- AI Summary -->
-    {% if result.get('lender_summary') %}
-    <div class="px-6 py-4 bg-slate-50 border-b border-slate-100">
-      <div class="flex items-start gap-3">
-        <div class="w-8 h-8 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-          <span class="text-white text-xs font-bold">AI</span>
-        </div>
-        <div>
-          <div class="text-xs font-semibold text-sky-600 uppercase tracking-widest mb-1">AI Lender Summary</div>
-          <p class="text-slate-700 leading-relaxed">{{ result.lender_summary }}</p>
-        </div>
-      </div>
-    </div>
-    {% endif %}
   </div>
 
-  <!-- Key Metrics Grid -->
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-    {% for label, value, sub, color in [
-      ("Avg Monthly Deposits", "$" ~ "{:,.0f}".format(summary.get('avg_monthly_deposits', 0)), "income coming in", "sky"),
-      ("Avg Monthly Expenses", "$" ~ "{:,.0f}".format(summary.get('avg_monthly_withdrawals', 0)), "money going out", "slate"),
-      ("Avg Daily Balance", "$" ~ "{:,.0f}".format(summary.get('avg_daily_balance', 0)), "typical balance", "green" if summary.get('avg_daily_balance', 0) > 0 else "red"),
-      ("Ending Balance", "$" ~ "{:,.0f}".format(summary.get('ending_balance', 0)), "latest balance", "green" if summary.get('ending_balance', 0) > 0 else "red"),
-    ] %}
-    <div class="bg-white rounded-xl border border-slate-200 p-5 card-hover shadow-sm">
-      <div class="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">{{ label }}</div>
-      <div class="text-2xl font-black
-        {% if color == 'sky' %}text-sky-600
-        {% elif color == 'green' %}text-emerald-600
-        {% elif color == 'red' %}text-red-600
-        {% else %}text-slate-900{% endif %}">{{ value }}</div>
-      <div class="text-xs text-slate-400 mt-1">{{ sub }}</div>
+  <!-- AI Summary -->
+  {% if result.get('lender_summary') %}
+  <div class="px-4 py-3 d-flex align-items-start gap-3" style="background:#f0f9ff;border-bottom:1px solid #e0f2fe">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#0ea5e9,#6366f1);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+      <span class="text-white fw-bold" style="font-size:11px">AI</span>
     </div>
-    {% endfor %}
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-
-    <!-- Income Sources -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-bold text-slate-900">💰 Income Sources</h2>
-        <span class="text-xs px-2.5 py-1 rounded-full font-medium
-          {% if income.get('income_consistency') == 'consistent' %}bg-green-100 text-green-700
-          {% elif income.get('income_consistency') == 'increasing' %}bg-sky-100 text-sky-700
-          {% elif income.get('income_consistency') == 'declining' %}bg-red-100 text-red-700
-          {% else %}bg-yellow-100 text-yellow-700{% endif %}">
-          {{ income.get('income_consistency', 'unknown') | title }}
-        </span>
-      </div>
-
-      <div class="text-3xl font-black text-slate-900 mb-1">
-        ${{ "{:,.0f}".format(income.get('total_avg_monthly_income', 0)) }}<span class="text-lg font-normal text-slate-400">/mo</span>
-      </div>
-      <div class="text-sm text-slate-400 mb-5">average monthly income</div>
-
-      {% if income.get('sources') %}
-      <div class="space-y-3">
-        {% for src in income.sources %}
-        <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
-          <div>
-            <div class="font-medium text-slate-800 text-sm">{{ src.get('name', '') }}</div>
-            <div class="text-xs text-slate-400">{{ src.get('type', '') | title }} &middot; {{ src.get('frequency', '') }}</div>
-          </div>
-          <div class="text-sm font-bold text-emerald-600">${{ "{:,.0f}".format(src.get('avg_monthly_amount', 0)) }}/mo</div>
-        </div>
-        {% endfor %}
-      </div>
-      {% else %}
-      <p class="text-sm text-slate-400">No income sources identified.</p>
-      {% endif %}
-    </div>
-
-    <!-- Risk Flags -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-      <h2 class="font-bold text-slate-900 mb-4">🚩 Risk Flags</h2>
-
-      <div class="space-y-2.5">
-        {% set nsf = rf.get('nsf_count', 0) %}
-        {% set od = rf.get('overdraft_count', 0) %}
-        {% set mca = rf.get('mca_loans_detected', false) %}
-        {% set gamble = rf.get('gambling_transactions', false) %}
-        {% set decline = rf.get('declining_balance_trend', false) %}
-
-        {% for label, bad, value, icon in [
-          ("NSF / Bounced Checks", nsf > 0, nsf ~ " event" ~ ("s" if nsf != 1 else ""), "⚡"),
-          ("Overdrafts", od > 0, od ~ " event" ~ ("s" if od != 1 else ""), "📉"),
-          ("Overdraft Fees Total", (rf.get('overdraft_fees_total', 0) or 0) > 0, "$" ~ "{:,.0f}".format(rf.get('overdraft_fees_total', 0) or 0), "💸"),
-          ("MCA Loans", mca, "Detected" if mca else "None found", "⚠️"),
-          ("Gambling Activity", gamble, ("$" ~ "{:,.0f}".format(rf.get('gambling_total', 0) or 0)) if gamble else "None found", "🎰"),
-          ("Declining Balance Trend", decline, "Yes — review history" if decline else "Stable or improving", "📊"),
-        ] %}
-        <div class="flex items-center gap-3 p-3 rounded-lg
-          {% if bad %}bg-red-50 border border-red-100{% else %}bg-green-50 border border-green-100{% endif %}">
-          <span class="text-lg flex-shrink-0">{{ icon }}</span>
-          <span class="flex-1 text-sm font-medium {% if bad %}text-red-800{% else %}text-green-800{% endif %}">{{ label }}</span>
-          <span class="text-sm font-bold {% if bad %}text-red-600{% else %}text-green-600{% endif %}">{{ value }}</span>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
-  <!-- MCA Details -->
-  {% if rf.get('mca_details') %}
-  <div class="bg-orange-50 border border-orange-200 rounded-xl p-6 mb-6">
-    <h2 class="font-bold text-orange-900 mb-3 flex items-center gap-2">
-      ⚠️ MCA Loan Details
-      <span class="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full font-semibold">{{ rf.mca_details | length }} detected</span>
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      {% for mca in rf.mca_details %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1">{{ mca.get('merchant', 'Unknown') }}</div>
-        <div class="text-xs text-slate-500 mb-2">{{ mca.get('detected_from', '') }}</div>
-        <div class="text-lg font-bold text-orange-600">~${{ "{:,.0f}".format(mca.get('estimated_daily_payment', 0)) }}<span class="text-sm font-normal text-orange-400">/day</span></div>
-      </div>
-      {% endfor %}
+    <div>
+      <div class="fw-bold mb-1" style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#0284c7">AI Lender Summary</div>
+      <p class="mb-0" style="font-size:13.5px;color:#334155;line-height:1.65">{{ result.lender_summary }}</p>
     </div>
   </div>
   {% endif %}
+</div>
 
-  <!-- Monthly Breakdown + Chart -->
-  {% if result.get('monthly_breakdown') %}
-  <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-6">
-    <h2 class="font-bold text-slate-900 mb-5">📅 Monthly Breakdown</h2>
-    <div class="flex gap-2 items-end mb-6 h-36">
-      {% for mo in result.monthly_breakdown %}
-        {% set dep = mo.get('total_deposits', 0) %}
-        {% set wid = mo.get('total_withdrawals', 0) %}
-        {% set max_val = [dep, wid] | max %}
-        <div class="flex-1 flex flex-col items-center gap-1">
-          <div class="w-full flex gap-0.5 items-end" style="height: 100px;">
-            {% if max_val > 0 %}
-            <div class="flex-1 bg-sky-400 rounded-t-sm transition-all" style="height: {{ ((dep / max_val) * 100) | int }}px" title="Deposits: ${{ dep | int }}"></div>
-            <div class="flex-1 bg-rose-300 rounded-t-sm transition-all" style="height: {{ ((wid / max_val) * 100) | int }}px" title="Withdrawals: ${{ wid | int }}"></div>
-            {% endif %}
+<!-- ── KEY METRICS ── -->
+<div class="row g-3 mb-4">
+  {% for label, value, sub, good in [
+    ("Avg Monthly Deposits",  "$" ~ "{:,.0f}".format(summary.get('avg_monthly_deposits', 0)),  "income coming in",   True),
+    ("Avg Monthly Expenses",  "$" ~ "{:,.0f}".format(summary.get('avg_monthly_withdrawals', 0)),"money going out",   None),
+    ("Avg Daily Balance",     "$" ~ "{:,.0f}".format(summary.get('avg_daily_balance', 0)),      "typical balance",   summary.get('avg_daily_balance', 0) >= 0),
+    ("Ending Balance",        "$" ~ "{:,.0f}".format(summary.get('ending_balance', 0)),         "latest balance",    summary.get('ending_balance', 0) >= 0),
+  ] %}
+  <div class="col-6 col-md-3">
+    <div class="card shadow-sm h-100" style="border-top:3px solid {% if good is none %}#6366f1{% elif good %}#22c55e{% else %}#ef4444{% endif %}">
+      <div class="card-body p-3">
+        <div class="text-muted mb-2" style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em">{{ label }}</div>
+        <div class="fw-bold" style="font-size:1.55rem;letter-spacing:-0.04em;line-height:1;color:{% if good is none %}#6366f1{% elif good %}#16a34a{% else %}#dc2626{% endif %}">{{ value }}</div>
+        <div class="text-muted mt-1" style="font-size:11px">{{ sub }}</div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ── INCOME + RISK FLAGS ── -->
+<div class="row g-4 mb-4">
+
+  <!-- Income Sources -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100" style="overflow:hidden">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="d-flex align-items-center gap-2"><i class="bi bi-currency-dollar text-success"></i> Income Sources</span>
+        {% set consist = income.get('income_consistency','') %}
+        <span class="badge rounded-pill fw-semibold" style="font-size:10.5px;{% if consist=='consistent' %}background:#f0fdf4;color:#16a34a{% elif consist=='increasing' %}background:#f0f9ff;color:#0284c7{% elif consist=='declining' %}background:#fef2f2;color:#dc2626{% else %}background:#fef9c3;color:#854d0e{% endif %}">{{ consist|title }}</span>
+      </div>
+      <div class="card-body p-4">
+        <div class="fw-bold mb-0" style="font-size:2rem;letter-spacing:-0.04em;color:#0f172a;line-height:1">${{ "{:,.0f}".format(income.get('total_avg_monthly_income', 0)) }}<span class="fw-normal text-muted" style="font-size:1rem">/mo</span></div>
+        <div class="text-muted mb-4" style="font-size:12px">average monthly income</div>
+        {% if income.get('sources') %}
+        <div class="d-flex flex-column gap-0">
+          {% for src in income.sources %}
+          <div class="d-flex align-items-center justify-content-between py-2" style="border-bottom:1px solid #f0f2f5">
+            <div>
+              <div class="fw-semibold" style="font-size:13px;color:#0f172a">{{ src.get('name','') }}</div>
+              <div class="text-muted" style="font-size:11px">{{ src.get('type','')|title }} &middot; {{ src.get('frequency','') }}</div>
+            </div>
+            <div class="fw-bold text-success" style="font-size:13px">${{ "{:,.0f}".format(src.get('avg_monthly_amount',0)) }}/mo</div>
           </div>
-          <div class="text-xs text-slate-400 whitespace-nowrap">{{ mo.get('month', '')[-5:] }}</div>
-          {% if mo.get('nsf_count', 0) > 0 %}
-          <div class="text-xs bg-red-100 text-red-600 rounded-full px-1.5 font-bold">{{ mo.nsf_count }} NSF</div>
-          {% endif %}
+          {% endfor %}
         </div>
+        {% else %}
+        <p class="text-muted small mb-0">No income sources identified.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Flags -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100" style="overflow:hidden">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-flag-fill text-danger"></i> Risk Flags
+      </div>
+      <div class="card-body p-3 d-flex flex-column gap-2">
+        {% set nsf    = rf.get('nsf_count', 0) %}
+        {% set od     = rf.get('overdraft_count', 0) %}
+        {% set mca    = rf.get('mca_loans_detected', false) %}
+        {% set gamble = rf.get('gambling_transactions', false) %}
+        {% set decline= rf.get('declining_balance_trend', false) %}
+        {% set odfees = rf.get('overdraft_fees_total', 0) or 0 %}
+        {% for label, bad, value, icon in [
+          ("NSF / Bounced Checks",  nsf>0,    nsf|string ~ " event" ~ ("s" if nsf!=1 else ""),           "bi-lightning-charge-fill"),
+          ("Overdrafts",            od>0,     od|string ~ " event" ~ ("s" if od!=1 else ""),              "bi-graph-down-arrow"),
+          ("Overdraft Fees Total",  odfees>0, "$" ~ "{:,.0f}".format(odfees),                            "bi-cash"),
+          ("MCA Loans",             mca,      "Detected" if mca else "None found",                       "bi-exclamation-triangle-fill"),
+          ("Gambling Activity",     gamble,   ("$" ~ "{:,.0f}".format(rf.get('gambling_total',0) or 0)) if gamble else "None found", "bi-dice-5-fill"),
+          ("Declining Balance",     decline,  "Yes — review history" if decline else "Stable / improving","bi-bar-chart-fill"),
+        ] %}
+        <div class="d-flex align-items-center gap-3 p-2 rounded-3" style="background:{% if bad %}#fef2f2;border:1px solid #fecaca{% else %}#f0fdf4;border:1px solid #bbf7d0{% endif %}">
+          <i class="bi {{ icon }} flex-shrink-0" style="font-size:14px;color:{% if bad %}#dc2626{% else %}#16a34a{% endif %}"></i>
+          <span class="flex-grow-1 fw-semibold" style="font-size:12.5px;color:{% if bad %}#991b1b{% else %}#14532d{% endif %}">{{ label }}</span>
+          <span class="fw-bold" style="font-size:12.5px;color:{% if bad %}#dc2626{% else %}#16a34a{% endif %}">{{ value }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MCA DETAILS ── -->
+{% if rf.get('mca_details') %}
+<div class="card shadow-sm mb-4" style="border-color:#fed7aa;background:#fff7ed;overflow:hidden">
+  <div class="card-header d-flex align-items-center gap-2" style="background:#ffedd5;border-bottom-color:#fed7aa">
+    <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+    <span class="fw-bold" style="color:#92400e">MCA Loan Details</span>
+    <span class="badge rounded-pill fw-bold ms-1" style="font-size:10px;background:#fed7aa;color:#92400e">{{ rf.mca_details|length }} detected</span>
+  </div>
+  <div class="card-body p-3">
+    <div class="row g-3">
+      {% for mca in rf.mca_details %}
+      <div class="col-sm-6">
+        <div class="card" style="border-color:#fed7aa">
+          <div class="card-body p-3">
+            <div class="fw-bold mb-1" style="font-size:13.5px;color:#0f172a">{{ mca.get('merchant','Unknown') }}</div>
+            <div class="text-muted small mb-2">{{ mca.get('detected_from','') }}</div>
+            <div class="fw-bold" style="font-size:1.25rem;color:#ea580c">~${{ "{:,.0f}".format(mca.get('estimated_daily_payment',0)) }}<span class="fw-normal text-muted" style="font-size:0.85rem">/day</span></div>
+          </div>
+        </div>
+      </div>
       {% endfor %}
-      <div class="flex flex-col gap-1.5 text-xs text-slate-400 pb-5 flex-shrink-0 ml-2">
-        <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-sky-400 rounded-sm"></span>Deposits</span>
-        <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-rose-300 rounded-sm"></span>Withdrawals</span>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- ── MONTHLY BREAKDOWN ── -->
+{% if result.get('monthly_breakdown') %}
+<div class="card shadow-sm mb-4" style="overflow:hidden">
+  <div class="card-header d-flex align-items-center gap-2">
+    <i class="bi bi-calendar3 text-primary"></i> Monthly Breakdown
+  </div>
+  <div class="card-body p-4">
+    <!-- Bar chart -->
+    <div class="d-flex align-items-end gap-1 mb-4" style="height:110px">
+      {% for mo in result.monthly_breakdown %}
+      {% set dep = mo.get('total_deposits', 0) %}
+      {% set wid = mo.get('total_withdrawals', 0) %}
+      {% set mx  = [dep, wid, 1]|max %}
+      <div class="flex-fill d-flex flex-column align-items-center gap-1">
+        <div class="w-100 d-flex gap-1 align-items-end" style="height:88px">
+          <div class="flex-fill rounded-top" style="height:{{ ((dep/mx)*88)|int }}px;background:#0ea5e9;min-height:2px" title="Deposits: ${{ dep|int }}"></div>
+          <div class="flex-fill rounded-top" style="height:{{ ((wid/mx)*88)|int }}px;background:#f87171;min-height:2px" title="Withdrawals: ${{ wid|int }}"></div>
+        </div>
+        <div class="text-muted" style="font-size:9.5px;white-space:nowrap">{{ mo.get('month','')[-5:] }}</div>
+        {% if mo.get('nsf_count',0) > 0 %}
+        <span class="badge rounded-pill fw-bold" style="font-size:8px;background:#fef2f2;color:#dc2626">{{ mo.nsf_count }} NSF</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <div class="d-flex flex-column gap-2 flex-shrink-0 ms-2 pb-4">
+        <div class="d-flex align-items-center gap-1 text-muted" style="font-size:10.5px"><span style="width:12px;height:10px;background:#0ea5e9;border-radius:2px;display:inline-block"></span>Deposits</div>
+        <div class="d-flex align-items-center gap-1 text-muted" style="font-size:10.5px"><span style="width:12px;height:10px;background:#f87171;border-radius:2px;display:inline-block"></span>Withdrawals</div>
       </div>
     </div>
 
     <!-- Table -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle table-sm mb-0">
         <thead>
-          <tr class="border-b border-slate-100">
-            <th class="text-left text-xs font-semibold text-slate-400 uppercase tracking-wide pb-2">Month</th>
-            <th class="text-right text-xs font-semibold text-slate-400 uppercase tracking-wide pb-2">Deposits</th>
-            <th class="text-right text-xs font-semibold text-slate-400 uppercase tracking-wide pb-2">Withdrawals</th>
-            <th class="text-right text-xs font-semibold text-slate-400 uppercase tracking-wide pb-2">Ending Balance</th>
-            <th class="text-right text-xs font-semibold text-slate-400 uppercase tracking-wide pb-2">NSFs</th>
+          <tr>
+            <th>Month</th>
+            <th class="text-end">Deposits</th>
+            <th class="text-end">Withdrawals</th>
+            <th class="text-end">Ending Balance</th>
+            <th class="text-end">NSFs</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-50">
+        <tbody>
           {% for mo in result.monthly_breakdown %}
-          <tr class="hover:bg-slate-50 transition-colors">
-            <td class="py-3 font-semibold text-slate-700">{{ mo.get('month', '') }}</td>
-            <td class="py-3 text-right font-medium text-sky-600">${{ "{:,.0f}".format(mo.get('total_deposits', 0)) }}</td>
-            <td class="py-3 text-right text-slate-600">${{ "{:,.0f}".format(mo.get('total_withdrawals', 0)) }}</td>
-            <td class="py-3 text-right font-semibold {% if mo.get('ending_balance', 0) < 0 %}text-red-600{% else %}text-slate-900{% endif %}">
-              ${{ "{:,.0f}".format(mo.get('ending_balance', 0)) }}
-            </td>
-            <td class="py-3 text-right {% if mo.get('nsf_count', 0) > 0 %}text-red-600 font-bold{% else %}text-slate-300{% endif %}">
-              {{ mo.get('nsf_count', 0) or '—' }}
-            </td>
+          <tr>
+            <td class="fw-semibold" style="color:#0f172a">{{ mo.get('month','') }}</td>
+            <td class="text-end fw-semibold" style="color:#0284c7">${{ "{:,.0f}".format(mo.get('total_deposits',0)) }}</td>
+            <td class="text-end text-muted">${{ "{:,.0f}".format(mo.get('total_withdrawals',0)) }}</td>
+            <td class="text-end fw-bold {% if mo.get('ending_balance',0) < 0 %}text-danger{% else %}text-dark{% endif %}">${{ "{:,.0f}".format(mo.get('ending_balance',0)) }}</td>
+            <td class="text-end fw-bold {% if mo.get('nsf_count',0) > 0 %}text-danger{% else %}text-muted{% endif %}">{{ mo.get('nsf_count',0) or '—' }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  <!-- Expense Categories -->
-  {% if expenses.get('categories') %}
-  <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-6">
-    <h2 class="font-bold text-slate-900 mb-4">💸 Expense Breakdown</h2>
-    <div class="space-y-3">
-      {% for cat in expenses.categories | sort(attribute='avg_monthly_amount', reverse=True) %}
-      {% set pct = [cat.get('percentage_of_income', 0), 100] | min %}
+<!-- ── EXPENSE BREAKDOWN ── -->
+{% if expenses.get('categories') %}
+<div class="card shadow-sm mb-4" style="overflow:hidden">
+  <div class="card-header d-flex align-items-center gap-2">
+    <i class="bi bi-pie-chart-fill text-primary"></i> Expense Breakdown
+  </div>
+  <div class="card-body p-4 d-flex flex-column gap-3">
+    {% for cat in expenses.categories|sort(attribute='avg_monthly_amount',reverse=True) %}
+    {% set pct = [cat.get('percentage_of_income',0), 100]|min %}
+    <div>
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span class="fw-semibold" style="font-size:13px;color:#0f172a">{{ cat.get('category','') }}</span>
+        <span class="fw-bold" style="font-size:13px;color:#0f172a">${{ "{:,.0f}".format(cat.get('avg_monthly_amount',0)) }}/mo <span class="fw-normal text-muted">({{ "%.0f"|format(pct) }}%)</span></span>
+      </div>
+      <div class="progress" style="height:7px;border-radius:99px;background:#f1f5f9">
+        <div class="progress-bar" role="progressbar" style="width:{{ pct|int }}%;border-radius:99px;background:{% if pct>70 %}#ef4444{% elif pct>40 %}#f59e0b{% else %}#0ea5e9{% endif %}"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- ── LARGE UNUSUAL WITHDRAWALS ── -->
+{% if rf.get('large_unusual_withdrawals') %}
+<div class="card shadow-sm mb-4" style="overflow:hidden">
+  <div class="card-header d-flex align-items-center gap-2">
+    <i class="bi bi-search text-primary"></i> Large / Unusual Withdrawals
+  </div>
+  <div class="list-group list-group-flush">
+    {% for w in rf.large_unusual_withdrawals %}
+    <div class="list-group-item d-flex align-items-center justify-content-between py-3 px-4">
       <div>
-        <div class="flex justify-between text-sm mb-1.5">
-          <span class="text-slate-700 font-medium">{{ cat.get('category', '') }}</span>
-          <span class="font-bold text-slate-900">${{ "{:,.0f}".format(cat.get('avg_monthly_amount', 0)) }}/mo
-            <span class="text-slate-400 font-normal">({{ "%.0f" | format(pct) }}%)</span>
-          </span>
-        </div>
-        <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
-          <div class="h-full rounded-full transition-all
-            {% if pct > 70 %}bg-red-400{% elif pct > 40 %}bg-yellow-400{% else %}bg-sky-400{% endif %}"
-            style="width: {{ pct }}%"></div>
-        </div>
+        <div class="fw-semibold" style="font-size:13.5px;color:#0f172a">{{ w.get('description','') }}</div>
+        <div class="text-muted small">{{ w.get('date','') }}</div>
       </div>
-      {% endfor %}
+      <div class="fw-bold" style="font-size:14px;color:#dc2626">${{ "{:,.0f}".format(w.get('amount',0)) }}</div>
     </div>
+    {% endfor %}
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  <!-- Large Unusual Withdrawals -->
-  {% if rf.get('large_unusual_withdrawals') %}
-  <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-6">
-    <h2 class="font-bold text-slate-900 mb-4">🔍 Large / Unusual Withdrawals</h2>
-    <div class="space-y-2">
-      {% for w in rf.large_unusual_withdrawals %}
-      <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
-        <div>
-          <div class="text-sm font-medium text-slate-800">{{ w.get('description', '') }}</div>
-          <div class="text-xs text-slate-400">{{ w.get('date', '') }}</div>
-        </div>
-        <div class="text-sm font-bold text-slate-900">${{ "{:,.0f}".format(w.get('amount', 0)) }}</div>
-      </div>
-      {% endfor %}
-    </div>
+<!-- ── FRAUD / THUMBPRINT FLAGS ── -->
+{% set struct   = rf.get('structuring_risk', false) %}
+{% set circular = rf.get('circular_deposits_detected', false) %}
+{% set cycling  = rf.get('account_cycling_detected', false) %}
+{% set velocity = rf.get('velocity_spike_detected', false) %}
+{% set advance  = rf.get('advance_loan_indicators', []) %}
+{% set ach_ret  = rf.get('ach_returns_count', 0) %}
+{% set has_fraud= struct or circular or cycling or velocity or (advance|length > 0) or ach_ret > 0 %}
+{% if has_fraud %}
+<div class="card shadow-sm mb-4" style="border-color:#fed7aa;overflow:hidden">
+  <div class="card-header d-flex align-items-center gap-2" style="background:#fff7ed;border-bottom-color:#fed7aa">
+    <i class="bi bi-shield-exclamation text-warning fs-5"></i>
+    <span class="fw-bold" style="color:#92400e">Fraud Indicators</span>
+    <span class="badge rounded-pill fw-bold" style="font-size:10px;background:#fed7aa;color:#92400e">AI-Detected</span>
   </div>
-  {% endif %}
-
-  <!-- Fraud / Structuring Section (new Thumbprint-equivalent) -->
-  {% set struct = rf.get('structuring_risk', false) %}
-  {% set circular = rf.get('circular_deposits_detected', false) %}
-  {% set cycling = rf.get('account_cycling_detected', false) %}
-  {% set velocity = rf.get('velocity_spike_detected', false) %}
-  {% set advance = rf.get('advance_loan_indicators', []) %}
-  {% set ach_ret = rf.get('ach_returns_count', 0) %}
-  {% set round_dep = rf.get('round_number_deposits_count', 0) %}
-  {% set has_fraud_flags = struct or circular or cycling or velocity or (advance | length > 0) or ach_ret > 0 %}
-
-  {% if has_fraud_flags %}
-  <div class="bg-orange-50 border border-orange-200 rounded-xl p-6 mb-6">
-    <h2 class="font-bold text-orange-900 mb-4 flex items-center gap-2">
-      🔎 Thumbprint-Style Fraud Indicators
-      <span class="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full font-semibold">AI-Detected</span>
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  <div class="card-body p-3">
+    <div class="row g-3">
       {% if struct %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1 flex items-center gap-2">⚠️ Structuring Risk</div>
-        <div class="text-xs text-slate-500">{{ rf.get('structuring_details', 'Deposits near $10,000 threshold detected — potential BSA concern.') }}</div>
-      </div>
+      <div class="col-sm-6"><div class="card h-100" style="border-color:#fed7aa;background:#fff7ed"><div class="card-body p-3"><div class="fw-bold mb-1" style="color:#92400e"><i class="bi bi-exclamation-triangle-fill me-1"></i>Structuring Risk</div><div class="small text-muted">{{ rf.get('structuring_details','Deposits near $10,000 threshold detected — potential BSA concern.') }}</div></div></div></div>
       {% endif %}
       {% if circular %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1 flex items-center gap-2">🔄 Circular Deposits</div>
-        <div class="text-xs text-slate-500">{{ rf.get('circular_deposit_details', 'Money leaving and returning from same/similar sources within short windows.') }}</div>
-      </div>
+      <div class="col-sm-6"><div class="card h-100" style="border-color:#fed7aa;background:#fff7ed"><div class="card-body p-3"><div class="fw-bold mb-1" style="color:#92400e"><i class="bi bi-arrow-repeat me-1"></i>Circular Deposits</div><div class="small text-muted">{{ rf.get('circular_deposit_details','Money leaving and returning from same/similar sources within short windows.') }}</div></div></div></div>
       {% endif %}
       {% if cycling %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1 flex items-center gap-2">♻️ Account Cycling</div>
-        <div class="text-xs text-slate-500">Large deposit followed by near-identical withdrawal within 1–3 days — possible fund-sourcing fraud.</div>
-      </div>
+      <div class="col-sm-6"><div class="card h-100" style="border-color:#fed7aa;background:#fff7ed"><div class="card-body p-3"><div class="fw-bold mb-1" style="color:#92400e"><i class="bi bi-recycle me-1"></i>Account Cycling</div><div class="small text-muted">Large deposit followed by near-identical withdrawal within 1–3 days.</div></div></div></div>
       {% endif %}
       {% if velocity %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1 flex items-center gap-2">⚡ Velocity Spike</div>
-        <div class="text-xs text-slate-500">{{ rf.get('velocity_spike_details', 'Sudden spike in transaction frequency or deposit amounts detected.') }}</div>
-      </div>
+      <div class="col-sm-6"><div class="card h-100" style="border-color:#fed7aa;background:#fff7ed"><div class="card-body p-3"><div class="fw-bold mb-1" style="color:#92400e"><i class="bi bi-lightning-charge-fill me-1"></i>Velocity Spike</div><div class="small text-muted">{{ rf.get('velocity_spike_details','Sudden spike in transaction frequency or deposit amounts detected.') }}</div></div></div></div>
       {% endif %}
-      {% if advance | length > 0 %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1 flex items-center gap-2">💸 Advance Loan Apps</div>
-        <div class="text-xs text-slate-500">{{ advance | join(', ') }}</div>
-      </div>
+      {% if advance|length > 0 %}
+      <div class="col-sm-6"><div class="card h-100" style="border-color:#fed7aa;background:#fff7ed"><div class="card-body p-3"><div class="fw-bold mb-1" style="color:#92400e"><i class="bi bi-cash-stack me-1"></i>Advance Loan Apps</div><div class="small text-muted">{{ advance|join(', ') }}</div></div></div></div>
       {% endif %}
       {% if ach_ret > 0 %}
-      <div class="bg-white border border-orange-200 rounded-lg p-4">
-        <div class="font-semibold text-slate-800 mb-1 flex items-center gap-2">↩️ ACH Returns</div>
-        <div class="text-lg font-bold text-orange-600">{{ ach_ret }} return{{ 's' if ach_ret != 1 }}</div>
-      </div>
+      <div class="col-sm-6"><div class="card h-100" style="border-color:#fed7aa;background:#fff7ed"><div class="card-body p-3"><div class="fw-bold mb-1" style="color:#92400e"><i class="bi bi-arrow-return-left me-1"></i>ACH Returns</div><div class="fw-bold" style="font-size:1.25rem;color:#ea580c">{{ ach_ret }} return{{ 's' if ach_ret != 1 }}</div></div></div></div>
       {% endif %}
     </div>
     {% if rf.get('fraud_summary') %}
-    <div class="mt-3 text-sm text-orange-800 bg-orange-100 rounded-lg p-3">{{ rf.fraud_summary }}</div>
+    <div class="mt-3 p-3 rounded-3 small" style="background:#ffedd5;color:#92400e">{{ rf.fraud_summary }}</div>
     {% endif %}
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  <!-- Fraud Summary from AI (even if no specific flags above) -->
-  {% if result.get('fraud_summary') and not has_fraud_flags %}
-  <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
-    <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Fraud / Structuring Analysis</div>
-    <p class="text-sm text-slate-600">{{ result.fraud_summary }}</p>
+{% if result.get('fraud_summary') and not has_fraud %}
+<div class="card shadow-sm mb-4">
+  <div class="card-body p-4">
+    <div class="fw-bold text-muted mb-2" style="font-size:11px;text-transform:uppercase;letter-spacing:0.07em">Fraud / Structuring Analysis</div>
+    <p class="mb-0" style="font-size:13.5px;color:#334155">{{ result.fraud_summary }}</p>
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  <!-- Custom Scorecard Panel -->
-  {% if scorecard %}
-  {% set sc_nsf_fail = rf.get('nsf_count', 0) > scorecard.max_nsf_count %}
-  {% set sc_od_fail = rf.get('overdraft_count', 0) > scorecard.max_overdraft_count %}
-  {% set sc_bal_fail = summary.get('avg_daily_balance', 0) < scorecard.min_avg_daily_balance %}
-  {% set sc_inc_fail = income.get('total_avg_monthly_income', 0) < scorecard.min_monthly_income %}
-  {% set sc_risk_fail = rf.get('risk_score', 0) > scorecard.max_risk_score %}
-  {% set sc_mca_fail = (not scorecard.allow_mca) and rf.get('mca_loans_detected', false) %}
-  {% set sc_gamble_fail = scorecard.auto_decline_gambling and rf.get('gambling_transactions', false) %}
-  {% set sc_months_fail = period.get('months_covered', 0) < scorecard.min_months_coverage %}
-  {% set sc_failures = [sc_nsf_fail, sc_od_fail, sc_bal_fail, sc_inc_fail, sc_risk_fail, sc_mca_fail, sc_gamble_fail, sc_months_fail] | select | list | length %}
-  <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-6">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="font-bold text-slate-900 flex items-center gap-2">
-        📋 Your Custom Scorecard
-        <span class="text-xs {% if sc_failures == 0 %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} px-2 py-0.5 rounded-full font-semibold">
-          {{ sc_failures }} fail{{ 's' if sc_failures != 1 }}
-        </span>
-      </h2>
-      <a href="/settings" class="text-xs text-indigo-600 hover:underline font-semibold">Edit thresholds →</a>
+<!-- ── CUSTOM SCORECARD ── -->
+{% if scorecard %}
+{% set sc_nsf     = rf.get('nsf_count',0) > scorecard.max_nsf_count %}
+{% set sc_od      = rf.get('overdraft_count',0) > scorecard.max_overdraft_count %}
+{% set sc_bal     = summary.get('avg_daily_balance',0) < scorecard.min_avg_daily_balance %}
+{% set sc_inc     = income.get('total_avg_monthly_income',0) < scorecard.min_monthly_income %}
+{% set sc_risk    = rf.get('risk_score',0) > scorecard.max_risk_score %}
+{% set sc_mca     = (not scorecard.allow_mca) and rf.get('mca_loans_detected',false) %}
+{% set sc_gamble  = scorecard.auto_decline_gambling and rf.get('gambling_transactions',false) %}
+{% set sc_months  = period.get('months_covered',0) < scorecard.min_months_coverage %}
+{% set sc_fails   = [sc_nsf,sc_od,sc_bal,sc_inc,sc_risk,sc_mca,sc_gamble,sc_months]|select|list|length %}
+<div class="card shadow-sm mb-4" style="overflow:hidden">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-clipboard2-check-fill text-primary"></i>
+      <span>Your Custom Scorecard</span>
+      <span class="badge rounded-pill fw-bold ms-1" style="font-size:10.5px;{% if sc_fails==0 %}background:#f0fdf4;color:#16a34a{% else %}background:#fef2f2;color:#dc2626{% endif %}">{{ sc_fails }} fail{{ 's' if sc_fails!=1 }}</span>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <a href="/settings" class="btn btn-link btn-sm p-0 fw-semibold text-decoration-none" style="font-size:12px">Edit thresholds →</a>
+  </div>
+  <div class="card-body p-3">
+    <div class="row g-2">
       {% for label, fail, actual, threshold in [
-        ("NSF Count", sc_nsf_fail, rf.get('nsf_count', 0) ~ " NSF", "max " ~ scorecard.max_nsf_count),
-        ("Overdrafts", sc_od_fail, rf.get('overdraft_count', 0) ~ " OD", "max " ~ scorecard.max_overdraft_count),
-        ("Avg Daily Balance", sc_bal_fail, "$" ~ "{:,.0f}".format(summary.get('avg_daily_balance', 0)), "min $" ~ "{:,.0f}".format(scorecard.min_avg_daily_balance)),
-        ("Monthly Income", sc_inc_fail, "$" ~ "{:,.0f}".format(income.get('total_avg_monthly_income', 0)), "min $" ~ "{:,.0f}".format(scorecard.min_monthly_income)),
-        ("Risk Score", sc_risk_fail, rf.get('risk_score', 0) ~ " / 100", "max " ~ scorecard.max_risk_score),
-        ("MCA Policy", sc_mca_fail, "MCA detected" if rf.get('mca_loans_detected') else "No MCA", "allow: " ~ ("yes" if scorecard.allow_mca else "no")),
-        ("Gambling Policy", sc_gamble_fail, "Detected" if rf.get('gambling_transactions') else "None", "auto-decline: " ~ ("yes" if scorecard.auto_decline_gambling else "no")),
-        ("Statement Coverage", sc_months_fail, (period.get('months_covered', 0) | string) ~ " months", "min " ~ scorecard.min_months_coverage ~ " months"),
+        ("NSF Count",        sc_nsf,    rf.get('nsf_count',0)|string ~ " NSF",              "max " ~ scorecard.max_nsf_count),
+        ("Overdrafts",       sc_od,     rf.get('overdraft_count',0)|string ~ " OD",         "max " ~ scorecard.max_overdraft_count),
+        ("Avg Daily Bal",    sc_bal,    "$" ~ "{:,.0f}".format(summary.get('avg_daily_balance',0)), "min $" ~ "{:,.0f}".format(scorecard.min_avg_daily_balance)),
+        ("Monthly Income",   sc_inc,    "$" ~ "{:,.0f}".format(income.get('total_avg_monthly_income',0)),"min $" ~ "{:,.0f}".format(scorecard.min_monthly_income)),
+        ("Risk Score",       sc_risk,   rf.get('risk_score',0)|string ~ " / 100",           "max " ~ scorecard.max_risk_score),
+        ("MCA Policy",       sc_mca,    "MCA detected" if rf.get('mca_loans_detected') else "No MCA","allow: " ~ ("yes" if scorecard.allow_mca else "no")),
+        ("Gambling",         sc_gamble, "Detected" if rf.get('gambling_transactions') else "None","auto-decline: " ~ ("yes" if scorecard.auto_decline_gambling else "no")),
+        ("Stmt Coverage",    sc_months, period.get('months_covered',0)|string ~ " months",  "min " ~ scorecard.min_months_coverage ~ " mo"),
       ] %}
-      <div class="rounded-lg p-3 {% if fail %}bg-red-50 border border-red-100{% else %}bg-green-50 border border-green-100{% endif %}">
-        <div class="text-xs font-semibold {% if fail %}text-red-700{% else %}text-green-700{% endif %} mb-1">{{ label }}</div>
-        <div class="text-sm font-bold {% if fail %}text-red-600{% else %}text-green-600{% endif %}">{{ actual }}</div>
-        <div class="text-xs {% if fail %}text-red-400{% else %}text-green-500{% endif %}">{{ threshold }}</div>
+      <div class="col-6 col-md-3">
+        <div class="rounded-3 p-3 h-100" style="background:{% if fail %}#fef2f2;border:1px solid #fecaca{% else %}#f0fdf4;border:1px solid #bbf7d0{% endif %}">
+          <div class="fw-bold mb-1" style="font-size:11px;color:{% if fail %}#dc2626{% else %}#16a34a{% endif %}">{{ label }}</div>
+          <div class="fw-bold" style="font-size:14px;color:{% if fail %}#dc2626{% else %}#16a34a{% endif %}">{{ actual }}</div>
+          <div style="font-size:10.5px;color:{% if fail %}#fca5a5{% else %}#86efac{% endif %}">{{ threshold }}</div>
+        </div>
       </div>
       {% endfor %}
     </div>
   </div>
-  {% endif %}
-
-  <!-- Actions -->
-  <div class="flex flex-wrap gap-3 mt-2">
-    <a href="/dashboard" class="border border-slate-200 text-slate-600 px-5 py-2.5 rounded-lg hover:bg-slate-50 text-sm font-medium transition">
-      ← Dashboard
-    </a>
-    <a href="/dashboard" class="border border-sky-200 text-sky-600 px-5 py-2.5 rounded-lg hover:bg-sky-50 text-sm font-medium transition">
-      + New Analysis
-    </a>
-    <a href="/results/{{ analysis.id }}/print" target="_blank"
-       class="border border-indigo-200 text-indigo-600 px-5 py-2.5 rounded-lg hover:bg-indigo-50 text-sm font-medium transition flex items-center gap-1.5">
-      <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-      Print / PDF
-    </a>
-    <a href="/results/{{ analysis.id }}/export/csv"
-       class="border border-green-200 text-green-700 px-5 py-2.5 rounded-lg hover:bg-green-50 text-sm font-medium transition flex items-center gap-1.5">
-      <svg style="width:14px;height:14px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-      Export CSV
-    </a>
-    <form method="POST" action="/results/{{ analysis.id }}/delete" class="ml-auto"
-      onsubmit="return confirm('Delete this report permanently?')">
-      <button type="submit" class="border border-red-200 text-red-400 px-5 py-2.5 rounded-lg hover:bg-red-50 text-sm font-medium transition">
-        Delete
-      </button>
-    </form>
-  </div>
-
 </div>
+{% endif %}
+
+<!-- ── ACTION BUTTONS ── -->
+<div class="d-flex flex-wrap gap-2 mt-2 pt-2">
+  <a href="/dashboard" class="btn btn-outline-secondary fw-semibold d-inline-flex align-items-center gap-2">
+    <i class="bi bi-arrow-left"></i> Dashboard
+  </a>
+  <label for="fileInputTopbar" style="cursor:pointer">
+    <div class="btn btn-outline-primary fw-semibold d-inline-flex align-items-center gap-2">
+      <i class="bi bi-plus-lg"></i> New Analysis
+    </div>
+  </label>
+  <a href="/results/{{ analysis.id }}/print" target="_blank" class="btn btn-outline-secondary fw-semibold d-inline-flex align-items-center gap-2">
+    <i class="bi bi-printer-fill"></i> Print / PDF
+  </a>
+  <a href="/results/{{ analysis.id }}/export/csv" class="btn btn-outline-success fw-semibold d-inline-flex align-items-center gap-2">
+    <i class="bi bi-download"></i> Export CSV
+  </a>
+  <form method="POST" action="/results/{{ analysis.id }}/delete" class="ms-auto" onsubmit="return confirm('Delete this report permanently?')">
+    <button type="submit" class="btn btn-outline-danger fw-semibold d-inline-flex align-items-center gap-2">
+      <i class="bi bi-trash3"></i> Delete
+    </button>
+  </form>
+</div>
+
 {% endblock %}
