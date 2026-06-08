@@ -69,6 +69,25 @@ def _build_merchants(analyses):
     return result
 
 
+@router.get("/statements", response_class=HTMLResponse)
+async def statements_list(
+    request: Request,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    analyses = (
+        db.query(Analysis)
+        .filter(Analysis.user_id == user.id)
+        .order_by(Analysis.created_at.desc())
+        .all()
+    )
+    banks = sorted({a.bank_name for a in analyses if a.bank_name})
+    return templates.TemplateResponse(
+        "statements.html",
+        {"request": request, "user": user, "analyses": analyses, "banks": banks, "active_page": "statements"},
+    )
+
+
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(
     request: Request,

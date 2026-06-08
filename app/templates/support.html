@@ -1,0 +1,201 @@
+{% extends "base_app.html" %}
+{% block title %}Support Center — StatementScrub{% endblock %}
+{% block page_title %}Support Center{% endblock %}
+{% block page_subtitle %}Get help, report issues, or request features{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start;max-width:900px" class="animate-up">
+
+  <!-- LEFT: ticket form + FAQ -->
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <!-- Submit ticket -->
+    <div class="card" style="overflow:hidden">
+      <div style="padding:14px 18px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:13px;font-weight:800;color:#0f172a">Submit a Support Ticket</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px">We typically respond within 24 hours on business days</div>
+      </div>
+
+      {% if submitted %}
+      <div style="padding:32px 24px;text-align:center">
+        <div style="width:52px;height:52px;background:linear-gradient(135deg,#22c55e,#15803d);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 4px 14px rgba(34,197,94,0.3)">
+          <svg style="width:24px;height:24px;color:#fff" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px">Ticket submitted!</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:6px">Ticket ID: <strong style="color:#6366f1">#{{ ticket_id }}</strong></div>
+        <div style="font-size:12px;color:#94a3b8;margin-bottom:20px">We'll reply to <strong>{{ user.email }}</strong> within 24 hours.</div>
+        <a href="/support" style="font-size:12px;font-weight:700;color:#6366f1;text-decoration:none;background:#f5f3ff;padding:8px 18px;border-radius:8px">Submit another ticket</a>
+      </div>
+      {% else %}
+      <div style="padding:20px 18px">
+        <form method="POST" action="/support">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <!-- Category -->
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Category</label>
+              <select name="category" style="width:100%;padding:9px 12px;border-radius:9px;cursor:pointer">
+                <option value="">Select a category…</option>
+                <option value="billing">Billing & Credits</option>
+                <option value="technical">Technical Issue</option>
+                <option value="analysis">Analysis Question</option>
+                <option value="account">Account & Access</option>
+                <option value="feature">Feature Request</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <!-- Subject -->
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Subject</label>
+              <input type="text" name="subject" placeholder="Brief summary of your issue" style="width:100%;padding:9px 12px;border-radius:9px"/>
+            </div>
+            <!-- Priority -->
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Priority</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                {% for p, label, color, bg in [("low","Low","#15803d","#f0fdf4"),("medium","Medium","#a16207","#fefce8"),("high","High","#dc2626","#fef2f2")] %}
+                <label style="cursor:pointer">
+                  <input type="radio" name="priority" value="{{ p }}" {% if p == 'medium' %}checked{% endif %} style="display:none" class="prio-radio">
+                  <div class="prio-btn" data-val="{{ p }}" style="padding:8px;text-align:center;border-radius:9px;border:1.5px solid #e2e8f0;font-size:12px;font-weight:700;color:#64748b;transition:all 0.15s;cursor:pointer;
+                    {% if p == 'medium' %}border-color:{{ color }};background:{{ bg }};color:{{ color }}{% endif %}"
+                    onclick="setPrio('{{ p }}','{{ color }}','{{ bg }}')">{{ label }}</div>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            <!-- Description -->
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Description</label>
+              <textarea name="message" placeholder="Describe your issue in detail. Include any error messages, steps to reproduce, or screenshots if applicable." rows="5"
+                style="width:100%;padding:9px 12px;border-radius:9px;resize:vertical;line-height:1.5"></textarea>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11px;color:#94a3b8">Reply will be sent to: <strong>{{ user.email }}</strong></div>
+              <button type="submit" class="btn-primary" style="padding:10px 22px;font-size:13px">Submit Ticket →</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- FAQ -->
+    <div class="card" style="overflow:hidden">
+      <div style="padding:14px 18px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:13px;font-weight:800;color:#0f172a">Frequently Asked Questions</div>
+      </div>
+      <div style="padding:8px 0">
+        {% for q, a in [
+          ("How are credits used?", "Each bank statement analysis uses 1 credit, regardless of the number of pages. Credits never expire and stack with future purchases."),
+          ("What banks are supported?", "All major US banks are supported — Chase, Bank of America, Wells Fargo, Capital One, Citi, TD, PNC, US Bank, and hundreds more. We process any standard PDF statement."),
+          ("How is my data kept secure?", "All PDFs are processed in-memory and deleted within 24 hours. We never store statement data on third-party servers. Payments are handled entirely by Stripe."),
+          ("Can I get a refund?", "Yes — unused credits can be refunded within 14 days of purchase. Contact support with your email and purchase date."),
+          ("How do I access the API?", "Go to Settings & API, generate your API key, then use it in the Authorization header. Full documentation is on the settings page."),
+          ("What if an analysis fails?", "If an analysis fails, no credit is deducted. Re-upload the statement or contact support if the issue persists."),
+        ] %}
+        <details style="border-bottom:1px solid #f1f5f9">
+          <summary style="padding:12px 18px;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;transition:background 0.1s"
+            onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+            {{ q }}
+            <svg style="width:14px;height:14px;color:#94a3b8;flex-shrink:0;transition:transform 0.2s" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div style="padding:0 18px 14px;font-size:12px;color:#64748b;line-height:1.6">{{ a }}</div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: contact info + status -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+
+    <!-- Contact options -->
+    <div class="card" style="padding:16px">
+      <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:12px">Contact Options</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        {% for icon, title, desc, color, bg in [
+          ("✉️", "Email Support", "support@statementscrub.com", "#0284c7", "#f0f9ff"),
+          ("⚡", "Response Time", "Within 24 business hours", "#a16207", "#fefce8"),
+          ("🕐", "Support Hours", "Mon–Fri, 9am–6pm EST", "#6366f1", "#f5f3ff"),
+        ] %}
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:{{ bg }};border-radius:9px">
+          <span style="font-size:16px;flex-shrink:0">{{ icon }}</span>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#0f172a;margin-bottom:2px">{{ title }}</div>
+            <div style="font-size:11px;color:{{ color }};font-weight:600">{{ desc }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Quick tips -->
+    <div style="background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:14px;padding:16px;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 90% 10%,rgba(99,102,241,0.2) 0%,transparent 60%);pointer-events:none"></div>
+      <div style="position:relative">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:rgba(255,255,255,0.35);margin-bottom:12px">Quick Tips</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          {% for tip in [
+            "Upload 3+ months of statements for better income trend accuracy.",
+            "Look for daily/weekly fixed withdrawals to detect MCA loans.",
+            "NSF = 0 with stable balance → strong approval signal.",
+            "Use batch upload to process multiple applications at once.",
+          ] %}
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="width:16px;height:16px;border-radius:5px;background:rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+              <svg style="width:9px;height:9px;color:#818cf8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            <span style="font-size:11px;color:rgba(148,163,184,0.85);line-height:1.5">{{ tip }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="card" style="padding:14px 16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:12px;font-weight:800;color:#0f172a">System Status</div>
+        <div style="display:flex;align-items:center;gap:5px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite"></div>
+          <span style="font-size:11px;font-weight:700;color:#15803d">All Systems Operational</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        {% for svc, ok in [("Analysis Engine", True), ("File Processing", True), ("Payments (Stripe)", True), ("API", True)] %}
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;color:#64748b">{{ svc }}</span>
+          <span style="font-size:10px;font-weight:700;{% if ok %}color:#15803d{% else %}color:#dc2626{% endif %}">{{ '✓ Operational' if ok else '✗ Issue' }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+</style>
+<script>
+function setPrio(val, color, bg) {
+  document.querySelectorAll('.prio-btn').forEach(b => {
+    b.style.borderColor = '#e2e8f0';
+    b.style.background = 'transparent';
+    b.style.color = '#64748b';
+  });
+  const active = document.querySelector(`.prio-btn[data-val="${val}"]`);
+  if (active) {
+    active.style.borderColor = color;
+    active.style.background = bg;
+    active.style.color = color;
+  }
+  document.querySelectorAll('.prio-radio').forEach(r => {
+    r.checked = r.value === val;
+  });
+}
+</script>
+{% endblock %}
