@@ -72,6 +72,48 @@ US_STATES = [
 ]
 
 
+# ─── Helpers ───────────────────────────────────────────────────────────────────
+
+def _build_merchant_summaries(user_id: int, db: Session):
+    """Return list of merchant summary dicts for the current user."""
+    analyses = (
+        db.query(Analysis)
+        .filter(Analysis.user_id == user_id, Analysis.status == "complete")
+        .order_by(Analysis.created_at.desc())
+        .all()
+    )
+    merchants: dict = {}
+    for a in analyses:
+        key = (a.account_holder or "").strip() or "Unknown"
+        if key not in merchants:
+            merchants[key] = {
+                "name": key,
+                "count": 0,
+                "sum_deposits": 0.0,
+                "sum_balance": 0.0,
+                "total_nsf": 0,
+            }
+        m = merchants[key]
+        m["count"] += 1
+        m["sum_deposits"] += float(a.avg_monthly_deposits or 0)
+        m["sum_balance"] += float(a.avg_daily_balance or 0)
+        m["total_nsf"] += int(a.nsf_count or 0)
+
+    result = []
+    for name, m in merchants.items():
+        c = m["count"]
+        result.append({
+            "name": name,
+            "statement_count": c,
+            "avg_monthly_deposits": int(m["sum_deposits"] / c) if c else 0,
+            "avg_daily_balance": int(m["sum_balance"] / c) if c else 0,
+            "avg_nsf": round(m["total_nsf"] / c) if c else 0,
+        })
+
+    result.sort(key=lambda x: x["name"])
+    return result
+
+
 # ─── HTML page ─────────────────────────────────────────────────────────────────
 
 @router.get("/lender-match", response_class=HTMLResponse)
@@ -81,8 +123,8 @@ async def lender_match_page(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Lender matching page — optionally pre-filled from an analysis."""
     industries = get_all_industries(db)
+    merchants = _build_merchant_summaries(user.id, db)
     prefill = {}
 
     if analysis_id:
@@ -90,13 +132,13 @@ async def lender_match_page(
             Analysis.id == analysis_id, Analysis.user_id == user.id
         ).first()
         if analysis:
-            rf = (analysis.result_json or {}).get("red_flags", {})
             prefill = {
                 "avg_monthly_deposits": int(analysis.avg_monthly_deposits or 0),
                 "avg_daily_balance": int(analysis.avg_daily_balance or 0),
                 "nsf_count": int(analysis.nsf_count or 0),
                 "analysis_id": analysis_id,
                 "account_holder": analysis.account_holder,
+                "mode": "manual",
             }
 
     return templates.TemplateResponse(
@@ -106,6 +148,7 @@ async def lender_match_page(
             "user": user,
             "industries": industries,
             "states": US_STATES,
+            "merchants": merchants,
             "prefill": prefill,
             "results": None,
             "active_page": "lender_match",
@@ -119,17 +162,40 @@ async def lender_match_submit(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Process lender match form and return results."""
     form = await request.form()
+    mode = form.get("mode", "manual")
 
     industry = form.get("industry", "").strip()
     state = form.get("state", "").strip()
-    avg_monthly_deposits = float(form.get("avg_monthly_deposits", 0) or 0)
-    avg_daily_balance = float(form.get("avg_daily_balance", 0) or 0)
-    nsf_count = int(form.get("nsf_count", 0) or 0)
     time_in_business = int(form.get("time_in_business", 12) or 12)
     current_positions = int(form.get("current_positions", 0) or 0)
     credit_score = int(form.get("credit_score", 0) or 0)
+
+    # In merchant mode, pull financials from DB; in manual mode use form values
+    selected_merchant = form.get("merchant_name", "").strip()
+    avg_monthly_deposits = 0.0
+    avg_daily_balance = 0.0
+    nsf_count = 0
+
+    if mode == "merchant" and selected_merchant:
+        analyses = (
+            db.query(Analysis)
+            .filter(Analysis.user_id == user.id, Analysis.status == "complete")
+            .all()
+        )
+        merchant_statements = [
+            a for a in analyses
+            if ((a.account_holder or "").strip() or "Unknown") == selected_merchant
+        ]
+        if merchant_statements:
+            n = len(merchant_statements)
+            avg_monthly_deposits = sum(float(a.avg_monthly_deposits or 0) for a in merchant_statements) / n
+            avg_daily_balance = sum(float(a.avg_daily_balance or 0) for a in merchant_statements) / n
+            nsf_count = round(sum(int(a.nsf_count or 0) for a in merchant_statements) / n)
+    else:
+        avg_monthly_deposits = float(form.get("avg_monthly_deposits", 0) or 0)
+        avg_daily_balance = float(form.get("avg_daily_balance", 0) or 0)
+        nsf_count = int(form.get("nsf_count", 0) or 0)
 
     results = match_lenders(
         db=db,
@@ -144,7 +210,10 @@ async def lender_match_submit(
     )
 
     industries = get_all_industries(db)
+    merchants = _build_merchant_summaries(user.id, db)
     prefill = {
+        "mode": mode,
+        "merchant_name": selected_merchant,
         "industry": industry,
         "state": state,
         "avg_monthly_deposits": int(avg_monthly_deposits),
@@ -162,6 +231,7 @@ async def lender_match_submit(
             "user": user,
             "industries": industries,
             "states": US_STATES,
+            "merchants": merchants,
             "prefill": prefill,
             "results": results,
             "active_page": "lender_match",
