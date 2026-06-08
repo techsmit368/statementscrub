@@ -20,7 +20,7 @@ class LenderRequirementSchema(BaseModel):
     id: int
     lender_id: int
     allow_industry: Optional[str]
-    allow_state: Optional[ListType[str]]
+    allow_state: Optional[ListType[Optional[str]]]
     time_in_business: int
     min_deposit: int
     min_avg_deposit: int
