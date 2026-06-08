@@ -1,163 +1,150 @@
 {% extends "base_app.html" %}
 {% block title %}My Profile — StatementScrub{% endblock %}
 {% block page_title %}My Profile{% endblock %}
-{% block page_subtitle %}Manage your account information and preferences{% endblock %}
+{% block page_subtitle %}Manage your account information and security settings{% endblock %}
 
 {% block content %}
-<div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start;max-width:900px" class="animate-up">
+<div class="row g-4 au" style="max-width:940px">
 
-  <!-- LEFT: profile + password -->
-  <div style="display:flex;flex-direction:column;gap:14px">
+  <!-- LEFT COLUMN -->
+  <div class="col-lg-7 d-flex flex-column gap-4">
 
     <!-- Profile card -->
-    <div class="card" style="overflow:hidden">
-      <div style="padding:14px 18px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:13px;font-weight:800;color:#0f172a">Account Information</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px">Update your name and view account details</div>
+    <div class="card shadow-sm" style="overflow:hidden">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-person-circle text-primary"></i> Account Information
       </div>
-      <div style="padding:20px 18px">
-        <!-- Avatar -->
-        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
-          <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px;box-shadow:0 4px 16px rgba(99,102,241,0.3);flex-shrink:0">
+      <div class="card-body p-4">
+        <!-- Avatar row -->
+        <div class="d-flex align-items-center gap-3 mb-4 pb-4" style="border-bottom:1px solid #e8ecf0">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:24px;box-shadow:0 4px 16px rgba(99,102,241,0.3);flex-shrink:0">
             {{ (user.full_name or user.email)[0].upper() }}
           </div>
           <div>
-            <div style="font-size:15px;font-weight:800;color:#0f172a">{{ user.full_name or 'No name set' }}</div>
-            <div style="font-size:12px;color:#94a3b8">{{ user.email }}</div>
-            <div style="margin-top:4px">
-              {% if user.subscription_plan %}
-              <span style="font-size:10px;font-weight:800;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:3px 9px;border-radius:6px">
-                {{ 'Pro Plan' if user.subscription_plan == 'pro_sub' else 'Starter Plan' }}
-              </span>
-              {% else %}
-              <span style="font-size:10px;font-weight:700;background:#f1f5f9;color:#64748b;padding:3px 9px;border-radius:6px">{{ user.plan | capitalize }} Plan</span>
-              {% endif %}
-            </div>
+            <h5 class="fw-bold mb-1" style="color:#0f172a">{{ user.full_name or 'No name set' }}</h5>
+            <div class="text-muted small mb-1">{{ user.email }}</div>
+            {% if user.subscription_plan %}
+            <span class="badge fw-bold" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);font-size:10.5px">{{ 'Pro Plan' if user.subscription_plan=='pro_sub' else 'Starter Plan' }}</span>
+            {% else %}
+            <span class="badge bg-light text-secondary fw-bold border" style="font-size:10.5px">{{ user.plan|capitalize }} Plan</span>
+            {% endif %}
           </div>
         </div>
 
         {% if saved %}
-        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:10px 14px;margin-bottom:18px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#15803d">
-          <svg style="width:14px;height:14px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-          Profile updated successfully.
+        <div class="alert alert-success d-flex align-items-center gap-2 mb-4" role="alert">
+          <i class="bi bi-check-circle-fill flex-shrink-0"></i> Profile updated successfully.
         </div>
         {% endif %}
 
         <form method="POST" action="/profile">
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div>
-              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Full Name</label>
-              <input type="text" name="full_name" value="{{ user.full_name or '' }}" placeholder="Your full name"
-                style="width:100%;padding:9px 12px;border-radius:9px"/>
-            </div>
-            <div>
-              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Email Address</label>
-              <input type="email" value="{{ user.email }}" disabled
-                style="width:100%;padding:9px 12px;border-radius:9px;background:#f8fafc;color:#94a3b8;cursor:not-allowed"/>
-              <div style="font-size:10px;color:#94a3b8;margin-top:4px">Email cannot be changed. Contact support if needed.</div>
-            </div>
-            <div>
-              <button type="submit" class="btn btn-primary" style="padding:10px 24px;font-size:13px">Save Changes</button>
-            </div>
+          <div class="mb-3">
+            <label for="full_name" class="form-label">Full Name</label>
+            <input type="text" id="full_name" name="full_name" value="{{ user.full_name or '' }}" placeholder="Your full name" class="form-control"/>
           </div>
+          <div class="mb-4">
+            <label class="form-label">Email Address</label>
+            <input type="email" value="{{ user.email }}" disabled class="form-control"/>
+            <div class="form-text">Email cannot be changed. Contact support if needed.</div>
+          </div>
+          <button type="submit" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-2">
+            <i class="bi bi-check-lg"></i> Save Changes
+          </button>
         </form>
       </div>
     </div>
 
-    <!-- Change password -->
-    <div class="card" style="overflow:hidden">
-      <div style="padding:14px 18px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:13px;font-weight:800;color:#0f172a">Change Password</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px">Use a strong password with at least 8 characters</div>
+    <!-- Password card -->
+    <div class="card shadow-sm" style="overflow:hidden">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-shield-lock-fill text-primary"></i> Change Password
       </div>
-      <div style="padding:20px 18px">
+      <div class="card-body p-4">
         {% if pw_error %}
-        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#dc2626;font-weight:600">{{ pw_error }}</div>
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-4" role="alert">
+          <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i> {{ pw_error }}
+        </div>
         {% endif %}
         {% if pw_saved %}
-        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#15803d">
-          <svg style="width:14px;height:14px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-          Password updated successfully.
+        <div class="alert alert-success d-flex align-items-center gap-2 mb-4" role="alert">
+          <i class="bi bi-check-circle-fill flex-shrink-0"></i> Password updated successfully.
         </div>
         {% endif %}
         <form method="POST" action="/profile/password">
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div>
-              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Current Password</label>
-              <input type="password" name="current_password" placeholder="••••••••" style="width:100%;padding:9px 12px;border-radius:9px"/>
-            </div>
-            <div>
-              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">New Password</label>
-              <input type="password" name="new_password" placeholder="••••••••" style="width:100%;padding:9px 12px;border-radius:9px"/>
-            </div>
-            <div>
-              <label style="display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Confirm New Password</label>
-              <input type="password" name="confirm_password" placeholder="••••••••" style="width:100%;padding:9px 12px;border-radius:9px"/>
-            </div>
-            <div>
-              <button type="submit" class="btn btn-ghost" style="padding:9px 22px;font-size:13px">Update Password</button>
-            </div>
+          <div class="mb-3">
+            <label for="current_password" class="form-label">Current Password</label>
+            <input type="password" id="current_password" name="current_password" placeholder="••••••••" class="form-control"/>
           </div>
+          <div class="mb-3">
+            <label for="new_password" class="form-label">New Password</label>
+            <input type="password" id="new_password" name="new_password" placeholder="Min 8 characters" class="form-control"/>
+          </div>
+          <div class="mb-4">
+            <label for="confirm_password" class="form-label">Confirm New Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat new password" class="form-control"/>
+          </div>
+          <button type="submit" class="btn btn-outline-secondary fw-semibold d-inline-flex align-items-center gap-2">
+            <i class="bi bi-lock-fill"></i> Update Password
+          </button>
         </form>
       </div>
     </div>
 
   </div>
 
-  <!-- RIGHT: plan + stats + danger -->
-  <div style="display:flex;flex-direction:column;gap:12px">
+  <!-- RIGHT COLUMN -->
+  <div class="col-lg-5 d-flex flex-column gap-4">
 
-    <!-- Plan summary -->
-    <div style="background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:16px;padding:18px;overflow:hidden;position:relative">
+    <!-- Dark account summary -->
+    <div style="background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:16px;padding:22px;position:relative;overflow:hidden" class="au1">
       <div style="position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(99,102,241,0.2) 0%,transparent 55%);pointer-events:none"></div>
       <div style="position:relative">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.35);margin-bottom:12px">Account Summary</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          {% for label, value, color in [
-            ("Plan",    user.plan | capitalize ~ (' Sub' if user.subscription_plan else ''),    "#a5b4fc"),
-            ("Credits", (user.credits or 0) | string ~ " remaining",                           "#38bdf8" if (user.credits or 0) > 0 else "#f87171"),
-            ("Analyses used", user.analyses_used | string,                                     "#94a3b8"),
-            ("Member since", user.created_at.strftime('%b %Y') if user.created_at else "—",   "#94a3b8"),
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:16px">Account Summary</div>
+        <div class="d-flex flex-column gap-3">
+          {% for lbl, val, col in [
+            ("Plan",    user.plan|capitalize ~ (' Sub' if user.subscription_plan else ''), "#a5b4fc"),
+            ("Credits", (user.credits or 0)|string ~ " remaining",                          "#38bdf8" if (user.credits or 0) > 0 else "#f87171"),
+            ("Analyses Used", user.analyses_used|string,                                    "#94a3b8"),
+            ("Member Since",  user.created_at.strftime('%b %Y') if user.created_at else "—","#94a3b8"),
           ] %}
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <span style="font-size:11px;color:rgba(148,163,184,0.6);font-weight:600">{{ label }}</span>
-            <span style="font-size:12px;font-weight:800;color:{{ color }}">{{ value }}</span>
+          <div class="d-flex align-items-center justify-content-between">
+            <span style="font-size:11.5px;color:rgba(148,163,184,0.6);font-weight:500">{{ lbl }}</span>
+            <span class="fw-bold" style="font-size:13px;color:{{ col }}">{{ val }}</span>
           </div>
           {% endfor %}
         </div>
-        <a href="/credits" style="display:block;margin-top:16px;text-align:center;font-size:12px;font-weight:800;padding:9px;border-radius:10px;text-decoration:none;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.12);transition:all 0.15s"
+        <a href="/credits" class="d-block mt-4 text-center text-decoration-none py-2 px-3 rounded-3 fw-bold" style="font-size:13px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.12);transition:all 0.15s"
            onmouseover="this.style.background='rgba(99,102,241,0.3)';this.style.color='#a5b4fc'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='rgba(255,255,255,0.7)'">
-          View Billing & Credits →
+          View Billing & Credits <i class="bi bi-arrow-right"></i>
         </a>
       </div>
     </div>
 
     <!-- Quick links -->
-    <div class="card" style="padding:14px 16px">
-      <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:12px">Quick Links</div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        {% for icon, label, url in [
-          ("⚙️", "Settings & API Key", "/settings"),
-          ("📄", "All Statements", "/statements"),
-          ("💳", "Credits & Billing", "/credits"),
-          ("🎫", "Support Center", "/support"),
-        ] %}
-        <a href="{{ url }}" style="display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;text-decoration:none;transition:background 0.15s"
-           onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-          <span style="font-size:14px">{{ icon }}</span>
-          <span style="font-size:12px;font-weight:600;color:#374151">{{ label }}</span>
-          <svg style="width:12px;height:12px;color:#c7d2fe;margin-left:auto;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+    <div class="card shadow-sm au1">
+      <div class="card-header">Quick Links</div>
+      <div class="list-group list-group-flush">
+        {% for icon, label, url in [("bi-gear-fill","Settings & API","/settings"),("bi-file-earmark-text","All Statements","/statements"),("bi-credit-card-fill","Credits & Billing","/credits"),("bi-headset","Support Center","/support")] %}
+        <a href="{{ url }}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3 px-4">
+          <div class="icon-box ib-primary" style="width:32px;height:32px;border-radius:8px">
+            <i class="bi {{ icon }}" style="font-size:13px"></i>
+          </div>
+          <span class="fw-semibold" style="font-size:13px;color:#374151">{{ label }}</span>
+          <i class="bi bi-chevron-right text-muted ms-auto" style="font-size:12px"></i>
         </a>
         {% endfor %}
       </div>
     </div>
 
     <!-- Danger zone -->
-    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 16px">
-      <div style="font-size:12px;font-weight:800;color:#991b1b;margin-bottom:8px">Danger Zone</div>
-      <div style="font-size:11px;color:#b91c1c;margin-bottom:12px;line-height:1.5">Signing out ends your session. All data stays intact.</div>
-      <a href="/auth/logout" style="display:block;text-align:center;font-size:12px;font-weight:700;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:8px;border-radius:8px;text-decoration:none;transition:all 0.15s"
-         onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fef2f2'">Sign Out of Account</a>
+    <div class="card shadow-sm au2" style="border-color:#fecaca">
+      <div class="card-body p-4">
+        <h6 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Danger Zone</h6>
+        <p class="text-muted small mb-3">Signing out ends your session. All data stays intact.</p>
+        <a href="/auth/logout" class="btn btn-outline-danger btn-sm fw-semibold d-flex align-items-center justify-content-center gap-2">
+          <i class="bi bi-box-arrow-right"></i> Sign Out of Account
+        </a>
+      </div>
     </div>
 
   </div>

@@ -4,298 +4,258 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{% block title %}StatementScrub{% endblock %}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f4f9; }
 
+    /* ── Brand overrides ── */
     :root {
-      --font: 'DM Sans', -apple-system, sans-serif;
-      --font-mono: 'Inter', monospace;
-      --bg: #f4f6f9;
-      --surface: #ffffff;
-      --border: #e8eaed;
-      --border-2: #f0f2f5;
-      --sidebar-bg: #0b0e14;
-      --sidebar-border: rgba(255,255,255,0.06);
-      --text-1: #0f172a;
-      --text-2: #64748b;
-      --text-3: #94a3b8;
-      --accent: #6366f1;
-      --accent-sky: #0ea5e9;
-      --radius: 12px;
-      --radius-lg: 16px;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      --bs-primary: #6366f1;
+      --bs-primary-rgb: 99,102,241;
+      --brand: #6366f1;
+      --brand-dark: #4f46e5;
     }
-
-    body { font-family: var(--font); background: var(--bg); color: var(--text-1); line-height: 1.5; font-size: 14px; display: flex; min-height: 100vh; }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 99px; }
+    .btn-primary, .btn-primary:active { background-color: #6366f1 !important; border-color: #6366f1 !important; }
+    .btn-primary:hover { background-color: #4f46e5 !important; border-color: #4338ca !important; }
+    .btn-primary:focus { box-shadow: 0 0 0 0.25rem rgba(99,102,241,0.35) !important; }
+    .btn-outline-primary { color: #6366f1 !important; border-color: #6366f1 !important; }
+    .btn-outline-primary:hover { background-color: #6366f1 !important; border-color: #6366f1 !important; color: #fff !important; }
+    .text-primary { color: #6366f1 !important; }
+    .bg-primary { background-color: #6366f1 !important; }
+    .border-primary { border-color: #6366f1 !important; }
+    .form-control:focus, .form-select:focus { border-color: #6366f1; box-shadow: 0 0 0 0.2rem rgba(99,102,241,0.18); }
+    .badge.bg-primary { background-color: #6366f1 !important; }
+    .progress-bar.bg-primary { background-color: #6366f1 !important; }
+    a { color: #6366f1; }
+    a:hover { color: #4f46e5; }
 
     /* ── Sidebar ── */
-    .sb-link {
-      display: flex; align-items: center; gap: 9px;
-      padding: 7px 10px; border-radius: 8px; margin-bottom: 1px;
+    .ss-sidebar {
+      width: 240px; background: #0f172a; position: fixed;
+      top: 0; left: 0; height: 100vh; overflow-y: auto;
+      z-index: 1030; border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex; flex-direction: column;
+    }
+    .ss-sidebar::-webkit-scrollbar { width: 3px; }
+    .ss-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+    .ss-nav-link {
+      color: rgba(148,163,184,0.8); padding: 8px 10px; border-radius: 8px;
       text-decoration: none; font-size: 13.5px; font-weight: 500;
-      color: rgba(148,163,184,0.75); transition: all 0.12s ease;
-      border-left: 2px solid transparent; position: relative;
+      display: flex; align-items: center; gap: 9px; margin-bottom: 2px;
+      transition: all 0.13s; border-left: 2px solid transparent;
     }
-    .sb-link:hover { background: rgba(255,255,255,0.065); color: #e2e8f0; }
-    .sb-link.active {
-      background: rgba(99,102,241,0.14);
-      color: #a5b4fc;
-      border-left-color: #6366f1;
-      padding-left: 8px;
-      font-weight: 600;
+    .ss-nav-link:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+    .ss-nav-link.active {
+      background: rgba(99,102,241,0.16); color: #a5b4fc;
+      border-left-color: #6366f1; padding-left: 8px; font-weight: 600;
     }
-    .sb-label {
-      font-size: 10px; color: rgba(100,116,139,0.38);
-      font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.09em; padding: 0 10px; margin: 18px 0 5px;
+    .ss-nav-link i { opacity: 0.7; flex-shrink: 0; font-size: 15px; }
+    .ss-nav-link:hover i, .ss-nav-link.active i { opacity: 1; }
+    .ss-nav-label {
+      font-size: 9.5px; font-weight: 800; color: rgba(100,116,139,0.4);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 0 10px; margin: 16px 0 4px;
     }
-    .sb-link.active svg { opacity: 1; }
-    .sb-link svg { opacity: 0.6; flex-shrink: 0; transition: opacity 0.12s; }
-    .sb-link:hover svg { opacity: 0.85; }
 
-    /* ── Surface cards ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
+    /* ── Topbar ── */
+    .ss-topbar {
+      background: #fff; border-bottom: 1px solid #e9ecef;
+      height: 60px; position: sticky; top: 0; z-index: 1020;
     }
-    .card-hover { transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s; }
-    .card-hover:hover { box-shadow: var(--shadow-md); border-color: #c7d2fe; transform: translateY(-1px); }
+    .ss-main { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── Cards ── */
+    .card { border-color: #e8ecf0; border-radius: 12px; }
+    .card-header {
+      background: #f8f9fb; border-bottom: 1px solid #e8ecf0;
+      padding: 13px 18px; font-weight: 700; font-size: 13.5px; color: #0f172a;
+    }
+    .card-footer { background: #f8f9fb; border-top: 1px solid #e8ecf0; }
 
     /* ── Metric cards ── */
-    .metric-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .metric-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2.5px;
-      background: var(--accent-line, linear-gradient(90deg,#6366f1,#8b5cf6));
-    }
-    .metric-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-    .metric-num {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.85rem;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      color: var(--text-1);
-      margin: 10px 0 3px;
-    }
-    .metric-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-    .metric-icon {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
+    .metric-card { border-top: 3px solid #6366f1 !important; border-radius: 12px; transition: transform 0.18s, box-shadow 0.18s; }
+    .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.09) !important; }
+    .mc-primary  { border-top-color: #6366f1 !important; }
+    .mc-info     { border-top-color: #0ea5e9 !important; }
+    .mc-success  { border-top-color: #22c55e !important; }
+    .mc-danger   { border-top-color: #ef4444 !important; }
+    .mc-warning  { border-top-color: #f59e0b !important; }
+    .mc-purple   { border-top-color: #8b5cf6 !important; }
+    .metric-num { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin: 10px 0 4px; }
 
-    /* ── Buttons ── */
-    .btn {
-      font-family: var(--font); font-weight: 600; font-size: 13.5px;
-      border-radius: 9px; border: none; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px;
-      transition: all 0.15s ease; text-decoration: none;
-      letter-spacing: -0.01em; white-space: nowrap;
+    /* ── Icon boxes ── */
+    .icon-box {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-      color: #fff; padding: 8px 16px;
-      box-shadow: 0 1px 2px rgba(79,70,229,0.3), 0 3px 10px rgba(99,102,241,0.2);
-    }
-    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 2px 4px rgba(79,70,229,0.35), 0 6px 18px rgba(99,102,241,0.25); }
-    .btn-secondary { background: var(--surface); color: var(--text-2); padding: 7px 14px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
-    .btn-secondary:hover { background: #f8fafc; border-color: #c7d2fe; color: #6366f1; }
-    .btn-ghost { background: transparent; color: var(--text-2); padding: 7px 12px; border: 1.5px solid transparent; }
-    .btn-ghost:hover { background: var(--bg); border-color: var(--border); color: var(--text-1); }
+    .ib-primary { background: #eef2ff; color: #6366f1; }
+    .ib-info    { background: #f0f9ff; color: #0284c7; }
+    .ib-success { background: #f0fdf4; color: #16a34a; }
+    .ib-danger  { background: #fef2f2; color: #dc2626; }
+    .ib-warning { background: #fffbeb; color: #d97706; }
+    .ib-purple  { background: #faf5ff; color: #7c3aed; }
 
-    /* ── Badges ── */
-    .badge { padding: 3px 9px; border-radius: 99px; font-size: 10.5px; font-weight: 700; display: inline-block; white-space: nowrap; letter-spacing: 0.01em; }
-    .badge-low      { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-    .badge-medium   { background: #fefce8; color: #ca8a04; border: 1px solid #fde68a; }
-    .badge-high     { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
-    .badge-critical { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    /* ── Risk badges ── */
+    .risk-low     { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #bbf7d0 !important; }
+    .risk-medium  { background: #fef9c3 !important; color: #854d0e !important; border: 1px solid #fde047 !important; }
+    .risk-high    { background: #ffedd5 !important; color: #c2410c !important; border: 1px solid #fed7aa !important; }
+    .risk-critical{ background: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fca5a5 !important; }
+
+    /* ── Tables ── */
+    .table thead th {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: #6c757d; border-bottom: 1px solid #e8ecf0;
+      background: #f8f9fb; padding: 10px 14px; white-space: nowrap;
+    }
+    .table tbody td { padding: 12px 14px; vertical-align: middle; font-size: 13.5px; border-color: #f0f2f5; }
+    .table-hover tbody tr:hover { background: #f5f8ff !important; cursor: pointer; }
 
     /* ── Forms ── */
-    .field { display: flex; flex-direction: column; gap: 5px; }
-    .field label { font-size: 11.5px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.06em; }
-    .field input, .field select, .field textarea,
-    input[type=text], input[type=email], input[type=password], input[type=number], select, textarea {
-      font-family: var(--font); font-size: 13.5px; color: var(--text-1);
-      border: 1.5px solid var(--border); border-radius: 9px;
-      padding: 9px 13px; outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      background: var(--surface); width: 100%;
+    .form-control, .form-select {
+      font-size: 13.5px; border-color: #dde1e7; border-radius: 8px;
+      padding: 9px 13px; font-family: 'Inter', sans-serif;
     }
-    input::placeholder, textarea::placeholder { color: #b0bec8; }
-    input:focus, select:focus, textarea:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .form-label { font-size: 11.5px; font-weight: 700; color: #374151; margin-bottom: 5px; letter-spacing: 0.03em; }
+    .input-group-text { border-color: #dde1e7; background: #f8f9fb; }
 
-    /* ── Section header ── */
-    .section-title { font-size: 13px; font-weight: 700; color: var(--text-1); letter-spacing: -0.01em; }
-    .section-sub { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+    /* ── Credit chip ── */
+    .credit-chip {
+      display: inline-flex; align-items: center; gap: 5px; padding: 5px 13px;
+      border-radius: 20px; font-size: 12.5px; font-weight: 700;
+      text-decoration: none; transition: opacity 0.15s;
+    }
+    .credit-chip:hover { opacity: 0.8; text-decoration: none; }
 
-    /* ── Table ── */
-    .tbl-header { font-size: 10.5px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.07em; }
-    .tbl-row { transition: background 0.1s; }
-    .tbl-row:hover { background: #fafbff !important; cursor: pointer; }
-
-    /* ── Divider ── */
-    .divider { height: 1px; background: var(--border-2); }
+    /* ── Spinner ── */
+    .ss-spin {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 3px solid rgba(99,102,241,0.2); border-top-color: #6366f1;
+      animation: ss-rotate 0.7s linear infinite;
+    }
+    @keyframes ss-rotate { to { transform: rotate(360deg); } }
 
     /* ── Animations ── */
-    .spinner { width: 26px; height: 26px; border: 2.5px solid rgba(99,102,241,0.15); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .au { animation: fadeUp 0.3s ease both; }
-    .au-1 { animation-delay: 0.06s; }
-    .au-2 { animation-delay: 0.10s; }
-    .au-3 { animation-delay: 0.14s; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .au  { animation: fadeUp 0.32s ease both; }
+    .au1 { animation-delay: 0.07s; }
+    .au2 { animation-delay: 0.13s; }
+    .au3 { animation-delay: 0.19s; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #ced4da; border-radius: 99px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    /* ── Misc ── */
+    .divider { height: 1px; background: #e8ecf0; }
+    .btn { font-family: 'Inter', sans-serif; }
+    .list-group-item { border-color: #e8ecf0; }
+    .list-group-item-action:hover { background: #f5f8ff; }
   </style>
   {% block head %}{% endblock %}
 </head>
 <body>
 
-<!-- ══════════════════════ SIDEBAR ══ -->
-<aside style="width:216px;flex-shrink:0;background:var(--sidebar-bg);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;z-index:100;border-right:1px solid var(--sidebar-border)">
-
+<!-- ══ SIDEBAR ══ -->
+<aside class="ss-sidebar">
   <!-- Logo -->
-  <div style="padding:16px 14px 15px;border-bottom:1px solid var(--sidebar-border)">
-    <a href="/dashboard" style="display:flex;align-items:center;gap:9px;text-decoration:none">
-      <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(99,102,241,0.5);flex-shrink:0">
-        <span style="color:#fff;font-weight:900;font-size:14px;font-family:'Inter',sans-serif">S</span>
+  <div style="padding:18px 14px 16px;border-bottom:1px solid rgba(255,255,255,0.06)">
+    <a href="/dashboard" class="d-flex align-items-center gap-2 text-decoration-none">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(99,102,241,0.45);flex-shrink:0">
+        <i class="bi bi-graph-up-arrow text-white" style="font-size:16px"></i>
       </div>
       <div>
-        <div style="font-size:14px;font-weight:800;color:#f1f5f9;letter-spacing:-0.02em;line-height:1.1">Statement<span style="background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Scrub</span></div>
-        <div style="font-size:9.5px;color:rgba(100,116,139,0.45);font-weight:600;letter-spacing:0.04em;margin-top:1px">CRM Platform</div>
+        <div style="font-size:14.5px;font-weight:800;color:#f1f5f9;letter-spacing:-0.025em;line-height:1.1">Statement<span style="background:linear-gradient(90deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Scrub</span></div>
+        <div style="font-size:9px;color:rgba(100,116,139,0.5);font-weight:700;letter-spacing:0.08em;margin-top:2px">UNDERWRITING CRM</div>
       </div>
     </a>
   </div>
 
   <!-- Nav -->
-  <nav style="padding:10px 8px 0;flex:1;overflow-y:auto">
-    <div class="sb-label">Overview</div>
-    <a href="/dashboard" class="sb-link {% if active_page == 'dashboard' %}active{% endif %}">
-      <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6zM4 13a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg>
-      Dashboard
+  <nav style="padding:10px 8px;flex:1;overflow-y:auto">
+    <div class="ss-nav-label">Workspace</div>
+    <a href="/dashboard" class="ss-nav-link {% if active_page=='dashboard' %}active{% endif %}">
+      <i class="bi bi-grid-1x2-fill"></i> Dashboard
     </a>
-    <a href="/statements" class="sb-link {% if active_page == 'statements' %}active{% endif %}">
-      <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      All Statements
+    <a href="/statements" class="ss-nav-link {% if active_page=='statements' %}active{% endif %}">
+      <i class="bi bi-file-earmark-text-fill"></i> All Statements
     </a>
 
-    <div class="sb-label">Billing</div>
-    <a href="/credits" class="sb-link {% if active_page == 'credits' %}active{% endif %}">
-      <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-      Credits & Billing
+    <div class="ss-nav-label">Billing</div>
+    <a href="/credits" class="ss-nav-link {% if active_page=='credits' %}active{% endif %}">
+      <i class="bi bi-credit-card-fill"></i> Credits & Billing
     </a>
 
-    <div class="sb-label">Account</div>
-    <a href="/profile" class="sb-link {% if active_page == 'profile' %}active{% endif %}">
-      <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-      My Profile
+    <div class="ss-nav-label">Account</div>
+    <a href="/profile" class="ss-nav-link {% if active_page=='profile' %}active{% endif %}">
+      <i class="bi bi-person-circle"></i> My Profile
     </a>
-    <a href="/settings" class="sb-link {% if active_page == 'settings' %}active{% endif %}">
-      <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      Settings & API
+    <a href="/settings" class="ss-nav-link {% if active_page=='settings' %}active{% endif %}">
+      <i class="bi bi-gear-fill"></i> Settings & API
     </a>
 
-    <div class="sb-label">Help</div>
-    <a href="/support" class="sb-link {% if active_page == 'support' %}active{% endif %}">
-      <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-      Support Center
+    <div class="ss-nav-label">Help</div>
+    <a href="/support" class="ss-nav-link {% if active_page=='support' %}active{% endif %}">
+      <i class="bi bi-headset"></i> Support Center
     </a>
     {% if user and user.plan in ['starter','pro'] %}
-    <a href="/dashboard#telegram" class="sb-link">
-      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-      Telegram Bot
-      {% if user.telegram_id %}<span style="margin-left:auto;width:6px;height:6px;background:#22c55e;border-radius:50%;flex-shrink:0;box-shadow:0 0 4px rgba(34,197,94,0.6)"></span>{% endif %}
+    <a href="/dashboard#telegram" class="ss-nav-link">
+      <i class="bi bi-telegram"></i> Telegram Bot
+      {% if user.telegram_id %}<span style="margin-left:auto;width:7px;height:7px;background:#22c55e;border-radius:50%;flex-shrink:0;box-shadow:0 0 5px rgba(34,197,94,0.7)"></span>{% endif %}
     </a>
     {% endif %}
   </nav>
 
   <!-- User footer -->
   {% if user %}
-  <div style="padding:10px 10px 12px;border-top:1px solid var(--sidebar-border)">
-    <a href="/profile" style="display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:9px;text-decoration:none;transition:background 0.12s"
-       onmouseover="this.style.background='rgba(255,255,255,0.055)'" onmouseout="this.style.background='transparent'">
-      <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;flex-shrink:0;letter-spacing:0;font-family:'Inter',sans-serif">
+  <div style="padding:10px 10px 12px;border-top:1px solid rgba(255,255,255,0.06)">
+    <a href="/profile" class="d-flex align-items-center gap-2 text-decoration-none p-2 rounded-3" style="transition:background 0.12s"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">
+      <div style="width:32px;height:32px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0">
         {{ (user.full_name or user.email)[0].upper() }}
       </div>
       <div style="min-width:0;flex:1">
-        <div style="font-size:12.5px;font-weight:600;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;line-height:1.2">{{ user.full_name or user.email.split('@')[0] }}</div>
-        <div style="font-size:10px;font-weight:600;letter-spacing:0.02em;margin-top:1px;{% if user.subscription_plan %}color:#6ee7b7{% else %}color:rgba(100,116,139,0.45){% endif %}">
-          {{ 'Pro Plan' if user.subscription_plan == 'pro_sub' else ('Starter Plan' if user.subscription_plan == 'starter_sub' else (user.plan|capitalize) + ' Plan') }}
+        <div style="font-size:12.5px;font-weight:600;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:118px;line-height:1.2">{{ user.full_name or user.email.split('@')[0] }}</div>
+        <div style="font-size:10px;font-weight:600;margin-top:1px;color:{% if user.subscription_plan %}#6ee7b7{% else %}rgba(100,116,139,0.5){% endif %}">
+          {{ 'Pro Plan' if user.subscription_plan=='pro_sub' else ('Starter' if user.subscription_plan=='starter_sub' else (user.plan|capitalize)) }}
         </div>
       </div>
     </a>
-    <a href="/auth/logout" style="display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:500;color:rgba(100,116,139,0.45);transition:all 0.12s;margin-top:2px"
-       onmouseover="this.style.background='rgba(239,68,68,0.08)';this.style.color='#fca5a5'" onmouseout="this.style.background='transparent';this.style.color='rgba(100,116,139,0.45)'">
-      <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-      Sign out
+    <a href="/auth/logout" class="d-flex align-items-center gap-2 text-decoration-none mt-1 px-2 py-1 rounded-3" style="font-size:12px;font-weight:500;color:rgba(100,116,139,0.5);transition:all 0.13s"
+       onmouseover="this.style.background='rgba(239,68,68,0.09)';this.style.color='#fca5a5'" onmouseout="this.style.background='transparent';this.style.color='rgba(100,116,139,0.5)'">
+      <i class="bi bi-box-arrow-right" style="font-size:13px"></i> Sign out
     </a>
   </div>
   {% endif %}
-
 </aside>
 
-<!-- ══════════════════════ MAIN ══ -->
-<div style="flex:1;margin-left:216px;display:flex;flex-direction:column;min-height:100vh">
+<!-- ══ MAIN ══ -->
+<div class="ss-main">
 
-  <!-- Top bar -->
-  <header style="background:#fff;border-bottom:1px solid var(--border);height:54px;position:sticky;top:0;z-index:50;flex-shrink:0">
-    <div style="padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px">
-      <!-- Page title -->
+  <!-- Topbar -->
+  <header class="ss-topbar">
+    <div class="d-flex align-items-center justify-content-between h-100 px-4 gap-3">
       <div style="min-width:0">
-        <h1 style="font-size:15px;font-weight:800;color:var(--text-1);line-height:1;letter-spacing:-0.025em">{% block page_title %}Dashboard{% endblock %}</h1>
-        <p style="font-size:11.5px;color:var(--text-3);margin-top:1.5px;font-weight:500">{% block page_subtitle %}{% endblock %}</p>
+        <h1 class="mb-0" style="font-size:16px;font-weight:800;color:#0f172a;letter-spacing:-0.025em;line-height:1">{% block page_title %}Dashboard{% endblock %}</h1>
+        <p class="mb-0 text-muted" style="font-size:11.5px;margin-top:2px">{% block page_subtitle %}{% endblock %}</p>
       </div>
-      <!-- Right actions -->
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <!-- Credit chip -->
+      <div class="d-flex align-items-center gap-2 flex-shrink-0">
         {% if user %}{% set _cr = user.credits or 0 %}
-        <a href="/credits" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:12.5px;font-weight:700;letter-spacing:-0.01em;text-decoration:none;transition:opacity 0.15s;
-          {% if _cr == 0 and user.plan == 'free' and user.analyses_used >= 3 %}background:#fef2f2;color:#dc2626;border:1.5px solid #fecaca
-          {% elif _cr > 0 and _cr <= 3 %}background:#fff7ed;color:#ea580c;border:1.5px solid #fed7aa
-          {% elif _cr > 0 %}background:#f0fdf4;color:#16a34a;border:1.5px solid #bbf7d0
-          {% else %}background:#f8fafc;color:#64748b;border:1.5px solid var(--border){% endif %}"
-          onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">
-          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          {% if _cr > 0 %}{{ _cr }} credit{{ 's' if _cr != 1 }}
-          {% elif user.plan != 'free' %}{{ user.plan }} plan
-          {% else %}{{ [3 - user.analyses_used, 0]|max }} free left{% endif %}
+        <a href="/credits" class="credit-chip
+          {%- if _cr==0 and user.plan=='free' and user.analyses_used>=3 %} text-danger" style="background:#fef2f2;border:1.5px solid #fecaca
+          {%- elif _cr>0 and _cr<=3 %} text-warning" style="background:#fffbeb;border:1.5px solid #fed7aa
+          {%- elif _cr>0 %} text-success" style="background:#f0fdf4;border:1.5px solid #bbf7d0
+          {%- else %} text-secondary" style="background:#f8f9fa;border:1.5px solid #dee2e6{%- endif %}">
+          <i class="bi bi-coin"></i>
+          {% if _cr > 0 %}{{ _cr }} credit{{ 's' if _cr != 1 }}{% elif user.plan != 'free' %}{{ user.plan }} plan{% else %}{{ [3-user.analyses_used,0]|max }} free left{% endif %}
         </a>
         {% endif %}
         {% block topbar_actions %}{% endblock %}
-        <label for="fileInputTopbar" style="cursor:pointer">
-          <div class="btn btn-primary">
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-            New Analysis
+        <label for="fileInputTopbar" class="mb-0" style="cursor:pointer">
+          <div class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2 fw-semibold" style="border-radius:8px;padding:7px 14px">
+            <i class="bi bi-plus-lg"></i> New Analysis
           </div>
         </label>
       </div>
@@ -303,15 +263,16 @@
   </header>
 
   <!-- Global upload form -->
-  <form method="POST" action="/upload" enctype="multipart/form-data" id="topbarUploadForm" style="display:none">
+  <form method="POST" action="/upload" enctype="multipart/form-data" id="topbarUploadForm" class="d-none">
     <input type="file" name="file" id="fileInputTopbar" accept=".pdf" onchange="document.getElementById('topbarUploadForm').submit()"/>
   </form>
 
-  <!-- Main content -->
-  <main style="flex:1;padding:22px 24px 52px;background:var(--bg)">
+  <!-- Content -->
+  <main class="flex-grow-1 p-4" style="background:#f1f4f9;padding-bottom:60px!important">
     {% block content %}{% endblock %}
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmk9sTa1pxBzq75DVbK91IrBHdoF" crossorigin="anonymous"></script>
 </body>
 </html>

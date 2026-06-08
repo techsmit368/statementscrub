@@ -6,179 +6,204 @@
 {% block content %}
 {% set _cr = user.credits or 0 %}
 
-<!-- Main 2-col grid -->
-<div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start">
-
-  <!-- LEFT: One-time credit packs -->
-  <div class="card" style="padding:0;overflow:hidden">
-    <div style="padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between">
+<!-- Current balance banner -->
+<div class="card shadow-sm mb-4 au" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border:none;overflow:hidden;position:relative">
+  <div style="position:absolute;inset:0;background:radial-gradient(circle at 90% 50%,rgba(99,102,241,0.25) 0%,transparent 60%);pointer-events:none"></div>
+  <div class="card-body p-4 d-flex align-items-center justify-content-between gap-3 flex-wrap" style="position:relative">
+    <div class="d-flex align-items-center gap-3">
+      <div style="width:48px;height:48px;background:rgba(99,102,241,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(99,102,241,0.35)">
+        <i class="bi bi-coin text-white" style="font-size:22px"></i>
+      </div>
       <div>
-        <div style="font-size:13px;font-weight:800;color:#0f172a">One-Time Credit Packs</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px">Buy once, use whenever — credits never expire or reset</div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4)">Current Balance</div>
+        <div style="font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.04em;line-height:1.1">{{ _cr }} <span style="font-size:14px;font-weight:500;color:rgba(255,255,255,0.5)">credit{{ 's' if _cr != 1 }}</span></div>
       </div>
-      <div style="font-size:10px;font-weight:700;background:#ede9fe;color:#6d28d9;padding:3px 10px;border-radius:6px;white-space:nowrap">No subscription</div>
     </div>
-
-    <!-- Pack table -->
-    <div style="padding:0">
-      <div style="display:grid;grid-template-columns:100px 90px 90px 90px 1fr;padding:8px 18px;background:#f8fafc;border-bottom:1px solid #f1f5f9">
-        {% for col in ["Credits","Price","Per report","Savings",""] %}
-        <div style="font-size:9px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.07em">{{ col }}</div>
-        {% endfor %}
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      {% if user.subscription_plan %}
+      <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3)">
+        <span style="width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:ss-pulse 2s infinite"></span>
+        <span class="fw-bold" style="font-size:12.5px;color:#6ee7b7">{{ 'Pro Plan' if user.subscription_plan=='pro_sub' else 'Starter Plan' }} Active</span>
       </div>
+      {% else %}
+      <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12)">
+        <span class="fw-semibold" style="font-size:12.5px;color:rgba(255,255,255,0.5)">{{ user.plan|capitalize }} Plan</span>
+      </div>
+      {% endif %}
+      <div style="font-size:11.5px;color:rgba(148,163,184,0.6)">{{ user.analyses_used }} analyses used</div>
+    </div>
+  </div>
+</div>
 
-      {% for pack, credits, price, per_credit, savings_pct, hot in [
-        ("starter",  10,  14.90, "1.49", 0,  false),
-        ("basic",    25,  27.90, "1.12", 25, false),
-        ("standard", 50,  54.90, "1.10", 26, true),
-        ("business", 100, 104.90,"1.05", 29, false),
-        ("growth",   250, 262.90,"1.05", 37, false),
-        ("scale",    500, 499.90,"1.00", 40, false),
-      ] %}
-      <div style="display:grid;grid-template-columns:100px 90px 90px 90px 1fr;padding:11px 18px;border-bottom:1px solid #f8fafc;align-items:center;
-        {% if hot %}background:linear-gradient(90deg,#fafbff,#fff){% endif %};transition:background 0.1s"
-        onmouseover="this.style.background='#fafbff'" onmouseout="this.style.background='{% if hot %}linear-gradient(90deg,#fafbff,#fff){% else %}transparent{% endif %}'">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="font-size:16px;font-weight:900;color:#0f172a;line-height:1">{{ credits }}</div>
-          <div style="font-size:10px;color:#94a3b8;font-weight:600">credits
-          {% if hot %}<br/><span style="background:linear-gradient(135deg,#6366f1,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800">★ Popular</span>{% endif %}</div>
-        </div>
-        <div style="font-size:14px;font-weight:800;color:#0f172a">${{ "%.2f"|format(price) }}</div>
-        <div style="font-size:13px;font-weight:700;color:{% if hot %}#6366f1{% else %}#0284c7{% endif %}">${{ per_credit }}</div>
+<div class="row g-4 au1">
+  <!-- LEFT: Credit packs table -->
+  <div class="col-lg-7">
+    <div class="card shadow-sm h-100" style="overflow:hidden">
+      <div class="card-header d-flex align-items-center justify-content-between">
         <div>
-          {% if savings_pct > 0 %}
-          <span style="background:#dcfce7;color:#15803d;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px">-{{ savings_pct }}%</span>
-          {% else %}
-          <span style="font-size:10px;color:#cbd5e1">—</span>
-          {% endif %}
+          <div class="fw-bold" style="color:#0f172a">One-Time Credit Packs</div>
+          <div class="text-muted small fw-normal">Buy once, use whenever — credits never expire</div>
         </div>
-        <div style="text-align:right">
-          <form method="POST" action="/billing/checkout" style="display:inline">
-            <input type="hidden" name="pack" value="{{ pack }}">
-            <button type="submit" style="font-size:11px;font-weight:800;padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s;
-              {% if hot %}background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;box-shadow:0 3px 12px rgba(99,102,241,0.3)
-              {% else %}background:#f1f5f9;color:#334155{% endif %}"
-              onmouseover="{% if not hot %}this.style.background='#e0e7ff';this.style.color='#4f46e5'{% endif %}"
-              onmouseout="{% if not hot %}this.style.background='#f1f5f9';this.style.color='#334155'{% endif %}">
-              Buy {{ credits }}
-            </button>
-          </form>
+        <span class="badge rounded-pill fw-semibold" style="font-size:10.5px;background:#ede9fe;color:#6d28d9">No subscription</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Pack</th>
+              <th class="text-end">Price</th>
+              <th class="text-end">Per report</th>
+              <th class="text-center">Savings</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pack, credits, price, per, savings, hot in [
+              ("starter",  10,  14.90, "1.49", 0,  False),
+              ("basic",    25,  27.90, "1.12", 25, False),
+              ("standard", 50,  54.90, "1.10", 26, True),
+              ("business", 100, 104.90,"1.05", 29, False),
+              ("growth",   250, 262.90,"1.05", 37, False),
+              ("scale",    500, 499.90,"1.00", 40, False),
+            ] %}
+            <tr style="{% if hot %}background:linear-gradient(90deg,#fafbff,#fff){% endif %}">
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-bold" style="font-size:16px;color:#0f172a">{{ credits }}</span>
+                  <span class="text-muted small fw-medium">credits{% if hot %}<br><span class="badge rounded-pill fw-bold" style="font-size:9px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff">★ Popular</span>{% endif %}</span>
+                </div>
+              </td>
+              <td class="text-end fw-bold" style="font-size:15px;color:#0f172a">${{ "%.2f"|format(price) }}</td>
+              <td class="text-end fw-semibold" style="font-size:13.5px;color:{% if hot %}#6366f1{% else %}#0284c7{% endif %}">${{ per }}</td>
+              <td class="text-center">
+                {% if savings > 0 %}
+                <span class="badge rounded-pill fw-bold" style="font-size:10px;background:#dcfce7;color:#15803d">-{{ savings }}%</span>
+                {% else %}<span class="text-muted">—</span>{% endif %}
+              </td>
+              <td class="text-end">
+                <form method="POST" action="/billing/checkout" class="d-inline">
+                  <input type="hidden" name="pack" value="{{ pack }}">
+                  <button type="submit" class="btn btn-sm fw-semibold {% if hot %}btn-primary{% else %}btn-outline-secondary{% endif %}" style="border-radius:8px;padding:5px 16px;font-size:12px">
+                    Buy {{ credits }}
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer py-2 px-3">
+        <div class="d-flex flex-wrap gap-3">
+          {% for t in ["Credits stack & never expire","Instant activation","Refund within 14 days"] %}
+          <div class="d-flex align-items-center gap-1 text-muted" style="font-size:11.5px">
+            <i class="bi bi-check-circle-fill text-success" style="font-size:11px"></i> {{ t }}
+          </div>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
-    </div>
-
-    <div style="padding:10px 18px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;align-items:center;gap:16px">
-      {% for t in ["Credits stack &amp; never expire","Instant activation","Refund within 14 days"] %}
-      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b">
-        <svg style="width:11px;height:11px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-        {{ t }}
-      </div>
-      {% endfor %}
     </div>
   </div>
 
-  <!-- RIGHT: Subscriptions + info -->
-  <div style="display:flex;flex-direction:column;gap:12px">
+  <!-- RIGHT: Subscriptions + compare -->
+  <div class="col-lg-5 d-flex flex-column gap-4">
 
     <!-- Subscription cards -->
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:13px;font-weight:800;color:#0f172a">Monthly Plans</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:1px">Credits refill every month · Cancel any time</div>
+    <div class="card shadow-sm" style="overflow:hidden">
+      <div class="card-header">
+        <div class="fw-bold" style="color:#0f172a">Monthly Plans</div>
+        <div class="text-muted small fw-normal">Credits refill monthly · Cancel any time</div>
       </div>
 
-      <!-- Starter sub -->
-      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <!-- Starter -->
+      <div class="p-4" style="border-bottom:1px solid #e8ecf0">
+        <div class="d-flex align-items-start justify-content-between mb-3">
           <div>
-            <div style="font-size:12px;font-weight:800;color:#0f172a">Starter</div>
-            <div style="font-size:10px;color:#94a3b8;margin-top:1px">50 credits/mo · $0.98 each</div>
+            <div class="fw-bold" style="font-size:14px;color:#0f172a">Starter</div>
+            <div class="text-muted small">50 credits/mo · $0.98 each</div>
           </div>
-          <div style="text-align:right">
-            <div style="font-size:18px;font-weight:900;color:#0f172a;line-height:1">$49</div>
-            <div style="font-size:10px;color:#94a3b8">/month</div>
+          <div class="text-end">
+            <div class="fw-bold" style="font-size:22px;color:#0f172a;letter-spacing:-0.04em;line-height:1">$49</div>
+            <div class="text-muted small">/month</div>
           </div>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <div class="d-flex gap-2 flex-wrap mb-3">
           {% for f in ["50 credits/mo","Roll over","Cancel any time"] %}
-          <span style="font-size:10px;font-weight:600;background:#f0f9ff;color:#0369a1;padding:2px 8px;border-radius:5px">{{ f }}</span>
+          <span class="badge rounded-pill fw-semibold" style="font-size:10.5px;background:#f0f9ff;color:#0369a1">{{ f }}</span>
           {% endfor %}
         </div>
         <form method="POST" action="/billing/subscribe">
           <input type="hidden" name="plan" value="starter_sub">
-          <button type="submit" style="width:100%;padding:9px;border-radius:9px;font-size:12px;font-weight:800;background:#f1f5f9;color:#334155;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s"
-            onmouseover="this.style.background='#e0e7ff';this.style.color='#4f46e5'"
-            onmouseout="this.style.background='#f1f5f9';this.style.color='#334155'">
-            Subscribe $49/mo →
-          </button>
+          <button type="submit" class="btn btn-outline-secondary w-100 fw-semibold" style="border-radius:9px">Subscribe $49/mo →</button>
         </form>
       </div>
 
-      <!-- Pro sub -->
-      <div style="padding:14px 16px;background:linear-gradient(135deg,#fafbff,#f5f3ff)">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <!-- Pro -->
+      <div class="p-4" style="background:linear-gradient(135deg,#fafbff,#f5f3ff)">
+        <div class="d-flex align-items-start justify-content-between mb-3">
           <div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:12px;font-weight:800;color:#0f172a">Pro</span>
-              <span style="font-size:9px;font-weight:900;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:2px 7px;border-radius:4px;letter-spacing:0.04em">BEST VALUE</span>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="fw-bold" style="font-size:14px;color:#0f172a">Pro</span>
+              <span class="badge fw-bold" style="font-size:9.5px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;letter-spacing:0.04em">BEST VALUE</span>
             </div>
-            <div style="font-size:10px;color:#94a3b8;margin-top:1px">250 credits/mo · $0.60 each</div>
+            <div class="text-muted small">250 credits/mo · $0.60 each</div>
           </div>
-          <div style="text-align:right">
-            <div style="font-size:18px;font-weight:900;color:#0f172a;line-height:1">$149</div>
-            <div style="font-size:10px;color:#94a3b8">/month</div>
+          <div class="text-end">
+            <div class="fw-bold" style="font-size:22px;color:#0f172a;letter-spacing:-0.04em;line-height:1">$149</div>
+            <div class="text-muted small">/month</div>
           </div>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <div class="d-flex gap-2 flex-wrap mb-3">
           {% for f in ["250 credits/mo","Roll over","Priority support","Cancel any time"] %}
-          <span style="font-size:10px;font-weight:600;background:#ede9fe;color:#6d28d9;padding:2px 8px;border-radius:5px">{{ f }}</span>
+          <span class="badge rounded-pill fw-semibold" style="font-size:10.5px;background:#ede9fe;color:#6d28d9">{{ f }}</span>
           {% endfor %}
         </div>
         <form method="POST" action="/billing/subscribe">
           <input type="hidden" name="plan" value="pro_sub">
-          <button type="submit" style="width:100%;padding:9px;border-radius:9px;font-size:12px;font-weight:800;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(99,102,241,0.3);transition:all 0.15s"
-            onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-            Subscribe $149/mo →
-          </button>
+          <button type="submit" class="btn btn-primary w-100 fw-semibold" style="border-radius:9px;box-shadow:0 4px 14px rgba(99,102,241,0.3)">Subscribe $149/mo →</button>
         </form>
       </div>
     </div>
 
-    <!-- Compare packs vs sub -->
-    <div class="card" style="padding:14px 16px">
-      <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px">Credits vs Subscription</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        {% for icon, label, rec in [
-          ("💳","Occasional use (1–15/mo)","Buy a pack"),
-          ("📅","Regular use (16–50/mo)","Starter plan"),
-          ("🚀","High volume (50+/mo)","Pro plan"),
+    <!-- Pack vs sub guide -->
+    <div class="card shadow-sm">
+      <div class="card-header"><i class="bi bi-compass-fill text-primary me-2"></i>Which option fits you?</div>
+      <div class="list-group list-group-flush">
+        {% for icon, label, rec, col in [
+          ("bi-credit-card","Occasional (1–15/mo)","Buy a pack","#6366f1"),
+          ("bi-calendar-month","Regular (16–50/mo)","Starter plan","#0284c7"),
+          ("bi-rocket-takeoff-fill","High volume (50+/mo)","Pro plan","#22c55e"),
         ] %}
-        <div style="display:flex;align-items:center;gap:8px;font-size:11px">
-          <span style="font-size:13px">{{ icon }}</span>
-          <span style="color:#64748b;flex:1">{{ label }}</span>
-          <span style="font-weight:700;color:#6366f1">{{ rec }}</span>
+        <div class="list-group-item d-flex align-items-center gap-3 py-3 px-4">
+          <i class="bi {{ icon }} text-muted" style="font-size:15px;flex-shrink:0"></i>
+          <span class="text-muted flex-grow-1" style="font-size:13px">{{ label }}</span>
+          <span class="fw-bold" style="font-size:13px;color:{{ col }}">{{ rec }}</span>
         </div>
         {% endfor %}
       </div>
     </div>
 
-    <!-- Security note -->
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px">
-      <div style="display:flex;gap:6px;flex-direction:column">
-        {% for icon, text in [
-          ("🔒","Payments via Stripe — card never stored here"),
-          ("🗑️","PDFs deleted within 24h of upload"),
-          ("🔁","Refund unused credits within 14 days"),
-        ] %}
-        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#64748b">
-          <span>{{ icon }}</span>{{ text }}
+    <!-- Security trust badges -->
+    <div class="card shadow-sm">
+      <div class="card-body p-3">
+        <div class="d-flex flex-column gap-2">
+          {% for icon, text in [
+            ("bi-lock-fill","Payments via Stripe — card never stored here"),
+            ("bi-trash3-fill","PDFs deleted within 24h of upload"),
+            ("bi-arrow-counterclockwise","Refund unused credits within 14 days"),
+          ] %}
+          <div class="d-flex align-items-center gap-2 text-muted" style="font-size:12.5px">
+            <i class="bi {{ icon }} text-primary flex-shrink-0" style="font-size:13px"></i> {{ text }}
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </div>
 
   </div>
 </div>
 
+<style>
+@keyframes ss-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+</style>
 {% endblock %}
