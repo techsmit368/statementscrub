@@ -20,7 +20,7 @@ class LenderRequirementSchema(BaseModel):
     id: int
     lender_id: int
     allow_industry: Optional[str]
-    allow_state: Optional[dict]
+    allow_state: Optional[ListType[str]]
     time_in_business: int
     min_deposit: int
     min_avg_deposit: int
@@ -64,7 +64,7 @@ def get_lenders_by_grade(grade: str, db: Session = Depends(get_db)):
     """Get lenders by grade (A, B, C, D)"""
     lenders = db.query(LenderInfo).filter(
         LenderInfo.status == 1,
-        LenderInfo.grade == grade.upper()
+        LenderInfo.grade == grade.lower()
     ).all()
     return lenders
 
