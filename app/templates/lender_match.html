@@ -1,0 +1,362 @@
+{% extends "base_app.html" %}
+{% block title %}Find Matching Lenders — StatementScrub{% endblock %}
+
+{% block head %}
+<style>
+  .grade-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px;
+    font-size: 13px; font-weight: 900; flex-shrink: 0;
+  }
+  .grade-A { background: #dcfce7; color: #15803d; }
+  .grade-B { background: #dbeafe; color: #1d4ed8; }
+  .grade-C { background: #fef9c3; color: #854d0e; }
+  .grade-D { background: #fee2e2; color: #b91c1c; }
+
+  .lender-card {
+    border: 1px solid #e8ecf0; border-radius: 12px; background: #fff;
+    padding: 16px 18px; transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .lender-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-1px); }
+
+  .grade-section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #f1f4f9;
+  }
+  .criteria-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+    background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;
+  }
+  .fail-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+    background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;
+  }
+  .result-count-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 22px; height: 22px; border-radius: 20px; font-size: 11px; font-weight: 800;
+    padding: 0 6px;
+  }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #6366f1; text-decoration: none; font-weight: 600;
+  }
+  .contact-link:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="au">
+
+  <!-- Page header -->
+  <div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-2">
+    <div>
+      <h4 class="fw-900 mb-1" style="font-size:1.35rem;color:#0f172a;font-weight:900;letter-spacing:-0.03em">
+        <i class="bi bi-lightning-charge-fill me-2" style="color:#22c55e"></i>Find Matching Lenders
+      </h4>
+      <p class="text-muted mb-0" style="font-size:13px">
+        Enter merchant criteria to instantly see which lenders qualify — filtered by grade, state, industry, and financial requirements.
+      </p>
+    </div>
+    {% if results %}
+    <div class="text-end">
+      <div style="font-size:2rem;font-weight:900;color:#22c55e;line-height:1;letter-spacing:-0.04em">{{ results.total_matched }}</div>
+      <div style="font-size:11px;color:#64748b;font-weight:600">of {{ results.total_lenders_checked }} lenders qualify</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row g-4">
+
+    <!-- ── FORM ── -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm sticky-top" style="top:72px">
+        <div class="card-header d-flex align-items-center gap-2">
+          <i class="bi bi-sliders2 text-primary"></i> Merchant Criteria
+        </div>
+        <form method="POST" action="/lender-match" class="card-body" style="font-size:13px">
+
+          <!-- Industry -->
+          <div class="mb-3">
+            <label class="form-label">Business Industry <span class="text-danger">*</span></label>
+            <select name="industry" class="form-select form-select-sm" required>
+              <option value="">— Select Industry —</option>
+              {% for ind in industries %}
+              <option value="{{ ind }}" {% if prefill.get('industry','').upper() == ind %}selected{% endif %}>{{ ind | title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- State -->
+          <div class="mb-3">
+            <label class="form-label">Business State <span class="text-danger">*</span></label>
+            <select name="state" class="form-select form-select-sm" required>
+              <option value="">— Select State —</option>
+              {% for code, name in states %}
+              <option value="{{ code }}" {% if prefill.get('state','') == code %}selected{% endif %}>{{ code }} — {{ name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="divider my-3"></div>
+          <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Financial Data (from bank statements)</div>
+
+          <!-- Avg Monthly Deposits -->
+          <div class="mb-3">
+            <label class="form-label">Avg Monthly Deposits ($)</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">$</span>
+              <input type="number" name="avg_monthly_deposits" class="form-control"
+                value="{{ prefill.get('avg_monthly_deposits', '') }}" placeholder="e.g. 25000" min="0">
+            </div>
+          </div>
+
+          <!-- Avg Daily Balance -->
+          <div class="mb-3">
+            <label class="form-label">Avg Daily Balance ($)</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">$</span>
+              <input type="number" name="avg_daily_balance" class="form-control"
+                value="{{ prefill.get('avg_daily_balance', '') }}" placeholder="e.g. 5000" min="0">
+            </div>
+          </div>
+
+          <!-- NSF Count -->
+          <div class="mb-3">
+            <label class="form-label">NSF / Negative Days Count</label>
+            <input type="number" name="nsf_count" class="form-control form-control-sm"
+              value="{{ prefill.get('nsf_count', 0) }}" placeholder="0" min="0">
+          </div>
+
+          <div class="divider my-3"></div>
+          <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Merchant Background</div>
+
+          <!-- Time in Business -->
+          <div class="mb-3">
+            <label class="form-label">Time in Business (months)</label>
+            <input type="number" name="time_in_business" class="form-control form-control-sm"
+              value="{{ prefill.get('time_in_business', 12) }}" placeholder="12" min="0">
+            <div class="form-text">e.g. 12 = 1 year, 24 = 2 years</div>
+          </div>
+
+          <!-- Current Positions -->
+          <div class="mb-3">
+            <label class="form-label">Current MCA Positions</label>
+            <input type="number" name="current_positions" class="form-control form-control-sm"
+              value="{{ prefill.get('current_positions', 0) }}" placeholder="0" min="0">
+            <div class="form-text">Number of active MCA/cash advance loans</div>
+          </div>
+
+          <!-- Credit Score -->
+          <div class="mb-3">
+            <label class="form-label">Credit Score <span class="text-muted">(optional)</span></label>
+            <input type="number" name="credit_score" class="form-control form-control-sm"
+              value="{{ prefill.get('credit_score', '') }}" placeholder="e.g. 600" min="0" max="850">
+          </div>
+
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-primary fw-700">
+              <i class="bi bi-lightning-charge-fill me-1"></i> Find Matching Lenders
+            </button>
+          </div>
+
+          {% if prefill.get('account_holder') %}
+          <div class="mt-3 p-2 rounded" style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:11.5px;color:#15803d">
+            <i class="bi bi-check-circle-fill me-1"></i> Pre-filled from: <strong>{{ prefill.account_holder }}</strong>
+          </div>
+          {% endif %}
+
+        </form>
+      </div>
+    </div>
+
+    <!-- ── RESULTS ── -->
+    <div class="col-lg-8">
+
+      {% if results is none %}
+      <!-- Empty state -->
+      <div class="card shadow-sm h-100 d-flex align-items-center justify-content-center" style="min-height:400px">
+        <div class="text-center p-5">
+          <div style="width:80px;height:80px;background:#f0fdf4;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+            <i class="bi bi-lightning-charge-fill" style="font-size:36px;color:#22c55e"></i>
+          </div>
+          <h5 class="fw-800 mb-2" style="color:#0f172a">Enter Criteria to Match Lenders</h5>
+          <p class="text-muted mb-0" style="font-size:13px;max-width:320px;margin:0 auto">
+            Fill in the merchant's financial data and business info on the left. We'll match them against {{ "435" }} active lenders instantly.
+          </p>
+        </div>
+      </div>
+
+      {% elif results.total_matched == 0 %}
+      <!-- No matches -->
+      <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+          <div style="width:70px;height:70px;background:#fef2f2;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+            <i class="bi bi-x-circle-fill" style="font-size:32px;color:#ef4444"></i>
+          </div>
+          <h5 class="fw-800 mb-1" style="color:#0f172a">No Qualifying Lenders Found</h5>
+          <p class="text-muted mb-4" style="font-size:13px">
+            No lenders match all criteria. Try relaxing some filters — more deposits, fewer NSFs, or a different state.
+          </p>
+          {% if results.declined_sample %}
+          <div class="text-start mt-3">
+            <div style="font-size:11px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Why lenders declined (sample):</div>
+            {% for lender in results.declined_sample[:5] %}
+            <div class="d-flex align-items-start gap-2 mb-2 p-2 rounded" style="background:#fafafa;border:1px solid #f0f0f0">
+              <span class="grade-badge grade-{{ lender.grade }}">{{ lender.grade }}</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#0f172a">{{ lender.lender_name }}</div>
+                {% for reason in lender.fail_reasons[:2] %}
+                <span class="fail-pill me-1 mt-1">{{ reason }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% else %}
+      <!-- Matched lenders -->
+
+      <!-- Summary bar -->
+      <div class="card shadow-sm mb-3">
+        <div class="card-body py-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            {% set grade_colors = {'A': '#15803d', 'B': '#1d4ed8', 'C': '#854d0e', 'D': '#b91c1c'} %}
+            {% set grade_bg = {'A': '#dcfce7', 'B': '#dbeafe', 'C': '#fef9c3', 'D': '#fee2e2'} %}
+            {% for g in ['A','B','C','D'] %}
+            {% if results.by_grade[g] %}
+            <div class="d-flex align-items-center gap-1">
+              <span class="grade-badge grade-{{ g }}">{{ g }}</span>
+              <span style="font-size:13px;font-weight:800;color:{{ grade_colors[g] }}">{{ results.by_grade[g] | length }}</span>
+              <span style="font-size:11px;color:#94a3b8;font-weight:600">lenders</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div style="font-size:12px;color:#64748b">
+            Checked <strong>{{ results.total_lenders_checked }}</strong> lenders · <strong style="color:#22c55e">{{ results.total_matched }}</strong> qualify
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade sections -->
+      {% for grade in ['A','B','C','D'] %}
+      {% set lenders = results.by_grade[grade] %}
+      {% if lenders %}
+
+      <div class="grade-section-header au au{{ loop.index }}">
+        <span class="grade-badge grade-{{ grade }}" style="width:32px;height:32px;font-size:15px">{{ grade }}</span>
+        <div>
+          <span style="font-size:14px;font-weight:800;color:#0f172a">Grade {{ grade }} Lenders</span>
+          <span class="ms-2" style="font-size:12px;color:#64748b">{{ lenders | length }} qualifying</span>
+        </div>
+        {% if grade == 'A' %}
+        <span style="font-size:10px;background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;border-radius:20px;padding:2px 9px;font-weight:800">BEST QUALITY</span>
+        {% elif grade == 'B' %}
+        <span style="font-size:10px;background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:20px;padding:2px 9px;font-weight:800">SOLID TERMS</span>
+        {% elif grade == 'C' %}
+        <span style="font-size:10px;background:#fef9c3;color:#854d0e;border:1px solid #fde047;border-radius:20px;padding:2px 9px;font-weight:800">ALTERNATIVE</span>
+        {% elif grade == 'D' %}
+        <span style="font-size:10px;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;border-radius:20px;padding:2px 9px;font-weight:800">LAST RESORT</span>
+        {% endif %}
+      </div>
+
+      <div class="row g-2 mb-2">
+        {% for lender in lenders %}
+        <div class="col-12">
+          <div class="lender-card">
+            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+
+              <!-- Left: Name + contacts -->
+              <div class="d-flex align-items-start gap-3 flex-grow-1">
+                <span class="grade-badge grade-{{ grade }}" style="margin-top:2px">{{ grade }}</span>
+                <div>
+                  <div style="font-size:14px;font-weight:800;color:#0f172a;line-height:1.2">
+                    {{ lender.lender_name }}
+                    {% if lender.lender_code %}
+                    <span style="font-size:10px;font-weight:700;color:#94a3b8;margin-left:5px">[{{ lender.lender_code }}]</span>
+                    {% endif %}
+                  </div>
+
+                  <!-- Contact info -->
+                  <div class="d-flex flex-wrap gap-2 mt-1">
+                    {% if lender.email_1 %}
+                    <a href="mailto:{{ lender.email_1 }}" class="contact-link">
+                      <i class="bi bi-envelope-fill" style="font-size:11px"></i>{{ lender.email_1 }}
+                    </a>
+                    {% endif %}
+                    {% if lender.email_2 and lender.email_2 != lender.email_1 %}
+                    <a href="mailto:{{ lender.email_2 }}" class="contact-link">
+                      <i class="bi bi-envelope" style="font-size:11px"></i>{{ lender.email_2 }}
+                    </a>
+                    {% endif %}
+                    {% if lender.phone_1 %}
+                    <a href="tel:{{ lender.phone_1 }}" class="contact-link">
+                      <i class="bi bi-telephone-fill" style="font-size:11px;color:#16a34a"></i>
+                      <span style="color:#16a34a">{{ lender.phone_1 }}</span>
+                    </a>
+                    {% endif %}
+                  </div>
+
+                  <!-- Notes/rep -->
+                  {% if lender.isorep %}
+                  <div class="mt-1" style="font-size:11.5px;color:#64748b">
+                    <i class="bi bi-person-fill me-1"></i>Rep: <strong>{{ lender.isorep }}</strong>
+                  </div>
+                  {% endif %}
+                  {% if lender.notes and lender.notes.strip() and lender.notes.strip() not in ['', 'N/A'] %}
+                  <div class="mt-1" style="font-size:11px;color:#94a3b8;max-width:420px">
+                    <i class="bi bi-info-circle me-1"></i>{{ lender.notes[:120] }}{% if lender.notes|length > 120 %}…{% endif %}
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Right: Advance + link -->
+              <div class="text-end flex-shrink-0">
+                {% if lender.advance_amount and lender.advance_amount > 0 %}
+                <div style="font-size:13px;font-weight:800;color:#0f172a">
+                  Up to ${{ "{:,.0f}".format(lender.advance_amount) }}
+                </div>
+                <div style="font-size:10px;color:#94a3b8;font-weight:600">Max advance</div>
+                {% endif %}
+                {% if lender.Web_link %}
+                <a href="{{ lender.Web_link }}" target="_blank" class="btn btn-outline-primary btn-sm mt-2" style="font-size:11px;padding:3px 10px">
+                  <i class="bi bi-box-arrow-up-right me-1"></i>Portal
+                </a>
+                {% endif %}
+              </div>
+
+            </div>
+
+            <!-- Tags row -->
+            <div class="d-flex flex-wrap gap-1 mt-2">
+              <span class="criteria-pill"><i class="bi bi-check-lg"></i> Qualifies</span>
+              {% if lender.consolidation and lender.consolidation not in ['No', '', 'N\\A'] %}
+              <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#faf5ff;color:#7c3aed;border:1px solid #e9d5ff">
+                <i class="bi bi-layers-fill me-1"></i>Consolidation
+              </span>
+              {% endif %}
+              {% if lender.default_on_advance and lender.default_on_advance not in ['No', 'N\\A', '', 'N/A'] %}
+              <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa">
+                Default OK
+              </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endfor %}
+
+      {% endif %} {# end results check #}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
