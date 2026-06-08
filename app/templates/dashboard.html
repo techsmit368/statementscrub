@@ -1,12 +1,16 @@
 {% extends "base_app.html" %}
 {% block title %}Dashboard — StatementScrub{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
-{% block page_subtitle %}{{ merchants | length }} merchant{{ 's' if merchants | length != 1 }} · {{ (merchants | sum(attribute='count')) if merchants else 0 }} total statements{% endblock %}
+{% block page_subtitle %}
+  {%- if merchants -%}
+    {{ merchants|length }} merchant{{ 's' if merchants|length != 1 }} · {{ merchants|sum(attribute='count') }} statement{{ 's' if merchants|sum(attribute='count') != 1 }}
+  {%- else -%}Welcome back, {{ (user.full_name or user.email).split(' ')[0] }}{%- endif -%}
+{% endblock %}
 
 {% block topbar_actions %}
 <label for="fileInputBatch" style="cursor:pointer">
-  <div class="btn-ghost" style="padding:7px 12px;font-size:12px">
-    <svg style="width:13px;height:13px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+  <div class="btn btn-secondary" style="padding:7px 13px;font-size:12.5px">
+    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
     Batch Upload
   </div>
 </label>
@@ -23,264 +27,355 @@
 </form>
 
 <!-- Upload overlay -->
-<div id="uploadingOverlay" style="display:none;background:#fff;border:1px solid #e0e7ff;border-radius:16px;padding:36px;text-align:center;margin-bottom:20px;box-shadow:0 4px 24px rgba(99,102,241,0.1)">
+<div id="uploadingOverlay" style="display:none;background:#fff;border:1px solid #e0e7ff;border-radius:14px;padding:32px;text-align:center;margin-bottom:20px;box-shadow:0 4px 24px rgba(99,102,241,0.1)">
   <div class="spinner" style="margin:0 auto 14px"></div>
-  <div id="overlayTitle" style="font-size:14px;font-weight:800;color:#0f172a;margin-bottom:4px">Analyzing statement…</div>
-  <div id="overlaySubtitle" style="font-size:12px;color:#64748b;margin-bottom:16px">Reading transactions, calculating income, detecting risk flags</div>
-  <div style="display:inline-flex;gap:0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
-    {% for step in ["Reading PDF","Processing","Building Report"] %}
-    <div class="upload-step" style="padding:8px 16px;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:5px;font-weight:600;{% if not loop.last %}border-right:1px solid #e2e8f0{% endif %}">
-      <span class="step-dot" style="width:6px;height:6px;background:#e2e8f0;border-radius:50%;display:inline-block;flex-shrink:0"></span>{{ step }}
+  <div id="overlayTitle" style="font-size:14px;font-weight:800;color:var(--text-1);margin-bottom:4px">Analyzing statement…</div>
+  <div id="overlaySubtitle" style="font-size:12px;color:var(--text-3);margin-bottom:16px">Reading transactions, calculating income, detecting risk flags</div>
+  <div style="display:inline-flex;gap:0;background:#f8fafc;border:1px solid var(--border);border-radius:9px;overflow:hidden">
+    {% for step in ["Reading PDF","Processing Data","Building Report"] %}
+    <div class="upload-step" style="padding:7px 16px;font-size:11.5px;color:var(--text-3);display:flex;align-items:center;gap:5px;font-weight:600;{% if not loop.last %}border-right:1px solid var(--border){% endif %}">
+      <span class="step-dot" style="width:6px;height:6px;background:#e2e8f0;border-radius:50%;display:inline-block"></span>{{ step }}
     </div>
     {% endfor %}
   </div>
 </div>
 
-<!-- Banners -->
+<!-- Alerts -->
 {% if request.query_params.get('batch_done') %}
-<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#15803d">
-  <svg style="width:14px;height:14px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-  Batch complete — {{ request.query_params.get('batch_done') }} statements analyzed{% if request.query_params.get('batch_failed') and request.query_params.get('batch_failed') != '0' %}, {{ request.query_params.get('batch_failed') }} skipped{% endif %}.
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#16a34a">
+  <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+  Batch complete — {{ request.query_params.get('batch_done') }} statement{{ 's' if request.query_params.get('batch_done') != '1' }} analyzed.
 </div>
 {% endif %}
-
 {% if error %}
 <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:10px;margin-bottom:16px;font-size:13px;display:flex;align-items:center;gap:8px">
-  <svg style="width:14px;height:14px;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+  <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
   {{ error }}
 </div>
 {% endif %}
 
-<!-- Credit banners -->
+<!-- Credit alert banners -->
 {% set _cr = user.credits or 0 %}
 {% if _cr == 0 and user.plan == 'free' and user.analyses_used >= 3 %}
-<div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:1px solid #fecaca;border-radius:12px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+<div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:1px solid #fecaca;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
   <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:32px;height:32px;background:#fee2e2;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <svg style="width:15px;height:15px;color:#dc2626" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:800;color:#991b1b">Out of credits — uploads paused</div>
-      <div style="font-size:11px;color:#b91c1c;margin-top:1px">All 3 free analyses used. Buy a credit pack to continue.</div>
-    </div>
+    <div style="width:32px;height:32px;background:#fee2e2;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" fill="currentColor" viewBox="0 0 20 20" style="color:#dc2626"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
+    <div><div style="font-size:13px;font-weight:800;color:#991b1b">Out of credits — uploads paused</div><div style="font-size:11.5px;color:#b91c1c;margin-top:1px">All 3 free analyses used. Buy a credit pack to continue.</div></div>
   </div>
-  <a href="/credits" style="font-size:12px;font-weight:800;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:8px 18px;border-radius:9px;text-decoration:none;white-space:nowrap">Buy Credits →</a>
+  <a href="/credits" style="font-size:12.5px;font-weight:700;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:8px 18px;border-radius:8px;text-decoration:none">Buy Credits →</a>
 </div>
 {% elif _cr == 1 %}
-<div style="background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1px solid #fed7aa;border-radius:12px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-  <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:32px;height:32px;background:#ffedd5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <svg style="width:15px;height:15px;color:#ea580c" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:800;color:#9a3412">1 credit remaining</div>
-      <div style="font-size:11px;color:#c2410c;margin-top:1px">Top up now so you don't get interrupted mid-workflow.</div>
-    </div>
+<div style="background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1px solid #fed7aa;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;background:#ffedd5;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" fill="currentColor" viewBox="0 0 20 20" style="color:#ea580c"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
+    <div><div style="font-size:13px;font-weight:800;color:#9a3412">1 credit remaining</div><div style="font-size:11.5px;color:#c2410c;margin-top:1px">Top up now so you don't get interrupted mid-workflow.</div></div>
   </div>
-  <a href="/credits" style="font-size:12px;font-weight:800;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;padding:8px 18px;border-radius:9px;text-decoration:none;white-space:nowrap">Top Up →</a>
+  <a href="/credits" style="font-size:12.5px;font-weight:700;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;padding:8px 18px;border-radius:8px;text-decoration:none">Top Up →</a>
 </div>
 {% elif _cr == 2 %}
-<div style="background:linear-gradient(135deg,#fefce8,#fff7ed);border:1px solid #fde68a;border-radius:12px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-  <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:32px;height:32px;background:#fef9c3;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <svg style="width:15px;height:15px;color:#ca8a04" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:800;color:#92400e">2 credits remaining</div>
-      <div style="font-size:11px;color:#a16207;margin-top:1px">Running low — consider topping up before you run out.</div>
-    </div>
+<div style="background:linear-gradient(135deg,#fefce8,#fff7ed);border:1px solid #fde68a;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;background:#fef9c3;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" fill="currentColor" viewBox="0 0 20 20" style="color:#ca8a04"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
+    <div><div style="font-size:13px;font-weight:800;color:#92400e">2 credits remaining</div><div style="font-size:11.5px;color:#a16207;margin-top:1px">Running low — consider topping up before you run out.</div></div>
   </div>
-  <a href="/credits" style="font-size:12px;font-weight:700;background:#fef9c3;border:1px solid #fde68a;color:#92400e;padding:8px 18px;border-radius:9px;text-decoration:none;white-space:nowrap">Buy More →</a>
+  <a href="/credits" style="font-size:12.5px;font-weight:700;background:#fef9c3;border:1.5px solid #fde68a;color:#92400e;padding:8px 18px;border-radius:8px;text-decoration:none">Buy More →</a>
 </div>
 {% endif %}
 
 {% if merchants %}
-{% set total_statements = merchants | sum(attribute='count') %}
-{% set total_nsf = merchants | sum(attribute='total_nsf') %}
-{% set avg_income_all = (merchants | sum(attribute='avg_deposits')) / (merchants | length) %}
-{% set high_risk_count = merchants | selectattr('latest_risk', 'in', ['high', 'critical']) | list | length %}
+{% set total_statements = merchants|sum(attribute='count') %}
+{% set total_nsf = merchants|sum(attribute='total_nsf') %}
+{% set avg_income_all = (merchants|sum(attribute='avg_deposits')) / (merchants|length) %}
+{% set high_risk_count = merchants|selectattr('latest_risk','in',['high','critical'])|list|length %}
+{% set approve_count = merchants|selectattr('latest_rec','equalto','approve')|list|length %}
 
-<!-- ── STATS ROW ── -->
-<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px" class="animate-up">
-  {% for icon, label, value, col, bg in [
-    ("🏢", "Merchants",     merchants | length | string,                "#6366f1", "#f5f3ff"),
-    ("📄", "Statements",    total_statements | string,                  "#0284c7", "#f0f9ff"),
-    ("💰", "Avg Income",    "$" ~ "{:,.0f}".format(avg_income_all),    "#15803d", "#f0fdf4"),
-    ("⚡", "NSF Total",     total_nsf | string,                         "#dc2626" if total_nsf > 0 else "#15803d", "#fef2f2" if total_nsf > 0 else "#f0fdf4"),
-    ("⚠️", "High Risk",    high_risk_count | string,                   "#c2410c" if high_risk_count > 0 else "#15803d", "#fff7ed" if high_risk_count > 0 else "#f0fdf4"),
-  ] %}
-  <div class="stat-card">
-    <div class="stat-icon" style="background:{{ bg }}">{{ icon }}</div>
-    <div>
-      <div class="stat-label">{{ label }}</div>
-      <div class="stat-value" style="color:{{ col }}">{{ value }}</div>
+<!-- ── METRIC CARDS ── -->
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px">
+
+  <div class="metric-card au" style="--accent-line:linear-gradient(90deg,#6366f1,#8b5cf6)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="metric-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);box-shadow:0 4px 12px rgba(99,102,241,0.28)">
+        <svg width="18" height="18" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;background:#eef2ff;color:#6366f1;padding:3px 9px;border-radius:6px;letter-spacing:0">Active</span>
     </div>
+    <div class="metric-num">{{ merchants|length }}</div>
+    <div class="metric-label">Merchants</div>
   </div>
-  {% endfor %}
+
+  <div class="metric-card au au-1" style="--accent-line:linear-gradient(90deg,#0ea5e9,#38bdf8)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="metric-icon" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8);box-shadow:0 4px 12px rgba(14,165,233,0.28)">
+        <svg width="18" height="18" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;background:#f0f9ff;color:#0284c7;padding:3px 9px;border-radius:6px">Total</span>
+    </div>
+    <div class="metric-num">{{ total_statements }}</div>
+    <div class="metric-label">Statements</div>
+  </div>
+
+  <div class="metric-card au au-1" style="--accent-line:linear-gradient(90deg,#10b981,#34d399)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="metric-icon" style="background:linear-gradient(135deg,#10b981,#34d399);box-shadow:0 4px 12px rgba(16,185,129,0.28)">
+        <svg width="18" height="18" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;background:#f0fdf4;color:#16a34a;padding:3px 9px;border-radius:6px">Avg /mo</span>
+    </div>
+    <div class="metric-num" style="font-size:1.5rem">${{ "{:,.0f}".format(avg_income_all) }}</div>
+    <div class="metric-label">Avg Income</div>
+  </div>
+
+  <div class="metric-card au au-2" style="--accent-line:{{ 'linear-gradient(90deg,#ef4444,#f97316)' if total_nsf > 0 else 'linear-gradient(90deg,#10b981,#34d399)' }}">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="metric-icon" style="background:{{ 'linear-gradient(135deg,#ef4444,#f97316);box-shadow:0 4px 12px rgba(239,68,68,0.28)' if total_nsf > 0 else 'linear-gradient(135deg,#10b981,#34d399);box-shadow:0 4px 12px rgba(16,185,129,0.28)' }}">
+        <svg width="18" height="18" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;{{ 'background:#fef2f2;color:#dc2626' if total_nsf > 0 else 'background:#f0fdf4;color:#16a34a' }}">{{ 'Issues' if total_nsf > 0 else 'Clean' }}</span>
+    </div>
+    <div class="metric-num" style="{{ 'color:#dc2626' if total_nsf > 0 else '' }}">{{ total_nsf }}</div>
+    <div class="metric-label">NSF Count</div>
+  </div>
+
+  <div class="metric-card au au-2" style="--accent-line:{{ 'linear-gradient(90deg,#f59e0b,#ef4444)' if high_risk_count > 0 else 'linear-gradient(90deg,#10b981,#34d399)' }}">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="metric-icon" style="background:{{ 'linear-gradient(135deg,#f59e0b,#ef4444);box-shadow:0 4px 12px rgba(245,158,11,0.28)' if high_risk_count > 0 else 'linear-gradient(135deg,#10b981,#34d399);box-shadow:0 4px 12px rgba(16,185,129,0.28)' }}">
+        <svg width="18" height="18" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;{{ 'background:#fff7ed;color:#ea580c' if high_risk_count > 0 else 'background:#f0fdf4;color:#16a34a' }}">{{ 'Review' if high_risk_count > 0 else 'All Clear' }}</span>
+    </div>
+    <div class="metric-num" style="{{ 'color:#ea580c' if high_risk_count > 0 else '' }}">{{ high_risk_count }}</div>
+    <div class="metric-label">High Risk</div>
+  </div>
+
 </div>
 
-<!-- ── MERCHANT TABLE ── -->
-<div class="card animate-up" style="overflow:hidden;animation-delay:0.06s">
-  <!-- Toolbar -->
-  <div style="padding:12px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <div style="font-size:13px;font-weight:800;color:#0f172a">Merchants</div>
-      <div style="font-size:11px;color:#94a3b8">{{ merchants | length }} business{{ 'es' if merchants | length != 1 }}</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<!-- ── 2-COL: TABLE + ACTIVITY ── -->
+<div style="display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start">
+
+  <!-- LEFT: Merchant table -->
+  <div class="card au au-2" style="overflow:hidden;padding:0">
+
+    <!-- Toolbar -->
+    <div style="padding:13px 16px 12px;border-bottom:1px solid var(--border-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div style="font-size:13px;font-weight:700;color:var(--text-1)">Merchants</div>
+      <div style="height:14px;width:1px;background:var(--border);flex-shrink:0"></div>
+      <div style="font-size:12px;color:var(--text-3)" id="rowCountLabel">{{ merchants|length }} result{{ 's' if merchants|length != 1 }}</div>
+      <div style="flex:1"></div>
       <!-- Search -->
       <div style="position:relative">
-        <svg style="width:13px;height:13px;color:#94a3b8;position:absolute;left:9px;top:50%;transform:translateY(-50%)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/></svg>
-        <input id="merchantSearch" type="text" placeholder="Search merchants…" oninput="filterMerchants()"
-          style="padding:7px 10px 7px 28px;width:180px;border-radius:8px;border:1px solid #e2e8f0;font-size:12px;color:#0f172a"/>
+        <svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%)" width="12" height="12" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/></svg>
+        <input id="merchantSearch" type="text" placeholder="Search merchants…" oninput="filterMerchants()" style="padding:7px 10px 7px 28px;width:175px;font-size:12.5px"/>
       </div>
-      <!-- Risk filter -->
-      <select id="riskFilter" onchange="filterMerchants()" style="padding:7px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:12px;color:#475569;background:#fff;cursor:pointer">
+      <select id="riskFilter" onchange="filterMerchants()" style="padding:7px 10px;font-size:12.5px;color:var(--text-2);cursor:pointer;width:auto">
         <option value="">All Risk</option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
         <option value="critical">Critical</option>
       </select>
-      <!-- Bank filter -->
-      <select id="bankFilter" onchange="filterMerchants()" style="padding:7px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:12px;color:#475569;background:#fff;cursor:pointer">
-        <option value="">All Banks</option>
-        {% set banks_seen = [] %}
-        {% for m in merchants %}{% if m.bank and m.bank not in banks_seen %}{% set _ = banks_seen.append(m.bank) %}<option value="{{ m.bank | lower }}">{{ m.bank }}</option>{% endif %}{% endfor %}
-      </select>
-      <!-- Sort -->
-      <select id="sortFilter" onchange="sortMerchants()" style="padding:7px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:12px;color:#475569;background:#fff;cursor:pointer">
-        <option value="latest">Latest First</option>
+      <select id="sortFilter" onchange="sortMerchants()" style="padding:7px 10px;font-size:12.5px;color:var(--text-2);cursor:pointer;width:auto">
+        <option value="latest">Latest</option>
         <option value="income_desc">Income ↓</option>
         <option value="income_asc">Income ↑</option>
         <option value="nsf_desc">NSF ↓</option>
-        <option value="risk">Risk Level</option>
+        <option value="risk">Risk</option>
       </select>
     </div>
-  </div>
 
-  <!-- Table header -->
-  <div style="display:grid;grid-template-columns:2.2fr 1fr 1.1fr 0.7fr 0.7fr 0.8fr 88px;padding:8px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0">
-    {% for col, align in [("Merchant / Business","left"),("Bank","left"),("Avg Income /mo","center"),("NSF","center"),("Stmts","center"),("Risk","center"),("","right")] %}
-    <div class="tbl-head" style="text-align:{{ align }}">{{ col }}</div>
-    {% endfor %}
-  </div>
+    <!-- Table head -->
+    <div style="display:grid;grid-template-columns:2.2fr 1fr 1.1fr 0.65fr 0.65fr 0.8fr 80px;padding:9px 16px;background:#fafbfc;border-bottom:1px solid var(--border)">
+      <div class="tbl-header">Merchant</div>
+      <div class="tbl-header">Bank</div>
+      <div class="tbl-header" style="text-align:right">Income /mo</div>
+      <div class="tbl-header" style="text-align:center">NSF</div>
+      <div class="tbl-header" style="text-align:center">Stmts</div>
+      <div class="tbl-header" style="text-align:center">Risk</div>
+      <div class="tbl-header" style="text-align:right">Action</div>
+    </div>
 
-  <!-- Rows -->
-  <div id="merchantTable">
-    {% for m in merchants %}
-    {% set risk = m.latest_risk %}
-    <div class="merchant-row tbl-row" data-name="{{ m.name | lower }}" data-risk="{{ risk }}" data-bank="{{ (m.bank or '') | lower }}" data-income="{{ m.avg_deposits | int }}" data-nsf="{{ m.total_nsf }}"
-      style="display:grid;grid-template-columns:2.2fr 1fr 1.1fr 0.7fr 0.7fr 0.8fr 88px;padding:11px 16px;border-bottom:1px solid #f8fafc;align-items:center;cursor:pointer"
-      onclick="window.location='/merchant/{{ m.name | urlencode }}'">
-      <div style="display:flex;align-items:center;gap:10px;min-width:0">
-        <div style="width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;
-          {% if risk == 'low' %}background:linear-gradient(135deg,#22c55e,#15803d)
-          {% elif risk == 'medium' %}background:linear-gradient(135deg,#f59e0b,#d97706)
-          {% elif risk == 'high' %}background:linear-gradient(135deg,#f97316,#ea580c)
-          {% else %}background:linear-gradient(135deg,#ef4444,#dc2626){% endif %}">
-          {{ m.name[0].upper() }}
-        </div>
-        <div style="min-width:0">
-          <div style="font-size:13px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ m.name }}</div>
-          <div style="font-size:10px;color:#94a3b8;margin-top:1px">
-            {% if m.latest_rec %}<span style="font-weight:700;{% if m.latest_rec == 'approve' %}color:#15803d{% elif m.latest_rec == 'review' %}color:#a16207{% else %}color:#dc2626{% endif %}">{{ m.latest_rec | upper }}</span> ·{% endif %}
-            Latest {{ m.latest_date.strftime('%b %d') if m.latest_date else '—' }}
+    <!-- Rows -->
+    <div id="merchantTable">
+      {% for m in merchants %}
+      {% set risk = m.latest_risk %}
+      {% set risk_colors = {'low':('linear-gradient(135deg,#22c55e,#16a34a)','#f0fdf4'), 'medium':('linear-gradient(135deg,#f59e0b,#d97706)','#fffbeb'), 'high':('linear-gradient(135deg,#f97316,#ea580c)','#fff7ed'), 'critical':('linear-gradient(135deg,#ef4444,#dc2626)','#fef2f2')} %}
+      <div class="merchant-row tbl-row"
+        data-name="{{ m.name|lower }}" data-risk="{{ risk }}" data-bank="{{ (m.bank or '')|lower }}"
+        data-income="{{ m.avg_deposits|int }}" data-nsf="{{ m.total_nsf }}"
+        style="display:grid;grid-template-columns:2.2fr 1fr 1.1fr 0.65fr 0.65fr 0.8fr 80px;padding:13px 16px;border-bottom:1px solid var(--border-2);align-items:center"
+        onclick="window.location='/merchant/{{ m.name|urlencode }}'">
+
+        <!-- Merchant name + decision -->
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <div style="width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:{{ risk_colors.get(risk, risk_colors.get('low'))[0] }};box-shadow:0 2px 8px rgba(0,0,0,0.12)">
+            {{ m.name[0].upper() }}
+          </div>
+          <div style="min-width:0">
+            <div style="font-size:13.5px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em">{{ m.name }}</div>
+            <div style="font-size:11px;color:var(--text-3);margin-top:1px;display:flex;align-items:center;gap:4px">
+              {% if m.latest_rec %}
+              <span style="font-weight:700;{% if m.latest_rec == 'approve' %}color:#16a34a{% elif m.latest_rec == 'review' %}color:#ca8a04{% else %}color:#dc2626{% endif %}">{{ m.latest_rec|upper }}</span>
+              <span style="color:var(--border)">·</span>
+              {% endif %}
+              {{ m.latest_date.strftime('%b %d') if m.latest_date else '—' }}
+            </div>
           </div>
         </div>
+
+        <div style="font-size:12.5px;color:var(--text-2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px">{{ m.bank or '—' }}</div>
+        <div style="text-align:right;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text-1);letter-spacing:-0.02em">${{ "{:,.0f}".format(m.avg_deposits) }}</div>
+        <div style="text-align:center;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;{{ 'color:#dc2626' if m.total_nsf > 0 else 'color:#16a34a' }}">{{ m.total_nsf }}</div>
+        <div style="text-align:center;font-size:12.5px;font-weight:600;color:var(--text-3)">{{ m.count }}</div>
+
+        <div style="text-align:center">
+          <span class="badge badge-{{ risk }}" style="font-size:10px">{{ risk|upper }}</span>
+        </div>
+
+        <div style="text-align:right">
+          <a href="/merchant/{{ m.name|urlencode }}" onclick="event.stopPropagation()"
+            style="font-size:11.5px;font-weight:700;color:#6366f1;background:#eef2ff;padding:5px 11px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;gap:3px;transition:background 0.12s"
+            onmouseover="this.style.background='#e0e7ff'" onmouseout="this.style.background='#eef2ff'">
+            Open <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
-      <div style="font-size:12px;color:#475569;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:4px">{{ m.bank or '—' }}</div>
-      <div style="text-align:center;font-size:13px;font-weight:800;color:#0f172a">${{ "{:,.0f}".format(m.avg_deposits) }}</div>
-      <div style="text-align:center;font-size:13px;font-weight:800;{% if m.total_nsf > 0 %}color:#dc2626{% else %}color:#16a34a{% endif %}">{{ m.total_nsf }}</div>
-      <div style="text-align:center;font-size:12px;font-weight:700;color:#64748b">{{ m.count }}</div>
-      <div style="text-align:center">
-        <span class="badge badge-{{ risk }}">{{ risk | upper }}</span>
+      {% endfor %}
+      <div id="noResults" style="display:none;padding:32px;text-align:center;font-size:13px;color:var(--text-3)">No merchants match your filters.</div>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:10px 16px;background:#fafbfc;border-top:1px solid var(--border-2);display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:11.5px;color:var(--text-3)">{{ merchants|length }} merchant{{ 's' if merchants|length != 1 }}</div>
+      <a href="/statements" style="font-size:12px;font-weight:700;color:#6366f1;text-decoration:none;display:flex;align-items:center;gap:4px">
+        All statements <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- RIGHT: Activity feed + quick upload -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+
+    <!-- Recent Activity -->
+    {% if recent %}
+    <div class="card au au-3" style="overflow:hidden;padding:0">
+      <div style="padding:12px 14px 11px;border-bottom:1px solid var(--border-2);display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:var(--text-1)">Recent Reports</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:1px">Latest analyzed statements</div>
+        </div>
+        <a href="/statements" style="font-size:11px;font-weight:700;color:#6366f1;text-decoration:none">All →</a>
       </div>
-      <div style="text-align:right">
-        <a href="/merchant/{{ m.name | urlencode }}" onclick="event.stopPropagation()"
-          style="font-size:11px;font-weight:700;color:#6366f1;background:#f5f3ff;padding:5px 11px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;gap:3px"
-          onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#f5f3ff'">
-          Open <svg style="width:10px;height:10px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      <div style="padding:8px 0">
+        {% for a in recent %}{% if a.status == 'complete' %}
+        {% set rf = a.result_json.get('red_flags',{}) if a.result_json else {} %}
+        {% set risk = rf.get('risk_level','low') %}
+        {% set rec = (a.result_json or {}).get('approval_recommendation','') %}
+        <a href="/results/{{ a.id }}" style="display:flex;align-items:center;gap:9px;padding:9px 14px;text-decoration:none;transition:background 0.1s"
+           onmouseover="this.style.background='#fafbff'" onmouseout="this.style.background='transparent'">
+          <div style="width:4px;height:36px;border-radius:3px;flex-shrink:0;background:{% if risk=='low'%}#22c55e{% elif risk=='medium'%}#f59e0b{% elif risk=='high'%}#f97316{% else %}#ef4444{% endif %}"></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12.5px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em">{{ a.account_holder or a.filename }}</div>
+            <div style="font-size:10.5px;color:var(--text-3);margin-top:1px">{{ a.bank_name or '' }}{% if a.created_at %} · {{ a.created_at.strftime('%b %d') }}{% endif %}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--text-1);letter-spacing:-0.02em">${{ "{:,.0f}".format(a.avg_monthly_deposits or 0) }}</div>
+            <span class="badge badge-{{ risk }}" style="font-size:9px;margin-top:2px;display:inline-block">{{ risk|upper }}</span>
+          </div>
         </a>
+        {% endif %}{% endfor %}
       </div>
     </div>
-    {% endfor %}
-    <div id="noResults" style="display:none;padding:28px;text-align:center;font-size:13px;color:#94a3b8">No merchants match your filters.</div>
-  </div>
+    {% endif %}
 
-  <!-- Table footer -->
-  <div style="padding:10px 16px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between">
-    <div id="rowCount" style="font-size:11px;color:#94a3b8">{{ merchants | length }} merchant{{ 's' if merchants | length != 1 }}</div>
-    <a href="/statements" style="font-size:11px;font-weight:700;color:#6366f1;text-decoration:none">View all statements →</a>
+    <!-- Quick Upload -->
+    <div class="card au au-3" style="padding:0;overflow:hidden">
+      <div style="padding:12px 14px 11px;border-bottom:1px solid var(--border-2)">
+        <div style="font-size:12.5px;font-weight:700;color:var(--text-1)">Upload Statement</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:1px">Single or batch · any major bank PDF</div>
+      </div>
+      <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+        <label for="fileInputGlobal" style="cursor:pointer;display:block">
+          <div style="border:1.5px dashed #c7d2fe;border-radius:10px;padding:14px;text-align:center;transition:all 0.2s;background:linear-gradient(135deg,#fafbff,#fff)"
+               onmouseover="this.style.borderColor='#6366f1';this.style.background='#f5f3ff'"
+               onmouseout="this.style.borderColor='#c7d2fe';this.style.background='linear-gradient(135deg,#fafbff,#fff)'">
+            <div style="width:30px;height:30px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 7px;box-shadow:0 2px 8px rgba(99,102,241,0.3)">
+              <svg width="15" height="15" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-1)">Single PDF</div>
+            <div style="font-size:10.5px;color:var(--text-3);margin-top:1px">Click to browse</div>
+          </div>
+        </label>
+        <label for="fileInputBatch" style="cursor:pointer;display:block">
+          <div style="border:1.5px dashed #bbf7d0;border-radius:10px;padding:10px 14px;text-align:center;transition:all 0.2s"
+               onmouseover="this.style.borderColor='#10b981';this.style.background='#f0fdf4'"
+               onmouseout="this.style.borderColor='#bbf7d0';this.style.background='transparent'">
+            <div style="font-size:12px;font-weight:700;color:#16a34a;display:flex;align-items:center;justify-content:center;gap:5px">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              Batch Upload
+            </div>
+            <div style="font-size:10.5px;color:#86efac;margin-top:1px">Multiple PDFs at once</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Approval summary -->
+    <div class="card au au-3" style="padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:700;color:var(--text-1);margin-bottom:12px">Approval Summary</div>
+      {% set total_recs = merchants|selectattr('latest_rec')|list|length %}
+      {% set approve_c = merchants|selectattr('latest_rec','equalto','approve')|list|length %}
+      {% set review_c = merchants|selectattr('latest_rec','equalto','review')|list|length %}
+      {% set decline_c = merchants|selectattr('latest_rec','equalto','decline')|list|length %}
+      {% for label, count, color, bg in [
+        ('Approve', approve_c, '#16a34a', '#f0fdf4'),
+        ('Review',  review_c,  '#ca8a04', '#fefce8'),
+        ('Decline', decline_c, '#dc2626', '#fef2f2'),
+      ] %}
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:600;color:{{ color }};background:{{ bg }};padding:3px 10px;border-radius:6px;min-width:70px;text-align:center">{{ label }}</div>
+        <div style="flex:1;height:6px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+          {% if total_recs > 0 %}<div style="height:100%;width:{{ ((count/total_recs)*100)|int }}%;background:{{ color }};border-radius:99px;transition:width 0.4s ease"></div>{% endif %}
+        </div>
+        <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--text-2);min-width:20px;text-align:right">{{ count }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
   </div>
 </div>
-
-<!-- ── RECENT REPORTS ── -->
-{% if recent %}
-<div style="margin-top:16px" class="animate-up" style="animation-delay:0.1s">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-    <div style="font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.06em">Recent Reports</div>
-    <a href="/statements" style="font-size:11px;font-weight:700;color:#6366f1;text-decoration:none">All statements →</a>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px">
-    {% for a in recent %}{% if a.status == 'complete' %}
-    {% set rf = a.result_json.get('red_flags', {}) if a.result_json else {} %}
-    {% set risk = rf.get('risk_level', 'low') %}
-    <a href="/results/{{ a.id }}" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:11px;transition:all 0.15s"
-       onmouseover="this.style.borderColor='#c7d2fe';this.style.background='#fafbff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#fff'">
-      <div style="width:5px;height:34px;border-radius:3px;flex-shrink:0;
-        {% if risk == 'low' %}background:#22c55e{% elif risk == 'medium' %}background:#f59e0b{% elif risk == 'high' %}background:#f97316{% else %}background:#ef4444{% endif %}"></div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:12px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.account_holder or a.filename }}</div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:1px">{{ a.bank_name or '' }}{% if a.statement_period %} · {{ a.statement_period[:15] }}{% endif %}</div>
-      </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div style="font-size:12px;font-weight:800;color:#0f172a">${{ "{:,.0f}".format(a.avg_monthly_deposits or 0) }}<span style="font-size:9px;color:#94a3b8">/mo</span></div>
-        <span class="badge badge-{{ risk }}" style="font-size:9px">{{ risk | upper }}</span>
-      </div>
-    </a>
-    {% endif %}{% endfor %}
-  </div>
-</div>
-{% endif %}
 
 {% else %}
 
 <!-- ── EMPTY STATE ── -->
-<div style="max-width:700px;margin:0 auto" class="animate-up">
-  <!-- Upload hero -->
-  <div class="card" style="padding:48px 40px;text-align:center;border-style:dashed;border-color:#c7d2fe;background:linear-gradient(135deg,#fafbff,#f5f3ff);margin-bottom:16px">
-    <div style="width:64px;height:64px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 6px 20px rgba(99,102,241,0.3)">
-      <svg style="width:30px;height:30px;color:#fff" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+<div style="max-width:680px;margin:0 auto">
+  <div class="card au" style="padding:52px 44px;text-align:center;border-style:dashed;border-color:#c7d2fe;background:linear-gradient(135deg,#fafbff 0%,#f5f3ff 100%);margin-bottom:16px">
+    <div style="width:68px;height:68px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px rgba(99,102,241,0.3)">
+      <svg width="32" height="32" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
     </div>
-    <div style="font-size:20px;font-weight:900;color:#0f172a;margin-bottom:8px">Analyze your first statement</div>
-    <div style="font-size:14px;color:#64748b;margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.6">Upload a bank statement PDF and get income verification, NSF detection, and a risk-based approval recommendation in under 30 seconds.</div>
+    <div style="font-size:22px;font-weight:800;color:var(--text-1);margin-bottom:8px;letter-spacing:-0.03em">Analyze your first statement</div>
+    <div style="font-size:14px;color:var(--text-2);margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.65">Upload a bank statement PDF and get income verification, NSF detection, and a risk-based approval recommendation in under 30 seconds.</div>
     <label for="fileInputGlobal" style="cursor:pointer">
-      <div class="btn-primary" style="display:inline-flex;padding:14px 28px;font-size:15px">
-        <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+      <div class="btn btn-primary" style="display:inline-flex;padding:12px 28px;font-size:14px">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
         Upload First Statement
       </div>
     </label>
-    <div style="font-size:11px;color:#94a3b8;margin-top:14px">Any major bank · PDF · up to 20MB</div>
+    <div style="font-size:11.5px;color:var(--text-3);margin-top:14px">Any major US bank · PDF only · up to 20MB</div>
   </div>
 
-  <!-- Feature grid -->
-  <div class="card" style="padding:22px">
-    <div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:14px">What every analysis includes</div>
+  <div class="card au au-1" style="padding:22px 24px">
+    <div style="font-size:13.5px;font-weight:700;color:var(--text-1);margin-bottom:16px;letter-spacing:-0.01em">What every report includes</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       {% for icon, title, desc in [
         ("💰","Income Verification","Avg deposits, consistency score, income sources"),
         ("⚡","NSF Detection","Every bounced check counted and risk-scored"),
         ("🔎","MCA Detection","Cash advance repayments flagged automatically"),
-        ("✅","Approval Decision","APPROVE / REVIEW / DECLINE with detailed reasoning"),
+        ("✅","Approval Decision","APPROVE / REVIEW / DECLINE with reasoning"),
         ("📅","Monthly Breakdown","Deposit and withdrawal chart by month"),
-        ("💸","Expense Analysis","Spending categories as % of income"),
+        ("🔑","API Access","Integrate directly into your LOS via REST API"),
       ] %}
-      <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:#f8fafc;border-radius:10px">
-        <span style="font-size:15px;flex-shrink:0">{{ icon }}</span>
+      <div style="display:flex;gap:11px;align-items:flex-start;padding:11px 13px;background:#fafbfc;border:1px solid var(--border-2);border-radius:10px">
+        <span style="font-size:16px;flex-shrink:0;line-height:1.4">{{ icon }}</span>
         <div>
-          <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:2px">{{ title }}</div>
-          <div style="font-size:11px;color:#64748b;line-height:1.4">{{ desc }}</div>
+          <div style="font-size:12.5px;font-weight:700;color:var(--text-1);margin-bottom:2px;letter-spacing:-0.01em">{{ title }}</div>
+          <div style="font-size:11.5px;color:var(--text-3);line-height:1.45">{{ desc }}</div>
         </div>
       </div>
       {% endfor %}
@@ -293,57 +388,52 @@
 <script>
 function submitGlobalUpload(input) {
   if (!input.files || !input.files[0]) return;
-  showOverlay('Analyzing statement…', 'Reading transactions, calculating income, detecting risk flags');
-  const dots = document.querySelectorAll('.step-dot');
-  const steps = document.querySelectorAll('.upload-step');
-  function activate(i) { dots[i].style.background='#6366f1'; dots[i].style.animation='spin 0.8s linear infinite'; steps[i].style.color='#6366f1'; }
-  function done(i)     { dots[i].style.background='#16a34a'; dots[i].style.animation=''; steps[i].style.color='#16a34a'; }
+  showOverlay('Analyzing statement…','Reading transactions, calculating income, detecting risk flags');
+  const dots = document.querySelectorAll('.step-dot'), steps = document.querySelectorAll('.upload-step');
+  const activate = i => { dots[i].style.background='#6366f1'; dots[i].style.animation='spin 0.8s linear infinite'; steps[i].style.color='#6366f1'; };
+  const done = i => { dots[i].style.background='#22c55e'; dots[i].style.animation=''; steps[i].style.color='#22c55e'; };
   activate(0);
-  setTimeout(() => { done(0); activate(1); }, 3500);
-  setTimeout(() => { done(1); activate(2); }, 9000);
+  setTimeout(()=>{done(0);activate(1);},3500);
+  setTimeout(()=>{done(1);activate(2);},9000);
   document.getElementById('globalUploadForm').submit();
 }
 function submitBatchUpload(input) {
   if (!input.files || !input.files.length) return;
-  const count = input.files.length;
-  showOverlay(`Batch analyzing ${count} statement${count !== 1 ? 's' : ''}…`, 'Processing each PDF in sequence. This may take a minute.');
+  const n = input.files.length;
+  showOverlay(`Batch analyzing ${n} statement${n!==1?'s':''}…`,'Processing each PDF in sequence. This may take a minute.');
   document.getElementById('batchUploadForm').submit();
 }
-function showOverlay(title, subtitle) {
+function showOverlay(t, s) {
   document.getElementById('uploadingOverlay').style.display = 'block';
-  document.getElementById('overlayTitle').textContent = title;
-  document.getElementById('overlaySubtitle').textContent = subtitle;
+  document.getElementById('overlayTitle').textContent = t;
+  document.getElementById('overlaySubtitle').textContent = s;
 }
 function filterMerchants() {
-  const q = (document.getElementById('merchantSearch').value || '').toLowerCase().trim();
-  const risk = (document.getElementById('riskFilter').value || '').toLowerCase();
-  const bank = (document.getElementById('bankFilter').value || '').toLowerCase();
+  const q = (document.getElementById('merchantSearch').value||'').toLowerCase();
+  const risk = document.getElementById('riskFilter').value.toLowerCase();
   const rows = document.querySelectorAll('.merchant-row');
-  let visible = 0;
+  let vis = 0;
   rows.forEach(r => {
-    const nameOk = !q || (r.dataset.name || '').includes(q);
-    const riskOk = !risk || r.dataset.risk === risk;
-    const bankOk = !bank || (r.dataset.bank || '').includes(bank);
-    const show = nameOk && riskOk && bankOk;
-    r.style.display = show ? 'grid' : 'none';
-    if (show) visible++;
+    const ok = (!q||(r.dataset.name||'').includes(q)) && (!risk||r.dataset.risk===risk);
+    r.style.display = ok ? 'grid' : 'none';
+    if (ok) vis++;
   });
-  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
-  document.getElementById('rowCount').textContent = `${visible} merchant${visible !== 1 ? 's' : ''}`;
+  document.getElementById('noResults').style.display = vis===0 ? 'block' : 'none';
+  document.getElementById('rowCountLabel').textContent = `${vis} result${vis!==1?'s':''}`;
 }
 function sortMerchants() {
-  const val = document.getElementById('sortFilter').value;
-  const table = document.getElementById('merchantTable');
+  const v = document.getElementById('sortFilter').value;
+  const tbl = document.getElementById('merchantTable');
   const rows = Array.from(document.querySelectorAll('.merchant-row'));
-  const riskOrder = {low:0, medium:1, high:2, critical:3};
-  rows.sort((a, b) => {
-    if (val === 'income_desc') return parseInt(b.dataset.income) - parseInt(a.dataset.income);
-    if (val === 'income_asc')  return parseInt(a.dataset.income) - parseInt(b.dataset.income);
-    if (val === 'nsf_desc')    return parseInt(b.dataset.nsf) - parseInt(a.dataset.nsf);
-    if (val === 'risk')        return (riskOrder[b.dataset.risk] || 0) - (riskOrder[a.dataset.risk] || 0);
+  const ro = {low:0,medium:1,high:2,critical:3};
+  rows.sort((a,b) => {
+    if (v==='income_desc') return parseInt(b.dataset.income)-parseInt(a.dataset.income);
+    if (v==='income_asc')  return parseInt(a.dataset.income)-parseInt(b.dataset.income);
+    if (v==='nsf_desc')    return parseInt(b.dataset.nsf)-parseInt(a.dataset.nsf);
+    if (v==='risk')        return (ro[b.dataset.risk]||0)-(ro[a.dataset.risk]||0);
     return 0;
   });
-  rows.forEach(r => table.insertBefore(r, table.lastElementChild));
+  rows.forEach(r => tbl.insertBefore(r, tbl.lastElementChild));
 }
 </script>
 {% endblock %}

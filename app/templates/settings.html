@@ -20,7 +20,7 @@
   {% endif %}
 
   <!-- ── Custom Scorecard ── -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+  <div class="card" style="overflow:hidden;margin-bottom:16px">
     <div style="padding:18px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px">
       <div style="width:38px;height:38px;background:#f5f3ff;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px">📊</div>
       <div>
@@ -74,7 +74,7 @@
   </div>
 
   <!-- ── API Access ── -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+  <div class="card" style="overflow:hidden;margin-bottom:16px">
     <div style="padding:18px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px">
       <div style="width:38px;height:38px;background:#f0f9ff;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px">🔑</div>
       <div>
@@ -134,7 +134,7 @@
   </div>
 
   <!-- ── Account Info ── -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+  <div class="card" style="padding:22px">
     <div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:14px">Account</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
       {% for label, value in [
