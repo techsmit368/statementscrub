@@ -24,22 +24,22 @@ PACKS = {
 # Monthly subscription plans — 3 tiers
 SUBSCRIPTIONS = {
     "broker": {
-        "credits_per_month": 50,
+        "credits_per_month": 25,
         "price_cents": 4900,
-        "label": "Broker Plan — 50 reports/month",
-        "description": "50 bank statement analyses per month, auto-renewed. Cancel any time.",
+        "label": "Broker Plan — 25 reports/month",
+        "description": "25 bank statement analyses per month ($2/report), auto-renewed. Cancel any time.",
     },
     "pro": {
-        "credits_per_month": 200,
+        "credits_per_month": 100,
         "price_cents": 14900,
-        "label": "Pro Plan — 200 reports/month",
-        "description": "200 bank statement analyses per month, auto-renewed. Cancel any time.",
+        "label": "Pro Plan — 100 reports/month",
+        "description": "100 bank statement analyses per month ($1.50/report), auto-renewed. Cancel any time.",
     },
     "agency": {
-        "credits_per_month": 500,
-        "price_cents": 34900,
-        "label": "Agency Plan — 500 reports/month",
-        "description": "500 bank statement analyses per month, auto-renewed. Cancel any time.",
+        "credits_per_month": 300,
+        "price_cents": 29900,
+        "label": "Agency Plan — 300 reports/month",
+        "description": "300 bank statement analyses per month ($1/report), auto-renewed. Cancel any time.",
     },
 }
 
