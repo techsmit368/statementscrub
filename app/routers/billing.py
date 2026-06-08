@@ -14,29 +14,32 @@ templates = Jinja2Templates(directory="app/templates")
 
 stripe.api_key = settings.stripe_secret_key
 
-# One-time credit packs
+# One-time credit packs (legacy — not shown in UI, kept for direct API use)
 PACKS = {
     "starter":  {"credits": 10,  "price_cents": 1490,  "label": "Starter Pack — 10 Credits"},
-    "basic":    {"credits": 25,  "price_cents": 2790,  "label": "Basic Pack — 25 Credits"},
     "standard": {"credits": 50,  "price_cents": 5490,  "label": "Standard Pack — 50 Credits"},
-    "business": {"credits": 100, "price_cents": 10490, "label": "Business Pack — 100 Credits"},
-    "growth":   {"credits": 250, "price_cents": 26290, "label": "Growth Pack — 250 Credits"},
     "scale":    {"credits": 500, "price_cents": 49990, "label": "Scale Pack — 500 Credits"},
 }
 
-# Monthly subscription plans
+# Monthly subscription plans — 3 tiers
 SUBSCRIPTIONS = {
-    "starter_sub": {
+    "broker": {
         "credits_per_month": 50,
         "price_cents": 4900,
-        "label": "Starter Monthly — 50 credits/month",
-        "description": "50 bank statement analyses per month, auto-renewed",
+        "label": "Broker Plan — 50 reports/month",
+        "description": "50 bank statement analyses per month, auto-renewed. Cancel any time.",
     },
-    "pro_sub": {
-        "credits_per_month": 250,
+    "pro": {
+        "credits_per_month": 200,
         "price_cents": 14900,
-        "label": "Pro Monthly — 250 credits/month",
-        "description": "250 bank statement analyses per month, auto-renewed",
+        "label": "Pro Plan — 200 reports/month",
+        "description": "200 bank statement analyses per month, auto-renewed. Cancel any time.",
+    },
+    "agency": {
+        "credits_per_month": 500,
+        "price_cents": 34900,
+        "label": "Agency Plan — 500 reports/month",
+        "description": "500 bank statement analyses per month, auto-renewed. Cancel any time.",
     },
 }
 

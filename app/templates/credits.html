@@ -1,129 +1,22 @@
-﻿{% extends "base.html" %}
-{% block title %}Buy Analysis Credits — StatementScrub{% endblock %}
-{% block meta_description %}Buy AI bank statement analysis credits starting at $1.00 per report. No subscription. Credits never expire. Cheaper than every major alternative. Try 3 reports free.{% endblock %}
+{% extends "base.html" %}
+{% block title %}Pricing Plans — StatementScrub{% endblock %}
+{% block meta_description %}3 simple plans for MCA brokers and lenders. AI bank statement analysis + lender matching. Start at $49/mo. Cancel any time. Try 3 reports free.{% endblock %}
 {% block canonical %}https://statementscrub.com/credits{% endblock %}
-{% block og_title %}Buy Bank Statement Analysis Credits — From $1.00/report{% endblock %}
-{% block og_description %}No subscription required. Credits never expire. AI analysis starting at $1.00/report — significantly cheaper than alternatives.{% endblock %}
+{% block og_title %}StatementScrub Pricing — Broker, Pro & Agency Plans{% endblock %}
+{% block og_description %}Simple 3-tier pricing for MCA brokers. 50–500 AI analyses/month + 435-lender matching. No hidden fees. Cancel any time.{% endblock %}
 {% block og_url %}https://statementscrub.com/credits{% endblock %}
-{% block tw_title %}Bank Statement Analysis Credits — $1.00/report{% endblock %}
-{% block tw_description %}No subscription. Credits never expire. Try 3 reports free.{% endblock %}
 
 {% block head %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {"@type": "Question", "name": "Do credits expire?", "acceptedAnswer": {"@type": "Answer", "text": "No. Credits never expire. Once purchased, they stay in your account until you use them — no time limit, no pressure."}},
-        {"@type": "Question", "name": "Can I buy multiple credit packs?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Credits stack. Buy a 100-credit pack and a 50-credit pack and you will have 150 credits total. They combine automatically."}},
-        {"@type": "Question", "name": "What counts as 1 credit?", "acceptedAnswer": {"@type": "Answer", "text": "One credit equals one full bank statement analysis. Upload a PDF, AI processes it, you get a complete structured report with income, NSF, risk score, and recommendation."}},
-        {"@type": "Question", "name": "Is there a refund policy?", "acceptedAnswer": {"@type": "Answer", "text": "Unused credits can be refunded within 14 days of purchase. Email support@statementscrub.com with your order details."}}
-      ]
-    },
-    {
-      "@type": "Product",
-      "name": "StatementScrub Bank Statement Analysis Credits",
-      "description": "Automated bank statement analysis credits. 1 credit = 1 full analysis. Income verification, NSF detection, MCA detection, fraud indicators, and risk score. Credits never expire.",
-      "url": "https://statementscrub.com/credits",
-      "image": "https://statementscrub.com/static/og-image.png",
-      "brand": {"@type": "Brand", "name": "StatementScrub"},
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "94",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "author": {"@type": "Person", "name": "Michael Torres"},
-          "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-          "reviewBody": "StatementScrub cut our underwriting review from 45 minutes to under 2. The NSF detection alone has saved us from three bad loans this quarter."
-        },
-        {
-          "@type": "Review",
-          "author": {"@type": "Person", "name": "Amanda Chen"},
-          "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-          "reviewBody": "We process 80+ statements a week. At $1.10 each it's the cheapest accurate tool we have. The MCA detection catches things I used to miss manually."
-        },
-        {
-          "@type": "Review",
-          "author": {"@type": "Person", "name": "David Okonkwo"},
-          "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-          "reviewBody": "The APPROVE / REVIEW / DECLINE recommendation is exactly what I needed. I review the AI reasoning and make the final call — it's the right division of labor."
-        }
-      ],
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "US",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 14,
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn"
-      },
-      "offers": [
-        {
-          "@type": "Offer",
-          "name": "Starter Pack",
-          "price": "14.90",
-          "priceCurrency": "USD",
-          "description": "10 bank statement analysis credits",
-          "availability": "https://schema.org/InStock",
-          "url": "https://statementscrub.com/credits",
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
-            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
-            "deliveryTime": {
-              "@type": "ShippingDeliveryTime",
-              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"},
-              "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}
-            }
-          }
-        },
-        {
-          "@type": "Offer",
-          "name": "Standard Pack",
-          "price": "54.90",
-          "priceCurrency": "USD",
-          "description": "50 bank statement analysis credits",
-          "availability": "https://schema.org/InStock",
-          "url": "https://statementscrub.com/credits",
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
-            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
-            "deliveryTime": {
-              "@type": "ShippingDeliveryTime",
-              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"},
-              "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}
-            }
-          }
-        },
-        {
-          "@type": "Offer",
-          "name": "Scale Pack",
-          "price": "499.90",
-          "priceCurrency": "USD",
-          "description": "500 bank statement analysis credits — $1.00 per report",
-          "availability": "https://schema.org/InStock",
-          "url": "https://statementscrub.com/credits",
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "USD"},
-            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
-            "deliveryTime": {
-              "@type": "ShippingDeliveryTime",
-              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"},
-              "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}
-            }
-          }
-        }
-      ]
-    }
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Can I cancel my plan?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Cancel any time from your account settings with one click. No questions asked, no cancellation fees."}},
+    {"@type": "Question", "name": "Do unused reports carry forward?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Any unused credits from your monthly allocation carry forward automatically — they never disappear."}},
+    {"@type": "Question", "name": "What counts as 1 report?", "acceptedAnswer": {"@type": "Answer", "text": "One report = one complete AI bank statement analysis: income verification, NSF count, MCA detection, 12-point fraud check, risk score 0–100, and APPROVE/REVIEW/DECLINE recommendation."}},
+    {"@type": "Question", "name": "What is lender matching?", "acceptedAnswer": {"@type": "Answer", "text": "After analyzing a statement, our engine matches the merchant against 435+ active MCA lenders filtered by industry, state, deposit amount, NSF count, and credit score. You see exactly which lenders will fund — grouped by grade A/B/C/D."}},
+    {"@type": "Question", "name": "Is there a free trial?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Every new account gets 3 free reports — no credit card required. See the full analysis quality before choosing a plan."}}
   ]
 }
 </script>
@@ -131,423 +24,403 @@
 
 {% block head_extra %}
 <style>
-  .credit-card { background:#fff; border:1.5px solid #e2e8f0; border-radius:20px; padding:28px; transition:all 0.2s; position:relative; }
-  .credit-card:hover { border-color:#a5b4fc; box-shadow:0 12px 40px rgba(99,102,241,0.1); transform:translateY(-3px); }
-  .credit-card.hot { border-color:#6366f1; box-shadow:0 8px 40px rgba(99,102,241,0.18); }
-  .credit-card.hot:hover { box-shadow:0 16px 56px rgba(99,102,241,0.28); transform:translateY(-4px); }
-  .sub-card { border-radius:24px; padding:36px; position:relative; overflow:hidden; }
-  .btn-buy { display:block; width:100%; padding:13px; border-radius:13px; font-weight:800; font-size:13px; text-align:center; transition:all 0.18s; cursor:pointer; border:none; font-family:inherit; }
-  .btn-buy-default { background:#f1f5f9; color:#334155; }
-  .btn-buy-default:hover { background:#e0e7ff; color:#4f46e5; }
-  .btn-buy-hot { background:linear-gradient(135deg,#6366f1,#0ea5e9); color:#fff; box-shadow:0 6px 20px rgba(99,102,241,0.35); }
-  .btn-buy-hot:hover { opacity:0.92; box-shadow:0 8px 28px rgba(99,102,241,0.45); transform:translateY(-1px); }
-  .badge-top { position:absolute; top:-13px; left:50%; transform:translateX(-50%); white-space:nowrap; font-size:10px; font-weight:900; padding:4px 14px; border-radius:100px; letter-spacing:0.06em; }
+  .plan-card {
+    border-radius: 24px;
+    padding: 36px 32px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .plan-card:hover { transform: translateY(-4px); }
+  .plan-card.light {
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+  .plan-card.light:hover { box-shadow: 0 12px 40px rgba(99,102,241,0.1); border-color: #c7d2fe; }
+  .plan-card.featured {
+    background: linear-gradient(145deg, #1e1b4b, #0f172a);
+    border: 1.5px solid rgba(99,102,241,0.5);
+    box-shadow: 0 8px 40px rgba(99,102,241,0.25);
+  }
+  .plan-card.featured:hover { box-shadow: 0 16px 60px rgba(99,102,241,0.35); }
+  .plan-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    white-space: nowrap; font-size: 10px; font-weight: 900;
+    padding: 5px 16px; border-radius: 100px; letter-spacing: 0.08em;
+    background: linear-gradient(135deg, #6366f1, #0ea5e9); color: #fff;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+  }
+  .plan-price { font-size: 3.6rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; }
+  .feature-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13.5px; padding: 6px 0;
+  }
+  .check-icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .btn-plan {
+    display: block; width: 100%; padding: 15px; border-radius: 14px;
+    font-weight: 900; font-size: 14px; text-align: center;
+    cursor: pointer; border: none; font-family: inherit;
+    transition: all 0.18s;
+  }
+  .trust-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px; padding: 6px 14px; font-size: 12px;
+    color: rgba(255,255,255,0.75); font-weight: 600;
+  }
+  .compare-table th {
+    background: #f8fafc; padding: 12px 16px; text-align: center;
+    font-size: 11px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.07em; color: #64748b; border-bottom: 2px solid #e2e8f0;
+  }
+  .compare-table td {
+    padding: 12px 16px; text-align: center; border-bottom: 1px solid #f1f5f9;
+    font-size: 13px; color: #475569;
+  }
+  .compare-table td:first-child { text-align: left; font-weight: 600; color: #0f172a; }
+  .tick { color: #22c55e; font-weight: 900; font-size: 16px; }
+  .cross { color: #cbd5e1; font-weight: 900; font-size: 16px; }
   @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  .float { animation:float 4s ease-in-out infinite; }
+  .float { animation: float 5s ease-in-out infinite; }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- ══ USER BALANCE BANNER (logged-in only) ══ -->
+<!-- ══ BALANCE BANNER (logged-in) ══ -->
 {% if user %}
 {% set _cr = user.credits or 0 %}
 <div style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border-bottom:1px solid rgba(255,255,255,0.06)">
-  <div style="max-width:1200px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-    <div style="display:flex;align-items:center;gap:20px">
-      <div style="background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.35);border-radius:14px;padding:12px 20px;display:flex;align-items:center;gap:14px">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg style="width:18px;height:18px;color:#fff" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
+  <div style="max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.35);border-radius:12px;padding:10px 18px;display:flex;align-items:center;gap:12px">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg style="width:16px;height:16px;color:#fff" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
         </div>
         <div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.5);font-weight:700;text-transform:uppercase;letter-spacing:0.07em">Your Balance</div>
-          <div style="font-size:24px;font-weight:900;color:#fff;line-height:1.1">
-            {{ _cr }} <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.5)">credit{{ 's' if _cr != 1 }}</span>
-          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);font-weight:700;text-transform:uppercase;letter-spacing:0.07em">Your Balance</div>
+          <div style="font-size:20px;font-weight:900;color:#fff;line-height:1.1">{{ _cr }} <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.45)">report{{ 's' if _cr != 1 }}</span></div>
         </div>
       </div>
       {% if user.subscription_plan %}
       <div style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:8px 14px">
-        <div style="font-size:10px;color:#6ee7b7;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Active Subscription</div>
-        <div style="font-size:13px;font-weight:800;color:#a7f3d0">{{ 'Starter 50/mo' if user.subscription_plan == 'starter_sub' else 'Pro 250/mo' }}</div>
+        <div style="font-size:10px;color:#6ee7b7;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Active Plan</div>
+        <div style="font-size:13px;font-weight:800;color:#a7f3d0">
+          {% if user.subscription_plan == 'broker' %}Broker 50/mo
+          {% elif user.subscription_plan == 'pro' %}Pro 200/mo
+          {% elif user.subscription_plan == 'agency' %}Agency 500/mo
+          {% else %}Active{% endif %}
+        </div>
       </div>
       {% endif %}
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      {% if _cr <= 5 %}
-      <span style="font-size:12px;color:#fbbf24;font-weight:600">{{ '⚠ Low balance — top up below' if _cr > 0 else '⚠ Out of credits' }}</span>
-      {% endif %}
-      <a href="#packs" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:13px;font-weight:800;padding:10px 22px;border-radius:11px;text-decoration:none;box-shadow:0 4px 15px rgba(99,102,241,0.4)">Top Up Credits →</a>
-    </div>
+    {% if _cr <= 5 %}
+    <span style="font-size:12px;color:#fbbf24;font-weight:700">{{ '⚠ Low balance — upgrade below' if _cr > 0 else '⚠ Out of reports — pick a plan' }}</span>
+    {% endif %}
   </div>
 </div>
 {% endif %}
 
 <!-- ══ HERO ══ -->
-<section class="relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%)">
-  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle at 20% 50%,rgba(99,102,241,0.15) 0%,transparent 60%),radial-gradient(circle at 80% 20%,rgba(14,165,233,0.12) 0%,transparent 50%)"></div>
-  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle,rgba(148,163,184,0.12) 1px,transparent 1px);background-size:28px 28px"></div>
+<section style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);padding:88px 0 80px;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(99,102,241,0.18) 0%,transparent 55%),radial-gradient(circle at 80% 20%,rgba(14,165,233,0.12) 0%,transparent 50%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(148,163,184,0.1) 1px,transparent 1px);background-size:28px 28px;pointer-events:none"></div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
-    <div class="inline-flex items-center gap-2 text-sky-300 text-xs font-bold px-4 py-2 rounded-full border border-white/10 mb-6" style="background:rgba(255,255,255,0.08)">
-      <svg style="width:13px;height:13px" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-      Pay-as-you-go &middot; No subscription required
+  <div style="max-width:760px;margin:0 auto;padding:0 24px;text-align:center;position:relative">
+
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.35);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:800;color:#a5b4fc;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:22px">
+      <svg style="width:11px;height:11px" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      Simple, transparent pricing
     </div>
 
-    <h1 class="text-4xl sm:text-6xl font-black text-white mb-5 leading-tight">
-      Analysis Credits<br/>
-      <span style="background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">at the fairest price</span>
+    <h1 style="font-size:clamp(2.4rem,5vw,3.6rem);font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px">
+      One tool.<br/>
+      <span style="background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Three plans.</span>
     </h1>
-    <p class="text-slate-300 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-      1 credit = 1 complete AI bank statement analysis. Credits never expire &mdash; buy once, use whenever.
+    <p style="font-size:1.15rem;color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto 36px;line-height:1.65">
+      AI bank statement analysis + 435-lender matching in one platform. Pick the plan that fits your volume — upgrade or cancel any time.
     </p>
 
-    <div class="flex flex-wrap gap-3 justify-center mb-10">
-      {% for label in ["Credits never expire", "Full AI every report", "No subscription lock-in", "Instant access after signup"] %}
-      <span class="inline-flex items-center gap-1.5 text-slate-300 text-sm font-medium px-4 py-2 rounded-full" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1)">
-        <span class="text-green-400 font-bold">&#10003;</span> {{ label }}
-      </span>
-      {% endfor %}
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px">
+      <span class="trust-pill">✓ Cancel any time</span>
+      <span class="trust-pill">✓ Unused reports carry forward</span>
+      <span class="trust-pill">✓ 3 free reports — no card needed</span>
+      <span class="trust-pill">✓ 435+ lenders included</span>
     </div>
 
-    <div class="inline-flex items-center gap-5" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:18px 28px">
-      <div class="text-left">
-        <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Starting from</div>
-        <div class="text-white font-black text-3xl leading-none mt-1">$1.00<span class="text-lg text-slate-400 font-semibold">/report</span></div>
-      </div>
-      <div style="width:1px;height:40px;background:rgba(255,255,255,0.15)"></div>
-      <div class="text-left">
-        <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider">vs industry avg</div>
-        <div class="text-red-400 font-black text-3xl leading-none mt-1" style="text-decoration:line-through;opacity:0.8">$3&ndash;5<span class="text-lg font-semibold">/report</span></div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- Stats bar -->
-<section class="bg-white border-b border-slate-100">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-      {% for val, label in [("500+","Credit packs sold"),("<30s","Analysis time"),("99.2%","Extraction accuracy"),("$0","Hidden fees")] %}
-      <div>
-        <div class="text-2xl font-black text-slate-900">{{ val }}</div>
-        <div class="text-xs text-slate-500 font-medium mt-0.5">{{ label }}</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+<!-- ══ 3 PLAN CARDS ══ -->
+<section style="background:#f0f4ff;padding:0 0 80px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
 
-<!-- ══ CREDIT PACKS ══ -->
-<section id="packs" style="background:#f8fafc;padding:80px 0">
-  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <!-- cards pulled up over hero -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:-52px">
 
-    <div style="text-align:center;margin-bottom:52px">
-      <div style="display:inline-flex;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:800;padding:5px 14px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px">
-        <svg style="width:11px;height:11px" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9z" clip-rule="evenodd"/></svg>
-        One-time · No subscription
-      </div>
-      <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:#0f172a;margin:0 0 12px;letter-spacing:-0.02em">Choose your credit pack</h2>
-      <p style="color:#64748b;font-size:1rem;max-width:480px;margin:0 auto;line-height:1.65">Buy once, use whenever. Credits never expire and stack with future purchases.</p>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:960px;margin:0 auto">
-      {% for pack, credits, price, per_credit, savings_pct, badge, hot, note in [
-        ("Starter",   10,  14.90, "1.49", 0,  "",             false, "Try it out"),
-        ("Basic",     25,  27.90, "1.12", 25, "",             false, "Small teams"),
-        ("Standard",  50,  54.90, "1.10", 26, "MOST POPULAR", true,  "Best for brokers"),
-        ("Business", 100, 104.90, "1.05", 29, "",             false, "High volume"),
-        ("Growth",   250, 262.90, "1.05", 37, "BEST VALUE",   false, "Power users"),
-        ("Scale",    500, 499.90, "1.00", 40, "",             false, "Enterprise"),
-      ] %}
-      <div class="credit-card {% if hot %}hot{% endif %}" style="{% if hot %}background:linear-gradient(180deg,#fafbff 0%,#fff 100%){% endif %}">
-        {% if badge %}
-        <div class="badge-top" style="{% if hot %}background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff{% else %}background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0{% endif %}">
-          {{ badge }}
-        </div>
-        {% endif %}
-
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
-          <div>
-            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:6px">{{ pack }}</div>
-            <div style="font-size:3rem;font-weight:900;color:#0f172a;line-height:1;letter-spacing:-0.03em">{{ credits }}</div>
-            <div style="font-size:12px;font-weight:600;color:#94a3b8;margin-top:2px">credits</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:1.6rem;font-weight:900;color:#0f172a;line-height:1">${{ "%.0f"|format(price) }}</div>
-            <div style="font-size:11px;color:#94a3b8;font-weight:500">one-time</div>
-            {% if savings_pct > 0 %}
-            <div style="margin-top:5px;background:#dcfce7;color:#15803d;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;display:inline-block">Save {{ savings_pct }}%</div>
-            {% endif %}
-          </div>
+      <!-- ── BROKER ── -->
+      <div class="plan-card light">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:10px">Broker</div>
+        <div class="plan-price" style="color:#0f172a">$49</div>
+        <div style="font-size:13px;color:#94a3b8;font-weight:600;margin-bottom:4px">/month</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:800;color:#15803d;margin-bottom:26px">
+          50 reports/mo &nbsp;·&nbsp; $0.98/report
         </div>
 
-        <div style="background:{% if hot %}#f0f0ff{% else %}#f8fafc{% endif %};border-radius:10px;padding:10px 14px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:13px;font-weight:800;color:{% if hot %}#4f46e5{% else %}#0284c7{% endif %}">${{ per_credit }}/report</span>
-          <span style="font-size:11px;color:#94a3b8">{{ note }}</span>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
-          {% for f in ["Income verification","NSF &amp; overdraft count","MCA loan detection","Risk score 0–100","APPROVE / REVIEW / DECLINE"] %}
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569">
-            <div style="width:16px;height:16px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:{% if hot %}#e0e7ff{% else %}#f0fdf4{% endif %}">
-              <svg style="width:8px;height:8px;color:{% if hot %}#6366f1{% else %}#16a34a{% endif %}" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        <div style="font-size:11px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px">Everything you need to start</div>
+        <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:28px">
+          {% for f in [
+            ("AI income & cashflow analysis", true),
+            ("NSF, overdraft & MCA detection", true),
+            ("12-point fraud check", true),
+            ("Risk score 0–100 with recommendation", true),
+            ("Lender matching — 435+ lenders", true),
+            ("Grade A/B/C/D lender results", true),
+            ("CSV & PDF export", true),
+            ("API access", false),
+            ("Custom scoring rules", false),
+          ] %}
+          <div class="feature-row">
+            <div class="check-icon" style="background:{% if f[1] %}#f0fdf4{% else %}#f8fafc{% endif %}">
+              {% if f[1] %}
+              <svg style="width:9px;height:9px;color:#22c55e" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              {% else %}
+              <svg style="width:9px;height:9px;color:#cbd5e1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              {% endif %}
             </div>
-            {{ f }}
+            <span style="font-size:13px;color:{% if f[1] %}#374151{% else %}#94a3b8{% endif %}">{{ f[0] }}</span>
           </div>
           {% endfor %}
         </div>
 
-        <form method="POST" action="/billing/checkout">
-          <input type="hidden" name="pack" value="{{ pack|lower }}">
-          <button type="submit" class="btn-buy {% if hot %}btn-buy-hot{% else %}btn-buy-default{% endif %}">
-            Buy {{ credits }} Credits — ${{ "%.0f"|format(price) }}
+        <form method="POST" action="/billing/subscribe">
+          <input type="hidden" name="plan" value="broker">
+          <button type="submit" class="btn-plan" style="background:#f1f5f9;color:#0f172a">
+            Get Started — $49/mo
           </button>
         </form>
+        <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:10px">Cancel any time · No lock-in</p>
       </div>
-      {% endfor %}
-    </div>
 
-    <!-- Value bar -->
-    <div style="max-width:640px;margin:60px auto 0;background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:28px 32px">
-      <div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:4px;text-align:center">Cost per report compared to alternatives</div>
-      <div style="font-size:11px;color:#94a3b8;text-align:center;margin-bottom:20px">Industry tools charge $2–5/report. We start at $1.49.</div>
-      {% for label, pct, price_per, col in [
-        ("Industry avg", 100, "$3–5", "#ef4444"),
-        ("Starter (10)", 45, "$1.49", "#94a3b8"),
-        ("Standard (50)", 34, "$1.10", "#6366f1"),
-        ("Scale (500)", 30, "$1.00", "#0ea5e9"),
-      ] %}
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <div style="width:110px;font-size:11px;font-weight:600;color:#64748b;text-align:right;flex-shrink:0">{{ label }}</div>
-        <div style="flex:1;background:#f1f5f9;border-radius:100px;height:28px;overflow:hidden">
-          <div style="height:100%;width:{{ pct }}%;background:{{ col }};border-radius:100px;display:flex;align-items:center;padding:0 10px;min-width:60px">
-            <span style="font-size:11px;font-weight:800;color:#fff">{{ price_per }}</span>
-          </div>
+      <!-- ── PRO (FEATURED) ── -->
+      <div class="plan-card featured">
+        <div class="plan-badge">MOST POPULAR</div>
+
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);margin-bottom:10px">Pro</div>
+        <div class="plan-price" style="color:#fff">$149</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);font-weight:600;margin-bottom:4px">/month</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,0.25);border:1px solid rgba(99,102,241,0.4);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:800;color:#a5b4fc;margin-bottom:26px">
+          200 reports/mo &nbsp;·&nbsp; $0.75/report
         </div>
-      </div>
-      {% endfor %}
-    </div>
 
-  </div>
-</section>
-
-<!-- Competitor Comparison Table -->
-<section class="py-16 bg-white">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-10">
-      <p class="text-sky-600 text-sm font-bold uppercase tracking-widest mb-2">Price Comparison</p>
-      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Significantly cheaper than every major alternative</h2>
-      <p class="text-slate-500 mt-3 text-sm">Same AI analysis quality. No restrictive templates. Up to 80% lower cost.</p>
-    </div>
-
-    <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-slate-50 border-b border-slate-200">
-              <th class="text-left text-slate-500 font-semibold py-4 px-5">Tool</th>
-              <th class="text-center text-slate-500 font-semibold py-4 px-4">5 reports</th>
-              <th class="text-center text-slate-500 font-semibold py-4 px-4">20 reports</th>
-              <th class="text-center text-slate-500 font-semibold py-4 px-4">60 reports</th>
-              <th class="text-center text-slate-500 font-semibold py-4 px-4">Pay-per</th>
-              <th class="text-center text-slate-500 font-semibold py-4 px-4">Model</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100">
-            <tr>
-              <td class="py-4 px-5 font-semibold text-slate-700">Other Tool A</td>
-              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$24.95/mo</span><br/><span class="text-xs text-slate-400">$4.99/ea</span></td>
-              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$49.95/mo</span><br/><span class="text-xs text-slate-400">$2.50/ea</span></td>
-              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$99.95/mo</span><br/><span class="text-xs text-slate-400">$1.67/ea</span></td>
-              <td class="py-4 px-4 text-center text-red-500 font-bold">$2&ndash;5/ea</td>
-              <td class="py-4 px-4 text-center"><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-1 rounded-lg">Subscription</span></td>
-            </tr>
-            <tr>
-              <td class="py-4 px-5 font-semibold text-slate-700">Other Tool B</td>
-              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$39/mo</span><br/><span class="text-xs text-slate-400">~$2.44/ea</span></td>
-              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$74/mo</span><br/><span class="text-xs text-slate-400">~$1.80/ea</span></td>
-              <td class="py-4 px-4 text-center"><span class="text-red-500 font-bold">$159/mo</span><br/><span class="text-xs text-slate-400">~$0.96/ea</span></td>
-              <td class="py-4 px-4 text-center text-slate-400">&mdash;</td>
-              <td class="py-4 px-4 text-center"><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-1 rounded-lg">Subscription</span></td>
-            </tr>
-            <tr>
-              <td class="py-4 px-5 font-semibold text-slate-700">Other Tool C</td>
-              <td class="py-4 px-4 text-center text-slate-400 text-xs italic">Custom quote</td>
-              <td class="py-4 px-4 text-center text-slate-400 text-xs italic">Custom quote</td>
-              <td class="py-4 px-4 text-center text-slate-400 text-xs italic">Custom quote</td>
-              <td class="py-4 px-4 text-center text-red-500 font-bold">$2&ndash;5+/ea</td>
-              <td class="py-4 px-4 text-center"><span class="bg-orange-50 text-orange-700 text-xs font-bold px-2 py-1 rounded-lg">Enterprise</span></td>
-            </tr>
-            <tr style="background:linear-gradient(135deg,rgba(224,242,254,0.7),rgba(238,242,255,0.6));border-top:2px solid #c7d2fe">
-              <td class="py-4 px-5">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs" style="background:linear-gradient(135deg,#6366f1,#0ea5e9)">S</div>
-                  <span class="font-black text-slate-900">StatementScrub</span>
-                  <span class="bg-green-500 text-white text-xs font-black px-2 py-0.5 rounded-full">CHEAPEST</span>
-                </div>
-              </td>
-              <td class="py-4 px-4 text-center"><span class="text-green-600 font-black">$14.90</span><br/><span class="text-xs text-green-500 font-bold">$1.49/ea</span></td>
-              <td class="py-4 px-4 text-center"><span class="text-green-600 font-black">$27.90</span><br/><span class="text-xs text-green-500 font-bold">$1.12/ea</span></td>
-              <td class="py-4 px-4 text-center"><span class="text-green-600 font-black">$54.90</span><br/><span class="text-xs text-green-500 font-bold">$1.10/ea</span></td>
-              <td class="py-4 px-4 text-center text-green-600 font-black">$1.00&ndash;1.49</td>
-              <td class="py-4 px-4 text-center"><span class="bg-green-50 text-green-700 text-xs font-black px-2 py-1 rounded-lg border border-green-200">Pay-as-you-go</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <p class="text-center text-slate-400 text-xs mt-4">Based on publicly available market pricing. Subject to change.</p>
-  </div>
-</section>
-
-<!-- Credits vs Subscription -->
-<section class="py-16 bg-slate-50">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Credits or monthly plan?</h2>
-      <p class="text-slate-500 mt-2 text-sm">Pick what fits your workflow.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-        <div class="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-2xl mb-4">&#127903;</div>
-        <h3 class="text-lg font-black text-slate-900 mb-1">Buy Credits when you&hellip;</h3>
-        <p class="text-slate-500 text-sm mb-5">Flexible, no recurring charges.</p>
-        <ul class="space-y-3 mb-6">
-          {% for item in ["Don't analyze statements every month","Want to try before committing","Have unpredictable or seasonal volume","Need a one-time bulk analysis run","Want credits that truly never expire"] %}
-          <li class="flex items-start gap-3 text-sm text-slate-600">
-            <div class="w-5 h-5 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5" style="color:#0284c7">
-              <svg style="width:9px;height:9px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            </div>
-            {{ item }}
-          </li>
-          {% endfor %}
-        </ul>
-        <a href="#packs" class="block text-center bg-slate-100 text-slate-800 font-bold py-3 rounded-xl hover:bg-slate-200 transition text-sm">Browse Credit Packs &uarr;</a>
-      </div>
-      <div class="rounded-2xl p-8 shadow-xl text-white" style="background:linear-gradient(135deg,#4f46e5,#0ea5e9)">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4" style="background:rgba(255,255,255,0.15)">&#128197;</div>
-        <h3 class="text-lg font-black mb-1">Subscribe monthly when you&hellip;</h3>
-        <p class="text-sm mb-5" style="color:rgba(255,255,255,0.7)">Best for high-volume teams.</p>
-        <ul class="space-y-3 mb-6">
-          {% for item in ["Analyze statements daily or weekly","Want the absolute lowest per-report cost","Need unlimited reports (Pro plan)","Want Telegram bot notifications","Process 50+ statements per month"] %}
-          <li class="flex items-start gap-3 text-sm" style="color:rgba(255,255,255,0.9)">
-            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(255,255,255,0.2)">
-              <svg style="width:9px;height:9px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            </div>
-            {{ item }}
-          </li>
-          {% endfor %}
-        </ul>
-        <a href="#subscriptions" class="block text-center bg-white text-indigo-700 font-black py-3 rounded-xl hover:bg-indigo-50 transition text-sm shadow-lg">See Monthly Plans &darr;</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ MONTHLY SUBSCRIPTIONS ══ -->
-<section id="subscriptions" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0c1a35 100%);padding:80px 0;position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 25% 40%,rgba(99,102,241,0.15) 0%,transparent 50%),radial-gradient(circle at 75% 60%,rgba(14,165,233,0.1) 0%,transparent 50%);pointer-events:none"></div>
-  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:26px 26px;pointer-events:none"></div>
-
-  <div style="max-width:900px;margin:0 auto;padding:0 24px;position:relative">
-
-    <div style="text-align:center;margin-bottom:52px">
-      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:11px;font-weight:800;padding:5px 14px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px;border:1px solid rgba(99,102,241,0.3)">
-        <svg style="width:11px;height:11px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
-        Auto-renews monthly · Cancel any time
-      </div>
-      <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-0.02em">Monthly subscriptions</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:1rem;max-width:440px;margin:0 auto">Credits refill every month automatically. Unused credits carry forward — they never disappear.</p>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
-
-      <!-- Starter Sub -->
-      <div class="sub-card" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:10px">Starter Monthly</div>
-        <div style="display:flex;align-items:flex-end;gap:6px;margin-bottom:4px">
-          <span style="font-size:3.2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.03em">$49</span>
-          <span style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:8px">/month</span>
-        </div>
-        <div style="font-size:12px;color:#818cf8;font-weight:700;margin-bottom:24px">50 credits · $0.98/report</div>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
-          {% for f in ["50 credits added every month","Unused credits carry forward","Full analysis per report","Email receipt monthly","Cancel any time — no lock-in"] %}
-          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.75)">
-            <div style="width:18px;height:18px;background:rgba(99,102,241,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px">Everything in Broker, plus</div>
+        <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:28px">
+          {% for f in [
+            "AI income & cashflow analysis",
+            "NSF, overdraft & MCA detection",
+            "12-point fraud check",
+            "Risk score 0–100 with recommendation",
+            "Lender matching — 435+ lenders",
+            "Grade A/B/C/D lender results",
+            "CSV & PDF export",
+            "API access with key management",
+            "Custom scoring rules (your thresholds)",
+            "Telegram bot notifications",
+            "Priority email support",
+          ] %}
+          <div class="feature-row">
+            <div class="check-icon" style="background:rgba(99,102,241,0.25)">
               <svg style="width:9px;height:9px;color:#818cf8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             </div>
-            {{ f }}
+            <span style="font-size:13px;color:rgba(255,255,255,0.82)">{{ f }}</span>
           </div>
           {% endfor %}
         </div>
+
         <form method="POST" action="/billing/subscribe">
-          <input type="hidden" name="plan" value="starter_sub">
-          <button type="submit" style="width:100%;padding:14px;border-radius:13px;font-weight:800;font-size:13px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-family:inherit;transition:all 0.18s"
-            onmouseover="this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-            Subscribe — $49/mo →
+          <input type="hidden" name="plan" value="pro">
+          <button type="submit" class="btn-plan" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;box-shadow:0 6px 24px rgba(99,102,241,0.45)">
+            Get Started — $149/mo
           </button>
         </form>
+        <p style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">Cancel any time · No lock-in</p>
       </div>
 
-      <!-- Pro Sub -->
-      <div class="sub-card" style="background:linear-gradient(145deg,rgba(99,102,241,0.25),rgba(14,165,233,0.15));border:1px solid rgba(99,102,241,0.45);position:relative">
-        <div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:10px;font-weight:900;padding:4px 16px;border-radius:100px;letter-spacing:0.07em;white-space:nowrap">BEST VALUE</div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);margin-bottom:10px">Pro Monthly</div>
-        <div style="display:flex;align-items:flex-end;gap:6px;margin-bottom:4px">
-          <span style="font-size:3.2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.03em">$149</span>
-          <span style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:8px">/month</span>
+      <!-- ── AGENCY ── -->
+      <div class="plan-card light">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:10px">Agency</div>
+        <div class="plan-price" style="color:#0f172a">$349</div>
+        <div style="font-size:13px;color:#94a3b8;font-weight:600;margin-bottom:4px">/month</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:#faf5ff;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:800;color:#7c3aed;margin-bottom:26px">
+          500 reports/mo &nbsp;·&nbsp; $0.70/report
         </div>
-        <div style="font-size:12px;color:#67e8f9;font-weight:700;margin-bottom:24px">250 credits · $0.60/report</div>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
-          {% for f in ["250 credits added every month","Unused credits carry forward","Full analysis per report","Priority support response","Cancel any time — no lock-in"] %}
-          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.85)">
-            <div style="width:18px;height:18px;background:rgba(14,165,233,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg style="width:9px;height:9px;color:#38bdf8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+
+        <div style="font-size:11px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px">Everything in Pro, plus</div>
+        <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:28px">
+          {% for f in [
+            "AI income & cashflow analysis",
+            "NSF, overdraft & MCA detection",
+            "12-point fraud check",
+            "Risk score 0–100 with recommendation",
+            "Lender matching — 435+ lenders",
+            "Grade A/B/C/D lender results",
+            "CSV & PDF export",
+            "API access with key management",
+            "Custom scoring rules",
+            "Telegram bot notifications",
+            "5 team member seats",
+            "Dedicated account manager",
+          ] %}
+          <div class="feature-row">
+            <div class="check-icon" style="background:#faf5ff">
+              <svg style="width:9px;height:9px;color:#8b5cf6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             </div>
-            {{ f }}
+            <span style="font-size:13px;color:#374151">{{ f }}</span>
           </div>
           {% endfor %}
         </div>
+
         <form method="POST" action="/billing/subscribe">
-          <input type="hidden" name="plan" value="pro_sub">
-          <button type="submit" style="width:100%;padding:14px;border-radius:13px;font-weight:800;font-size:13px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;cursor:pointer;font-family:inherit;box-shadow:0 6px 24px rgba(99,102,241,0.45);transition:all 0.18s"
-            onmouseover="this.style.opacity='0.9';this.style.transform='translateY(-1px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">
-            Subscribe — $149/mo →
+          <input type="hidden" name="plan" value="agency">
+          <button type="submit" class="btn-plan" style="background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;box-shadow:0 6px 24px rgba(124,58,237,0.3)">
+            Get Started — $349/mo
           </button>
         </form>
+        <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:10px">Cancel any time · No lock-in</p>
       </div>
 
     </div>
-    <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:11px">Charged monthly to your card. Cancel any time from account settings. Unused credits never expire.</p>
+
+    <!-- ── Free trial note ── -->
+    <div style="text-align:center;margin-top:28px">
+      <p style="color:#64748b;font-size:13.5px">
+        Not ready to commit?
+        <a href="/auth/register" style="color:#6366f1;font-weight:800;text-decoration:none">Start free →</a>
+        &nbsp;Get 3 full reports with no credit card required.
+      </p>
+    </div>
 
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="py-16 bg-white">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Frequently Asked Questions</h2>
+<!-- ══ VALUE CALLOUT ══ -->
+<section style="background:#fff;padding:64px 0">
+  <div style="max-width:1000px;margin:0 auto;padding:0 24px">
+
+    <div style="text-align:center;margin-bottom:48px">
+      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:#0f172a;letter-spacing:-0.02em;margin-bottom:10px">
+        Why brokers choose StatementScrub
+      </h2>
+      <p style="color:#64748b;font-size:14.5px;max-width:500px;margin:0 auto">Two tools in one. No other platform combines AI analysis with live lender matching.</p>
     </div>
-    <div class="space-y-3">
-      {% for q, a in [
-        ("Do credits expire?","No. Credits never expire. Once purchased, they stay in your account until you use them &mdash; no time limit, no pressure."),
-        ("Can I buy multiple packs?","Yes. Credits stack. Buy a 100-credit pack and a 50-credit pack and you will have 150 credits total. They combine automatically."),
-        ("What counts as 1 credit?","One credit = one full bank statement analysis. Upload a PDF, AI processes it, you get a complete structured report with income, NSF, risk score, and recommendation."),
-        ("Can I combine credits with a subscription?","Yes. If you are on a subscription plan and exhaust your monthly reports, credits automatically cover the overflow &mdash; no interruption."),
-        ("What if I need more than 500 credits?","Contact us at support@statementscrub.com for custom enterprise pricing on 1,000+ credit packs with volume discounts."),
-        ("Is there a refund policy?","Unused credits can be refunded within 14 days of purchase. Email support@statementscrub.com with your order details."),
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      {% for icon, title, body in [
+        ("⚡", "30-Second Analysis", "Upload any bank statement PDF and get a complete structured report in under 30 seconds — income, NSF count, MCA detection, and a risk score from 0 to 100."),
+        ("🏦", "435+ Live Lenders", "After analysis, instantly see which lenders will fund the merchant — filtered by industry, state, deposits, NSF count, and credit score. Grouped A → B → C → D."),
+        ("🚨", "12-Point Fraud Check", "Detect structuring, account cycling, round-number deposits, payday loans, ACH returns, and more — automatically flagged in every report."),
+        ("📊", "Full Monthly Breakdown", "Month-by-month table of deposits, withdrawals, NSFs, and balances — see trends at a glance and spot the months that matter."),
+        ("📤", "Export Anywhere", "Download every report as a formatted PDF or CSV. Share with clients, lenders, or compliance teams in one click."),
+        ("🔑", "API Access (Pro+)", "Connect StatementScrub to your own CRM or LOS via REST API. Your key is generated instantly in account settings."),
       ] %}
-      <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-        <details class="group">
-          <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition-colors select-none">
-            <span class="font-bold text-slate-900 text-sm">{{ q }}</span>
-            <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 ml-4 transition-colors" style="color:#94a3b8">
-              <svg style="width:12px;height:12px" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="transition-transform duration-200 group-open:rotate-180"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:24px 22px">
+        <div style="font-size:26px;margin-bottom:12px">{{ icon }}</div>
+        <h3 style="font-size:14.5px;font-weight:800;color:#0f172a;margin-bottom:6px">{{ title }}</h3>
+        <p style="font-size:13px;color:#64748b;line-height:1.65;margin:0">{{ body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ COMPARISON TABLE ══ -->
+<section style="background:#f8fafc;padding:64px 0">
+  <div style="max-width:860px;margin:0 auto;padding:0 24px">
+
+    <div style="text-align:center;margin-bottom:36px">
+      <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:#0f172a;letter-spacing:-0.02em">Plan comparison</h2>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.05)">
+      <table class="compare-table" style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:16px 24px">Feature</th>
+            <th>Broker<br/><span style="font-weight:600;font-size:12px;text-transform:none;letter-spacing:0">$49/mo</span></th>
+            <th style="background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(14,165,233,0.06));color:#4f46e5">Pro<br/><span style="font-weight:600;font-size:12px;text-transform:none;letter-spacing:0">$149/mo</span></th>
+            <th>Agency<br/><span style="font-weight:600;font-size:12px;text-transform:none;letter-spacing:0">$349/mo</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in [
+            ("Reports per month", "50", "200", "500"),
+            ("Cost per report", "$0.98", "$0.75", "$0.70"),
+            ("AI bank statement analysis", "✓", "✓", "✓"),
+            ("12-point fraud detection", "✓", "✓", "✓"),
+            ("Risk score 0–100", "✓", "✓", "✓"),
+            ("Lender matching (435+)", "✓", "✓", "✓"),
+            ("CSV & PDF export", "✓", "✓", "✓"),
+            ("API access", "—", "✓", "✓"),
+            ("Telegram notifications", "—", "✓", "✓"),
+            ("Custom scoring rules", "—", "✓", "✓"),
+            ("Team seats", "1", "1", "5"),
+            ("Support", "Email", "Priority", "Dedicated"),
+          ] %}
+          <tr {% if loop.index is odd %}style="background:#fafbff"{% endif %}>
+            <td>{{ row[0] }}</td>
+            <td>
+              {% if row[1] == "✓" %}<span class="tick">✓</span>
+              {% elif row[1] == "—" %}<span class="cross">—</span>
+              {% else %}<strong>{{ row[1] }}</strong>{% endif %}
+            </td>
+            <td style="background:linear-gradient(135deg,rgba(99,102,241,0.05),rgba(14,165,233,0.03))">
+              {% if row[2] == "✓" %}<span class="tick">✓</span>
+              {% elif row[2] == "—" %}<span class="cross">—</span>
+              {% else %}<strong style="color:#4f46e5">{{ row[2] }}</strong>{% endif %}
+            </td>
+            <td>
+              {% if row[3] == "✓" %}<span class="tick">✓</span>
+              {% elif row[3] == "—" %}<span class="cross">—</span>
+              {% else %}<strong>{{ row[3] }}</strong>{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section style="background:#fff;padding:64px 0">
+  <div style="max-width:680px;margin:0 auto;padding:0 24px">
+    <div style="text-align:center;margin-bottom:36px">
+      <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:#0f172a;letter-spacing:-0.02em">Frequently asked questions</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      {% for q, a in [
+        ("Can I cancel my plan?", "Yes. Cancel any time from your account settings with one click. No questions asked, no cancellation fees. Your remaining credits stay active for the rest of the billing period."),
+        ("Do unused reports carry forward?", "Yes. Any unused credits from your monthly allocation carry forward automatically — they never disappear."),
+        ("What counts as 1 report?", "One report = one full AI bank statement analysis: income verification, NSF count, MCA loan detection, 12-point fraud check, risk score 0–100, and an APPROVE / REVIEW / DECLINE recommendation."),
+        ("What is lender matching?", "After analyzing a statement, our engine matches the merchant against 435+ active MCA lenders — filtered by industry, state, deposit amount, NSF count, and credit score. You see exactly which lenders will fund, grouped A → B → C → D."),
+        ("Is there a free trial?", "Yes. Every new account gets 3 free reports with no credit card required. Explore the full analysis quality before choosing a plan."),
+        ("Can I use the API on any plan?", "API access is available on Pro and Agency plans. Your API key is generated instantly in account settings. Documentation is available at statementscrub.com/docs/api."),
+        ("Do you offer custom enterprise pricing?", "Yes. If you need 1,000+ reports per month, contact us at support@statementscrub.com for custom volume pricing."),
+      ] %}
+      <div style="border:1.5px solid #e2e8f0;border-radius:16px;overflow:hidden;background:#fff">
+        <details>
+          <summary style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;cursor:pointer;font-weight:700;font-size:14px;color:#0f172a;list-style:none;user-select:none">
+            {{ q }}
+            <span style="width:24px;height:24px;background:#f1f5f9;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:12px;color:#94a3b8">
+              <svg style="width:12px;height:12px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
             </span>
           </summary>
-          <div class="px-5 pb-5 text-slate-600 text-sm leading-relaxed border-t border-slate-100">{{ a }}</div>
+          <div style="padding:0 20px 18px;font-size:13.5px;color:#64748b;line-height:1.7;border-top:1px solid #f1f5f9">{{ a }}</div>
         </details>
       </div>
       {% endfor %}
@@ -555,24 +428,26 @@
   </div>
 </section>
 
-<!-- Bottom CTA -->
-<section class="py-20 relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#0f172a 100%)">
-  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle at 30% 50%,rgba(99,102,241,0.18) 0%,transparent 55%),radial-gradient(circle at 75% 30%,rgba(14,165,233,0.1) 0%,transparent 50%)"></div>
-  <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle,rgba(148,163,184,0.08) 1px,transparent 1px);background-size:28px 28px"></div>
-  <div class="relative max-w-3xl mx-auto px-4 text-center">
-    <div class="text-4xl mb-4">&#127873;</div>
-    <h2 class="text-3xl sm:text-4xl font-black text-white mb-3">Start with 3 free reports first</h2>
-    <p class="text-slate-300 text-lg mb-8">No credit card needed. Experience the quality before you commit to a pack.</p>
-    <div class="flex flex-col sm:flex-row gap-3 justify-center">
-      <a href="/auth/register" class="inline-flex items-center justify-center gap-2 bg-white text-indigo-700 px-8 py-4 rounded-xl font-black text-base hover:bg-indigo-50 transition shadow-2xl">
-        Try Free &mdash; No Card Needed
-        <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+<!-- ══ BOTTOM CTA ══ -->
+<section style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#0f172a 100%);padding:88px 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 30% 50%,rgba(99,102,241,0.18) 0%,transparent 55%),radial-gradient(circle at 75% 30%,rgba(14,165,233,0.1) 0%,transparent 50%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(148,163,184,0.08) 1px,transparent 1px);background-size:28px 28px;pointer-events:none"></div>
+
+  <div style="max-width:640px;margin:0 auto;padding:0 24px;text-align:center;position:relative">
+    <div style="font-size:44px;margin-bottom:16px" class="float">🚀</div>
+    <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:#fff;letter-spacing:-0.03em;margin-bottom:12px">Start with 3 free reports</h2>
+    <p style="color:rgba(255,255,255,0.55);font-size:1.05rem;margin-bottom:36px;line-height:1.65">
+      No credit card. No commitment. See exactly what your brokers will see before you spend a dollar.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+      <a href="/auth/register" style="background:#fff;color:#4f46e5;font-weight:900;font-size:15px;padding:15px 32px;border-radius:14px;text-decoration:none;box-shadow:0 8px 32px rgba(0,0,0,0.25);transition:all 0.18s">
+        Try Free — No Card Needed →
       </a>
-      <a href="#packs" class="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-bold text-base transition" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)">
-        View Credit Packs
+      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;font-weight:800;font-size:15px;padding:15px 32px;border-radius:14px;text-decoration:none">
+        View Plans ↑
       </a>
     </div>
-    <p class="text-slate-500 text-xs mt-6">3 free reports included with every new account &middot; No credit card required</p>
+    <p style="color:rgba(255,255,255,0.25);font-size:11px;margin-top:18px">3 free reports included with every new account · No credit card required</p>
   </div>
 </section>
 
