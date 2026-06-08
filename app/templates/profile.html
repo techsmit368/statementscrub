@@ -1,32 +1,32 @@
 {% extends "base_app.html" %}
 {% block title %}My Profile — StatementScrub{% endblock %}
 {% block page_title %}My Profile{% endblock %}
-{% block page_subtitle %}Manage your account information and security settings{% endblock %}
+{% block page_subtitle %}Manage your account information and security{% endblock %}
 
 {% block content %}
-<div class="row g-4 au" style="max-width:940px">
+<div class="row g-4 au" style="max-width:960px">
 
-  <!-- LEFT COLUMN -->
+  <!-- ── LEFT ── -->
   <div class="col-lg-7 d-flex flex-column gap-4">
 
-    <!-- Profile card -->
-    <div class="card shadow-sm" style="overflow:hidden">
+    <!-- Account card -->
+    <div class="card shadow-sm overflow-hidden">
       <div class="card-header d-flex align-items-center gap-2">
         <i class="bi bi-person-circle text-primary"></i> Account Information
       </div>
       <div class="card-body p-4">
         <!-- Avatar row -->
-        <div class="d-flex align-items-center gap-3 mb-4 pb-4" style="border-bottom:1px solid #e8ecf0">
-          <div style="width:58px;height:58px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:24px;box-shadow:0 4px 16px rgba(99,102,241,0.3);flex-shrink:0">
+        <div class="d-flex align-items-center gap-4 mb-4 pb-4" style="border-bottom:1px solid #f0f2f5">
+          <div style="width:64px;height:64px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:26px;box-shadow:0 6px 20px rgba(99,102,241,0.35);flex-shrink:0">
             {{ (user.full_name or user.email)[0].upper() }}
           </div>
           <div>
-            <h5 class="fw-bold mb-1" style="color:#0f172a">{{ user.full_name or 'No name set' }}</h5>
-            <div class="text-muted small mb-1">{{ user.email }}</div>
+            <h5 class="fw-bold mb-1" style="color:#0f172a;font-size:17px">{{ user.full_name or 'No name set' }}</h5>
+            <div class="text-muted mb-2" style="font-size:13px">{{ user.email }}</div>
             {% if user.subscription_plan %}
-            <span class="badge fw-bold" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);font-size:10.5px">{{ 'Pro Plan' if user.subscription_plan=='pro_sub' else 'Starter Plan' }}</span>
+            <span class="badge fw-bold" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);font-size:10.5px;padding:5px 10px">{{ 'Pro Plan' if user.subscription_plan=='pro_sub' else 'Starter Plan' }}</span>
             {% else %}
-            <span class="badge bg-light text-secondary fw-bold border" style="font-size:10.5px">{{ user.plan|capitalize }} Plan</span>
+            <span class="badge bg-light text-secondary fw-bold border" style="font-size:10.5px;padding:5px 10px">{{ user.plan|capitalize }} Plan</span>
             {% endif %}
           </div>
         </div>
@@ -44,10 +44,10 @@
           </div>
           <div class="mb-4">
             <label class="form-label">Email Address</label>
-            <input type="email" value="{{ user.email }}" disabled class="form-control"/>
+            <input type="email" value="{{ user.email }}" disabled class="form-control" style="background:#f8f9fb;color:#94a3b8"/>
             <div class="form-text">Email cannot be changed. Contact support if needed.</div>
           </div>
-          <button type="submit" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-2">
+          <button type="submit" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-2" style="border-radius:9px">
             <i class="bi bi-check-lg"></i> Save Changes
           </button>
         </form>
@@ -55,7 +55,7 @@
     </div>
 
     <!-- Password card -->
-    <div class="card shadow-sm" style="overflow:hidden">
+    <div class="card shadow-sm overflow-hidden">
       <div class="card-header d-flex align-items-center gap-2">
         <i class="bi bi-shield-lock-fill text-primary"></i> Change Password
       </div>
@@ -77,13 +77,13 @@
           </div>
           <div class="mb-3">
             <label for="new_password" class="form-label">New Password</label>
-            <input type="password" id="new_password" name="new_password" placeholder="Min 8 characters" class="form-control"/>
+            <input type="password" id="new_password" name="new_password" placeholder="Minimum 8 characters" class="form-control"/>
           </div>
           <div class="mb-4">
             <label for="confirm_password" class="form-label">Confirm New Password</label>
             <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat new password" class="form-control"/>
           </div>
-          <button type="submit" class="btn btn-outline-secondary fw-semibold d-inline-flex align-items-center gap-2">
+          <button type="submit" class="btn btn-outline-secondary fw-semibold d-inline-flex align-items-center gap-2" style="border-radius:9px">
             <i class="bi bi-lock-fill"></i> Update Password
           </button>
         </form>
@@ -92,56 +92,69 @@
 
   </div>
 
-  <!-- RIGHT COLUMN -->
+  <!-- ── RIGHT ── -->
   <div class="col-lg-5 d-flex flex-column gap-4">
 
     <!-- Dark account summary -->
-    <div style="background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:16px;padding:22px;position:relative;overflow:hidden" class="au1">
-      <div style="position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(99,102,241,0.2) 0%,transparent 55%);pointer-events:none"></div>
-      <div style="position:relative">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:16px">Account Summary</div>
-        <div class="d-flex flex-column gap-3">
+    <div class="card overflow-hidden au1" style="border:none;background:linear-gradient(145deg,#0f172a,#1e1b4b);position:relative">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,rgba(99,102,241,0.25) 0%,transparent 60%);pointer-events:none"></div>
+      <div class="card-body p-4" style="position:relative">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:rgba(148,163,184,0.3);margin-bottom:20px">Account Overview</div>
+
+        <div class="d-flex flex-column gap-0">
           {% for lbl, val, col in [
-            ("Plan",    user.plan|capitalize ~ (' Sub' if user.subscription_plan else ''), "#a5b4fc"),
-            ("Credits", (user.credits or 0)|string ~ " remaining",                          "#38bdf8" if (user.credits or 0) > 0 else "#f87171"),
-            ("Analyses Used", user.analyses_used|string,                                    "#94a3b8"),
-            ("Member Since",  user.created_at.strftime('%b %Y') if user.created_at else "—","#94a3b8"),
+            ("Plan",         user.plan|capitalize ~ (' (Sub)' if user.subscription_plan else ''), "#a5b4fc"),
+            ("Credits",      (user.credits or 0)|string ~ " remaining",  "#38bdf8" if (user.credits or 0) > 0 else "#f87171"),
+            ("Analyses",     user.analyses_used|string ~ " completed",   "#94a3b8"),
+            ("Member Since", user.created_at.strftime('%B %Y') if user.created_at else "—", "#94a3b8"),
           ] %}
-          <div class="d-flex align-items-center justify-content-between">
-            <span style="font-size:11.5px;color:rgba(148,163,184,0.6);font-weight:500">{{ lbl }}</span>
+          <div class="d-flex align-items-center justify-content-between py-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
+            <span style="font-size:12px;color:rgba(148,163,184,0.5);font-weight:500">{{ lbl }}</span>
             <span class="fw-bold" style="font-size:13px;color:{{ col }}">{{ val }}</span>
           </div>
           {% endfor %}
         </div>
-        <a href="/credits" class="d-block mt-4 text-center text-decoration-none py-2 px-3 rounded-3 fw-bold" style="font-size:13px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.12);transition:all 0.15s"
-           onmouseover="this.style.background='rgba(99,102,241,0.3)';this.style.color='#a5b4fc'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='rgba(255,255,255,0.7)'">
-          View Billing & Credits <i class="bi bi-arrow-right"></i>
+
+        <a href="/credits" class="d-flex align-items-center justify-content-center gap-2 text-decoration-none mt-4 py-2 px-3 rounded-3 fw-semibold"
+           style="font-size:13px;background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;transition:all 0.15s"
+           onmouseover="this.style.background='rgba(99,102,241,0.35)'" onmouseout="this.style.background='rgba(99,102,241,0.2)'">
+          <i class="bi bi-coin"></i> View Credits & Billing <i class="bi bi-arrow-right"></i>
         </a>
       </div>
     </div>
 
     <!-- Quick links -->
-    <div class="card shadow-sm au1">
-      <div class="card-header">Quick Links</div>
+    <div class="card shadow-sm au1" style="overflow:hidden">
+      <div class="card-header d-flex align-items-center gap-2">
+        <i class="bi bi-grid-1x2 text-primary"></i> Quick Links
+      </div>
       <div class="list-group list-group-flush">
-        {% for icon, label, url in [("bi-gear-fill","Settings & API","/settings"),("bi-file-earmark-text","All Statements","/statements"),("bi-credit-card-fill","Credits & Billing","/credits"),("bi-headset","Support Center","/support")] %}
+        {% for icon, label, url, col, bg in [
+          ("bi-gear-fill",           "Settings & API",     "/settings",    "#6366f1","#eef2ff"),
+          ("bi-file-earmark-text-fill","All Statements",  "/statements",  "#0284c7","#f0f9ff"),
+          ("bi-credit-card-fill",    "Credits & Billing",  "/credits",     "#16a34a","#f0fdf4"),
+          ("bi-headset",             "Support Center",     "/support",     "#d97706","#fffbeb"),
+        ] %}
         <a href="{{ url }}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3 px-4">
-          <div class="icon-box ib-primary" style="width:32px;height:32px;border-radius:8px">
-            <i class="bi {{ icon }}" style="font-size:13px"></i>
+          <div class="icon-box flex-shrink-0" style="width:34px;height:34px;border-radius:9px;background:{{ bg }};color:{{ col }}">
+            <i class="bi {{ icon }}" style="font-size:14px"></i>
           </div>
-          <span class="fw-semibold" style="font-size:13px;color:#374151">{{ label }}</span>
-          <i class="bi bi-chevron-right text-muted ms-auto" style="font-size:12px"></i>
+          <span class="fw-semibold flex-grow-1" style="font-size:13.5px;color:#374151">{{ label }}</span>
+          <i class="bi bi-chevron-right text-muted" style="font-size:11px"></i>
         </a>
         {% endfor %}
       </div>
     </div>
 
     <!-- Danger zone -->
-    <div class="card shadow-sm au2" style="border-color:#fecaca">
+    <div class="card shadow-sm au2" style="border-color:#fecaca;overflow:hidden">
       <div class="card-body p-4">
-        <h6 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>Danger Zone</h6>
-        <p class="text-muted small mb-3">Signing out ends your session. All data stays intact.</p>
-        <a href="/auth/logout" class="btn btn-outline-danger btn-sm fw-semibold d-flex align-items-center justify-content-center gap-2">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+          <h6 class="fw-bold text-danger mb-0">Danger Zone</h6>
+        </div>
+        <p class="text-muted small mb-3">Signing out ends your session. Your data stays intact.</p>
+        <a href="/auth/logout" class="btn btn-outline-danger btn-sm fw-semibold d-flex align-items-center justify-content-center gap-2" style="border-radius:8px">
           <i class="bi bi-box-arrow-right"></i> Sign Out of Account
         </a>
       </div>

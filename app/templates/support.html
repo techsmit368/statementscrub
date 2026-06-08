@@ -1,72 +1,85 @@
 {% extends "base_app.html" %}
 {% block title %}Support Center — StatementScrub{% endblock %}
 {% block page_title %}Support Center{% endblock %}
-{% block page_subtitle %}Get help, report issues, or request features{% endblock %}
+{% block page_subtitle %}Get help, report a bug, or request a feature{% endblock %}
 
 {% block content %}
-<div class="row g-4 au" style="max-width:960px">
+<div class="row g-4 au" style="max-width:980px">
 
-  <!-- LEFT -->
+  <!-- ── LEFT ── -->
   <div class="col-lg-7 d-flex flex-column gap-4">
 
     <!-- Submit ticket -->
-    <div class="card shadow-sm" style="overflow:hidden">
+    <div class="card shadow-sm overflow-hidden">
       <div class="card-header d-flex align-items-center gap-2">
         <i class="bi bi-ticket-fill text-primary"></i> Submit a Support Ticket
-        <small class="text-muted fw-normal ms-1">— typical response within 24 hours</small>
+        <span class="text-muted fw-normal small ms-1">— response within 24 hours</span>
       </div>
 
       {% if submitted %}
       <div class="card-body p-5 text-center">
-        <div style="width:56px;height:56px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 14px rgba(34,197,94,0.3)">
-          <i class="bi bi-check-lg text-white" style="font-size:26px"></i>
+        <div style="width:60px;height:60px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 6px 20px rgba(34,197,94,0.3)">
+          <i class="bi bi-check-lg text-white" style="font-size:28px"></i>
         </div>
         <h4 class="fw-bold mb-2">Ticket submitted!</h4>
         <p class="text-muted mb-1">Ticket ID: <strong class="text-primary">#{{ ticket_id }}</strong></p>
         <p class="text-muted small mb-4">We'll reply to <strong>{{ user.email }}</strong> within 24 hours.</p>
-        <a href="/support" class="btn btn-outline-primary fw-semibold">
+        <a href="/support" class="btn btn-outline-primary fw-semibold" style="border-radius:9px">
           <i class="bi bi-plus me-1"></i> Submit Another Ticket
         </a>
       </div>
+
       {% else %}
       <div class="card-body p-4">
         <form method="POST" action="/support">
+
+          <!-- Category -->
           <div class="mb-3">
             <label for="category" class="form-label">Category</label>
             <select id="category" name="category" class="form-select" required>
               <option value="">Select a category…</option>
-              <option value="billing">Billing & Credits</option>
-              <option value="technical">Technical Issue</option>
-              <option value="analysis">Analysis Question</option>
-              <option value="account">Account & Access</option>
-              <option value="feature">Feature Request</option>
-              <option value="other">Other</option>
+              {% for val, lbl in [("billing","Billing & Credits"),("technical","Technical Issue"),("analysis","Analysis Question"),("account","Account & Access"),("feature","Feature Request"),("other","Other")] %}
+              <option value="{{ val }}">{{ lbl }}</option>
+              {% endfor %}
             </select>
           </div>
+
+          <!-- Subject -->
           <div class="mb-3">
             <label for="subject" class="form-label">Subject</label>
             <input type="text" id="subject" name="subject" placeholder="Brief summary of your issue" class="form-control" required/>
           </div>
+
+          <!-- Priority -->
           <div class="mb-3">
-            <label class="form-label d-block">Priority</label>
+            <label class="form-label">Priority</label>
             <div class="d-flex gap-2">
               {% for p, label, col, bg in [("low","Low","#16a34a","#f0fdf4"),("medium","Medium","#d97706","#fffbeb"),("high","High","#dc2626","#fef2f2")] %}
               <label class="flex-fill" style="cursor:pointer">
                 <input type="radio" name="priority" value="{{ p }}" {% if p=='medium' %}checked{% endif %} class="d-none prio-radio">
-                <div class="prio-btn text-center py-2 rounded-3 fw-semibold" data-val="{{ p }}" data-col="{{ col }}" data-bg="{{ bg }}"
+                <div class="prio-btn text-center py-2 rounded-3 fw-semibold" data-val="{{ p }}"
                      style="border:1.5px solid #dee2e6;font-size:13px;color:#6c757d;cursor:pointer;transition:all 0.15s;{% if p=='medium' %}border-color:{{ col }};background:{{ bg }};color:{{ col }}{% endif %}"
-                     onclick="setPrio('{{ p }}','{{ col }}','{{ bg }}')">{{ label }}</div>
+                     onclick="setPrio('{{ p }}','{{ col }}','{{ bg }}')">
+                  <i class="bi bi-{% if p=='low' %}circle{% elif p=='medium' %}exclamation-circle{% else %}exclamation-triangle-fill{% endif %} me-1"></i>{{ label }}
+                </div>
               </label>
               {% endfor %}
             </div>
           </div>
+
+          <!-- Message -->
           <div class="mb-4">
             <label for="message" class="form-label">Description</label>
-            <textarea id="message" name="message" rows="5" placeholder="Describe your issue in detail. Include any error messages, steps to reproduce, or screenshots if applicable." class="form-control" required></textarea>
+            <textarea id="message" name="message" rows="5"
+              placeholder="Describe your issue. Include error messages, steps to reproduce, and any relevant screenshots."
+              class="form-control" required></textarea>
           </div>
+
           <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-            <div class="text-muted small"><i class="bi bi-envelope me-1"></i>Reply to: <strong>{{ user.email }}</strong></div>
-            <button type="submit" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-2">
+            <div class="text-muted small d-flex align-items-center gap-1">
+              <i class="bi bi-envelope"></i> Reply to: <strong>{{ user.email }}</strong>
+            </div>
+            <button type="submit" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-2" style="border-radius:9px">
               <i class="bi bi-send"></i> Submit Ticket
             </button>
           </div>
@@ -75,28 +88,30 @@
       {% endif %}
     </div>
 
-    <!-- FAQ accordion -->
-    <div class="card shadow-sm" style="overflow:hidden">
+    <!-- FAQ -->
+    <div class="card shadow-sm overflow-hidden">
       <div class="card-header d-flex align-items-center gap-2">
         <i class="bi bi-question-circle-fill text-primary"></i> Frequently Asked Questions
       </div>
       <div class="accordion accordion-flush" id="faqAccordion">
         {% for idx, q, a in [
-          (1,"How are credits used?", "Each bank statement analysis uses 1 credit, regardless of the number of pages. Credits never expire and stack with future purchases."),
-          (2,"What banks are supported?", "All major US banks are supported — Chase, Bank of America, Wells Fargo, Capital One, Citi, TD, PNC, US Bank, and hundreds more. We process any standard PDF statement."),
-          (3,"How is my data kept secure?", "All PDFs are processed in-memory and deleted within 24 hours. We never store statement data on third-party servers. Payments are handled entirely by Stripe."),
-          (4,"Can I get a refund?", "Yes — unused credits can be refunded within 14 days of purchase. Contact support with your email and purchase date."),
-          (5,"How do I access the API?", "Go to Settings & API, generate your API key, then pass it as X-API-Key in the request header. Full documentation is on the settings page."),
-          (6,"What if an analysis fails?", "If an analysis fails, no credit is deducted. Re-upload the statement or contact support if the issue persists."),
+          (1,"How are credits used?","Each bank statement analysis uses exactly 1 credit, regardless of page count. Credits never expire and stack with future purchases."),
+          (2,"What banks are supported?","All major US banks — Chase, Bank of America, Wells Fargo, Capital One, Citi, TD, PNC, US Bank, and hundreds more. We process any standard PDF statement."),
+          (3,"How is my data secured?","PDFs are processed in-memory and permanently deleted within 24 hours. We never store raw statement data on third-party servers. Payments go through Stripe only."),
+          (4,"Can I get a refund?","Yes — unused credits can be refunded within 14 days of purchase. Contact support with your email address and purchase date."),
+          (5,"How do I access the API?","Go to Settings & API, generate your key, then send it as the X-API-Key header. Full endpoint reference is on the Settings page."),
+          (6,"What if an analysis fails?","If analysis fails for any reason, no credit is deducted. Try re-uploading, or contact support if the issue persists."),
         ] %}
         <div class="accordion-item border-0" style="border-bottom:1px solid #e8ecf0!important">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ idx }}" style="font-size:13.5px;color:#0f172a;background:transparent">
+            <button class="accordion-button collapsed fw-semibold" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#faq{{ idx }}"
+                    style="font-size:13.5px;color:#0f172a;background:transparent">
               {{ q }}
             </button>
           </h2>
           <div id="faq{{ idx }}" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-            <div class="accordion-body text-muted" style="font-size:13.5px;line-height:1.65;padding:0 20px 16px">{{ a }}</div>
+            <div class="accordion-body text-muted" style="font-size:13.5px;line-height:1.65;padding:4px 20px 18px">{{ a }}</div>
           </div>
         </div>
         {% endfor %}
@@ -105,13 +120,13 @@
 
   </div>
 
-  <!-- RIGHT -->
+  <!-- ── RIGHT ── -->
   <div class="col-lg-5 d-flex flex-column gap-4">
 
     <!-- Contact options -->
-    <div class="card shadow-sm au1">
+    <div class="card shadow-sm overflow-hidden au1">
       <div class="card-header d-flex align-items-center gap-2">
-        <i class="bi bi-telephone-fill text-primary"></i> Contact Options
+        <i class="bi bi-headset text-primary"></i> Contact Options
       </div>
       <div class="card-body p-4 d-flex flex-column gap-3">
         {% for icon, title, desc, col, bg in [
@@ -119,8 +134,8 @@
           ("bi-clock-fill","Response Time","Within 24 business hours","#d97706","#fffbeb"),
           ("bi-calendar3","Support Hours","Mon–Fri, 9am–6pm EST","#6366f1","#eef2ff"),
         ] %}
-        <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:{{ bg }}">
-          <div class="icon-box" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.8);color:{{ col }}">
+        <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:{{ bg }};border:1px solid {{ col }}22">
+          <div class="icon-box flex-shrink-0" style="width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.7);color:{{ col }}">
             <i class="bi {{ icon }}" style="font-size:14px"></i>
           </div>
           <div>
@@ -132,23 +147,27 @@
       </div>
     </div>
 
-    <!-- Quick tips — dark panel -->
-    <div style="background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:16px;padding:20px;position:relative;overflow:hidden" class="au1">
+    <!-- Pro tips dark panel -->
+    <div class="card overflow-hidden au1" style="border:none;background:linear-gradient(145deg,#0f172a,#1e1b4b);position:relative">
       <div style="position:absolute;inset:0;background:radial-gradient(circle at 90% 10%,rgba(99,102,241,0.2) 0%,transparent 60%);pointer-events:none"></div>
-      <div style="position:relative">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:14px">Quick Tips</div>
+      <div class="card-body p-4" style="position:relative">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <i class="bi bi-lightbulb-fill" style="color:#f59e0b;font-size:14px"></i>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:rgba(148,163,184,0.3)">Pro Tips</div>
+        </div>
         <div class="d-flex flex-column gap-3">
           {% for tip in [
-            "Upload 3+ months of statements for better income trend accuracy.",
-            "Look for daily/weekly fixed withdrawals to detect MCA loans.",
+            "Upload 3+ months for better income trend accuracy.",
+            "Daily/weekly fixed withdrawals often signal MCA loans.",
             "NSF = 0 with stable balance → strong approval signal.",
             "Use batch upload to process multiple applications at once.",
+            "Enable MCA restriction in Settings to auto-flag MCA cases.",
           ] %}
-          <div class="d-flex gap-2 align-items-start">
-            <div style="width:18px;height:18px;border-radius:5px;background:rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+          <div class="d-flex gap-3 align-items-start">
+            <div style="width:20px;height:20px;border-radius:6px;background:rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
               <i class="bi bi-check text-white" style="font-size:11px"></i>
             </div>
-            <span style="font-size:12px;color:rgba(148,163,184,0.85);line-height:1.55">{{ tip }}</span>
+            <span style="font-size:12.5px;color:rgba(148,163,184,0.8);line-height:1.55">{{ tip }}</span>
           </div>
           {% endfor %}
         </div>
@@ -156,19 +175,23 @@
     </div>
 
     <!-- System status -->
-    <div class="card shadow-sm au2">
+    <div class="card shadow-sm au2" style="overflow:hidden">
       <div class="card-header d-flex align-items-center justify-content-between">
-        <span class="d-flex align-items-center gap-2"><i class="bi bi-activity text-primary"></i> System Status</span>
+        <span class="d-flex align-items-center gap-2">
+          <i class="bi bi-activity text-primary"></i> System Status
+        </span>
         <div class="d-flex align-items-center gap-2">
-          <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;animation:ss-pulse 2s infinite"></span>
-          <span class="fw-semibold text-success" style="font-size:11.5px">Operational</span>
+          <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>
+          <span class="fw-bold text-success" style="font-size:11.5px">All Systems Operational</span>
         </div>
       </div>
       <div class="list-group list-group-flush">
-        {% for svc, ok in [("Analysis Engine",True),("File Processing",True),("Payments (Stripe)",True),("REST API",True)] %}
+        {% for svc, ok in [("Analysis Engine",True),("PDF Processing",True),("Payments (Stripe)",True),("REST API",True),("Authentication",True)] %}
         <div class="list-group-item d-flex align-items-center justify-content-between py-2 px-4">
-          <span class="text-muted" style="font-size:13px">{{ svc }}</span>
-          <span class="badge rounded-pill fw-semibold {% if ok %}bg-success{% else %}bg-danger{% endif %} bg-opacity-15 {% if ok %}text-success{% else %}text-danger{% endif %}" style="font-size:10.5px">{{ '✓ Operational' if ok else '✗ Issue' }}</span>
+          <span style="font-size:13px;color:#475569">{{ svc }}</span>
+          <span class="badge rounded-pill fw-semibold" style="font-size:10.5px;{% if ok %}background:#f0fdf4;color:#16a34a{% else %}background:#fef2f2;color:#dc2626{% endif %}">
+            <i class="bi bi-{% if ok %}check{% else %}x{% endif %}-circle-fill me-1"></i>{{ 'Operational' if ok else 'Issue' }}
+          </span>
         </div>
         {% endfor %}
       </div>
@@ -178,20 +201,18 @@
 </div>
 
 <style>
-@keyframes ss-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-.accordion-button:not(.collapsed) { color: #6366f1; background: #eef2ff; box-shadow: none; }
-.accordion-button:focus { box-shadow: none; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.accordion-button:not(.collapsed){color:#6366f1;background:#eef2ff;box-shadow:none}
+.accordion-button:focus{box-shadow:none}
 </style>
 <script>
 function setPrio(val, col, bg) {
   document.querySelectorAll('.prio-btn').forEach(b => {
-    b.style.borderColor = '#dee2e6';
-    b.style.background = 'transparent';
-    b.style.color = '#6c757d';
+    b.style.borderColor='#dee2e6'; b.style.background='transparent'; b.style.color='#6c757d';
   });
-  const active = document.querySelector(`.prio-btn[data-val="${val}"]`);
-  if (active) { active.style.borderColor = col; active.style.background = bg; active.style.color = col; }
-  document.querySelectorAll('.prio-radio').forEach(r => { r.checked = r.value === val; });
+  const a = document.querySelector(`.prio-btn[data-val="${val}"]`);
+  if (a) { a.style.borderColor=col; a.style.background=bg; a.style.color=col; }
+  document.querySelectorAll('.prio-radio').forEach(r => r.checked = r.value===val);
 }
 </script>
 {% endblock %}
