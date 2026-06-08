@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from sqlalchemy import text
 from app.database import engine, Base
 from app.routers import auth, upload, telegram, blog, pages
-from app.routers import api_access, billing
+from app.routers import api_access, billing, lenders
 from app.services.auth import get_current_user
 from app.database import get_db
 import app.models
@@ -46,6 +46,7 @@ app.include_router(blog.router)
 app.include_router(pages.router)
 app.include_router(api_access.router)
 app.include_router(billing.router)
+app.include_router(lenders.router)
 
 templates = Jinja2Templates(directory="app/templates")
 
