@@ -19,20 +19,26 @@ class LenderImporter:
             with open(file_path, 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 for row in reader:
+                    def safe_int(val, default=0):
+                        try:
+                            return int(val) if val and val.strip() else default
+                        except (ValueError, TypeError):
+                            return default
+
                     lender = LenderInfo(
                         lender_name=row.get('lender_name'),
                         lender_code=row.get('lender_code'),
-                        email_1=row.get('email_1'),
-                        email_2=row.get('email_2'),
-                        email_3=row.get('email_3'),
-                        email_4=row.get('email_4'),
-                        phone_1=row.get('phone_1'),
-                        phone_2=row.get('phone_2'),
-                        Web_link=row.get('Web_link'),
-                        grade=row.get('grade'),
+                        email_1=row.get('email_1') or None,
+                        email_2=row.get('email_2') or None,
+                        email_3=row.get('email_3') or None,
+                        email_4=row.get('email_4') or None,
+                        phone_1=row.get('phone_1') or None,
+                        phone_2=row.get('phone_2') or None,
+                        Web_link=row.get('Web_link') or None,
+                        grade=row.get('grade') or None,
                         default_on_advance=row.get('default_on_advance'),
                         bankruptcy=row.get('bankruptcy'),
-                        advance_amount=int(row.get('advance_amount', 0)),
+                        advance_amount=safe_int(row.get('advance_amount')),
                         consolidation=row.get('consolidation'),
                         months_3_deposits=row.get('3months_deposits'),
                         months_3_dollar_deposits=row.get('3months$deposits'),
@@ -44,7 +50,7 @@ class LenderImporter:
                         monNegativeDays=row.get('monNegativeDays'),
                         itin_filter=row.get('itin_filter'),
                         home_based=row.get('home_based'),
-                        status=int(row.get('status', 1)),
+                        status=safe_int(row.get('status'), 1),
                         funding_cutoff_time=row.get('funding_cutoff_time'),
                         contracts_BV_cutoff_time=row.get('contracts_BV_cutoff_time'),
                         bank_product=row.get('bank_product'),
