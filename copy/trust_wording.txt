@@ -1,0 +1,221 @@
+==============================================================
+  StatementScrub — Trust-First Copy Guide
+  Purpose: Replace AI/chatbot language with neutral,
+           professional wording so users trust their
+           financial data stays confidential.
+==============================================================
+
+---------------------------------------------------------------
+RULE: WORDS TO NEVER USE ON THE WEBSITE
+---------------------------------------------------------------
+  ✗  AI / Artificial Intelligence
+  ✗  Machine Learning / ML
+  ✗  Neural Network
+  ✗  ChatGPT / GPT / LLM / Language Model
+  ✗  "Powered by AI"
+  ✗  "AI-Powered"
+  ✗  Claude / Anthropic (do not name the underlying model)
+  ✗  "Trained on your data"
+  ✗  "Our AI reads..."
+  ✗  "The AI detects..."
+
+---------------------------------------------------------------
+APPROVED REPLACEMENTS
+---------------------------------------------------------------
+  Instead of "AI analysis"      →  "automated analysis"
+  Instead of "AI-powered"       →  "instant" / "automated"
+  Instead of "our AI reads"     →  "our system reads"
+  Instead of "AI detects"       →  "our engine detects"
+  Instead of "AI report"        →  "analysis report" / "instant report"
+  Instead of "AI scans"         →  "our parser scans" / "we scan"
+  Instead of "AI-generated"     →  "automatically generated"
+  Instead of "AI score"         →  "risk score" / "automated risk score"
+
+
+==============================================================
+  HERO SECTION
+==============================================================
+
+HEADLINE (current — BAD):
+  "AI-Powered · Results in Under 30 Seconds"
+
+HEADLINE (approved):
+  "Instant Results — Under 30 Seconds"
+  or
+  "Automated Analysis · Results in Under 30 Seconds"
+
+------
+
+SUBHEADLINE / BODY (approved):
+  "StatementScrub reads every transaction in your borrower's
+   bank statement and delivers a lender-ready report — income
+   verified, NSF counted, MCA detected, risk scored — in
+   under 30 seconds."
+
+  ✓ This version is already good — keep it as-is.
+    It says what the tool DOES, not how it works internally.
+
+
+==============================================================
+  DATA PRIVACY / CONFIDENTIALITY SECTION
+  (Add this block to the homepage — below the hero or
+   near the pricing section)
+==============================================================
+
+SECTION HEADING:
+  "Your Data Stays Private. Always."
+
+BODY:
+  "We know bank statements contain some of the most sensitive
+   financial information your clients share with you.
+   StatementScrub is built with that in mind.
+
+   — Uploaded files are processed and permanently deleted
+     within 24 hours. We never store your PDFs.
+
+   — Documents are never used to train any system or model.
+     Your client's data is processed to produce your report,
+     then it's gone.
+
+   — We do not sell, share, or retain any transaction data
+     beyond the time needed to generate your report.
+
+   — All uploads and reports are transmitted over an
+     encrypted connection (TLS 1.2+).
+
+   — No employee reviews your uploaded documents.
+     Processing is fully automated and confidential."
+
+TRUST BADGES (short labels for the homepage):
+  • "Files deleted within 24h"
+  • "Never sold or shared"
+  • "Not used for training"
+  • "Encrypted in transit"
+  • "No human review of your files"
+
+
+==============================================================
+  HOW IT WORKS — APPROVED COPY
+==============================================================
+
+Step 1:
+  Heading:  "Upload the Bank Statement"
+  Body:     "Drag and drop any PDF bank statement.
+              We accept all major US banks."
+
+Step 2:
+  Heading:  "Our Engine Reads Every Transaction"
+  Body:     "Our automated parser scans the full statement —
+              deposits, withdrawals, NSF charges, recurring
+              payments, and more."
+
+Step 3:
+  Heading:  "Get Your Lender-Ready Report"
+  Body:     "In under 30 seconds you receive a structured
+              report: verified income, NSF count, MCA
+              detection, expense breakdown, and a risk score."
+
+
+==============================================================
+  FEATURES SECTION — APPROVED COPY
+==============================================================
+
+Feature 1 — Income Verification
+  "Our system identifies all deposit sources and separates
+   regular income from one-time transfers so you can
+   verify a borrower's true earning picture."
+
+Feature 2 — NSF & Overdraft Detection
+  "Every bounced check and overdraft fee is flagged and
+   counted automatically. Know the borrower's cash-flow
+   health before you underwrite."
+
+Feature 3 — MCA Detection
+  "Our engine recognizes the signature daily-debit pattern
+   of merchant cash advances and flags existing MCA
+   obligations so there are no surprises."
+
+Feature 4 — Risk Score
+  "Each statement is given an automated risk score based
+   on income stability, overdraft frequency, and debt
+   obligations — giving you a fast, consistent benchmark."
+
+Feature 5 — Expense Breakdown
+  "Transactions are automatically grouped by category —
+   payroll, rent, utilities, subscriptions — so you see
+   exactly where the money is going."
+
+
+==============================================================
+  PRICING PAGE — TRUST LINE (add under each plan)
+==============================================================
+
+  "Files are automatically deleted within 24 hours of
+   upload. Your clients' data is never stored beyond
+   the time needed to generate your report."
+
+
+==============================================================
+  FOOTER — TRUST TAGLINE
+==============================================================
+
+  "StatementScrub processes bank statements securely and
+   confidentially. Files are deleted within 24 hours.
+   Data is never sold or shared."
+
+
+==============================================================
+  REGISTRATION / LOGIN PAGE — TRUST NOTE
+==============================================================
+
+  Under the upload button, add:
+  "Your uploaded files are processed securely and deleted
+   within 24 hours. We do not store or share your documents."
+
+
+==============================================================
+  FAQ — SUGGESTED Q&A (add to homepage or /faq page)
+==============================================================
+
+Q: Is my client's financial data kept confidential?
+A: Yes. Uploaded bank statements are processed to generate
+   your report and then permanently deleted within 24 hours.
+   We never store, sell, or share transaction data.
+
+Q: Do you use my documents to improve your system?
+A: No. Your uploaded files and the data in them are never
+   used to train, improve, or update any system. Each file
+   is processed for your report only, then deleted.
+
+Q: Who at StatementScrub can see my uploaded documents?
+A: No one. Processing is fully automated. No employee
+   reviews, accesses, or views uploaded bank statements.
+
+Q: Is the connection secure?
+A: Yes. All file uploads and report data are transmitted
+   over an encrypted TLS connection. We follow industry-
+   standard security practices.
+
+Q: What banks do you support?
+A: StatementScrub works with PDF statements from all major
+   US banks including Chase, Bank of America, Wells Fargo,
+   Citi, US Bank, and hundreds more.
+
+
+==============================================================
+  INTERNAL NOTES FOR DEVELOPERS
+==============================================================
+
+- On any public-facing page, search for the strings "AI",
+  "artificial intelligence", "machine learning", and replace
+  with the approved terms above.
+- The <title> and meta description tags currently say
+  "AI Bank Statement Analyzer" — change to
+  "Bank Statement Analyzer" or "Automated Bank Statement
+  Analysis".
+- The hero badge "AI-Powered · Results in Under 30 Seconds"
+  should become "Instant Results — Under 30 Seconds".
+- Do NOT remove the speed/accuracy claims — those build
+  trust. Only remove the AI label.
+
+==============================================================
