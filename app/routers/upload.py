@@ -536,7 +536,7 @@ async def settings_page(
     scorecard = db.query(UserScorecard).filter(UserScorecard.user_id == user.id).first()
     return templates.TemplateResponse(
         "settings.html",
-        {"request": request, "user": user, "scorecard": scorecard},
+        {"request": request, "user": user, "scorecard": scorecard, "active_page": "settings"},
     )
 
 

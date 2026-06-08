@@ -1,40 +1,10 @@
 {% extends "base_app.html" %}
 {% block title %}Credits & Billing — StatementScrub{% endblock %}
+{% block page_title %}Credits & Billing{% endblock %}
+{% block page_subtitle %}Buy credits or subscribe — use them to analyze any bank statement PDF{% endblock %}
 
 {% block content %}
 {% set _cr = user.credits or 0 %}
-
-<!-- Page header -->
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-  <div>
-    <h1 style="font-size:18px;font-weight:900;color:#0f172a;margin:0 0 2px;letter-spacing:-0.01em">Credits &amp; Billing</h1>
-    <p style="font-size:12px;color:#94a3b8;margin:0">Buy credits or subscribe — use them to analyze any bank statement PDF</p>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:10px;padding:8px 16px;display:flex;align-items:center;gap:10px">
-      <div style="text-align:right">
-        <div style="font-size:9px;color:rgba(255,255,255,0.4);font-weight:700;text-transform:uppercase;letter-spacing:0.07em">Balance</div>
-        <div style="font-size:18px;font-weight:900;line-height:1;
-          {% if _cr == 0 %}color:#f87171
-          {% elif _cr <= 2 %}color:#fb923c
-          {% else %}background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text{% endif %}">
-          {{ _cr }} <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);-webkit-text-fill-color:rgba(255,255,255,0.4)">cr</span>
-        </div>
-      </div>
-    </div>
-    {% if user.subscription_plan %}
-    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:8px 14px">
-      <div style="font-size:9px;color:#15803d;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Active Plan</div>
-      <div style="font-size:13px;font-weight:800;color:#166534">{{ 'Starter 50/mo' if user.subscription_plan == 'starter_sub' else 'Pro 250/mo' }}</div>
-    </div>
-    {% else %}
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 14px">
-      <div style="font-size:9px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Plan</div>
-      <div style="font-size:13px;font-weight:800;color:#475569">Pay-as-you-go</div>
-    </div>
-    {% endif %}
-  </div>
-</div>
 
 <!-- Main 2-col grid -->
 <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start">
