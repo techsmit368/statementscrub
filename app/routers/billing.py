@@ -202,6 +202,14 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     return {"status": "ok"}
 
 
+@router.get("/plans", response_class=HTMLResponse)
+async def billing_plans(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse("/auth/login", status_code=302)
+    return templates.TemplateResponse("billing_plans.html", {"request": request, "user": user, "active_page": "credits"})
+
+
 @router.get("/success", response_class=HTMLResponse)
 async def billing_success(
     request: Request,

@@ -103,25 +103,25 @@
 {% set avg_income_all = (merchants | sum(attribute='avg_deposits')) / (merchants | length) %}
 
 <!-- ── STATS ROW ── -->
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
   {% for icon, label, value, col, bg in [
     ("🏢","Merchants", merchants | length | string, "#6366f1","#f5f3ff"),
     ("📄","Statements", total_statements | string, "#0284c7","#f0f9ff"),
     ("💰","Avg Income /mo","$" ~ "{:,.0f}".format(avg_income_all), "#15803d","#f0fdf4"),
     ("⚡","NSF Total", total_nsf | string, "#dc2626" if total_nsf > 0 else "#15803d","#fef2f2" if total_nsf > 0 else "#f0fdf4"),
   ] %}
-  <div class="card animate-slide-up" style="padding:16px 18px;display:flex;align-items:center;gap:12px">
-    <div style="width:40px;height:40px;background:{{ bg }};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">{{ icon }}</div>
+  <div class="card" style="padding:11px 14px;display:flex;align-items:center;gap:10px">
+    <div style="width:32px;height:32px;background:{{ bg }};border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">{{ icon }}</div>
     <div>
-      <div style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px">{{ label }}</div>
-      <div style="font-size:1.35rem;font-weight:900;color:{{ col }};line-height:1">{{ value }}</div>
+      <div style="font-size:9px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1px">{{ label }}</div>
+      <div style="font-size:1.15rem;font-weight:900;color:{{ col }};line-height:1">{{ value }}</div>
     </div>
   </div>
   {% endfor %}
 </div>
 
 <!-- ── MAIN 2-COL LAYOUT ── -->
-<div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start">
+<div style="display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start">
 
   <!-- LEFT: merchant table -->
   <div>
@@ -247,11 +247,11 @@
 
     <!-- Quick Upload -->
     <div class="card" style="overflow:hidden">
-      <div style="padding:16px 18px 0;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:2px">Upload</div>
-        <div style="font-size:11px;color:#64748b">Single or batch — any major bank PDF</div>
+      <div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:1px">Upload</div>
+        <div style="font-size:10px;color:#94a3b8">Single or batch — any major bank PDF</div>
       </div>
-      <div style="padding:0 18px 18px;display:flex;flex-direction:column;gap:8px">
+      <div style="padding:10px 14px;display:flex;flex-direction:column;gap:7px">
         <label for="fileInputGlobal" style="cursor:pointer;display:block">
           <div style="border:2px dashed #e0e7ff;border-radius:12px;padding:16px;text-align:center;transition:all 0.2s"
                onmouseover="this.style.borderColor='#6366f1';this.style.background='#fafbff'"
@@ -279,7 +279,7 @@
 
     <!-- Settings link -->
     <a href="/settings" style="text-decoration:none;display:block">
-      <div class="card" style="padding:13px 16px;display:flex;align-items:center;gap:10px;transition:all 0.15s"
+      <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px;transition:all 0.15s"
            onmouseover="this.style.borderColor='#c7d2fe'" onmouseout="this.style.borderColor='#e2e8f0'">
         <div style="width:32px;height:32px;background:#f5f3ff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚙️</div>
         <div style="flex:1;min-width:0">

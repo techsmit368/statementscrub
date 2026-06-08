@@ -1,0 +1,214 @@
+{% extends "base_app.html" %}
+{% block title %}Credits & Billing — StatementScrub{% endblock %}
+
+{% block content %}
+{% set _cr = user.credits or 0 %}
+
+<!-- Page header -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+  <div>
+    <h1 style="font-size:18px;font-weight:900;color:#0f172a;margin:0 0 2px;letter-spacing:-0.01em">Credits &amp; Billing</h1>
+    <p style="font-size:12px;color:#94a3b8;margin:0">Buy credits or subscribe — use them to analyze any bank statement PDF</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:10px;padding:8px 16px;display:flex;align-items:center;gap:10px">
+      <div style="text-align:right">
+        <div style="font-size:9px;color:rgba(255,255,255,0.4);font-weight:700;text-transform:uppercase;letter-spacing:0.07em">Balance</div>
+        <div style="font-size:18px;font-weight:900;line-height:1;
+          {% if _cr == 0 %}color:#f87171
+          {% elif _cr <= 2 %}color:#fb923c
+          {% else %}background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text{% endif %}">
+          {{ _cr }} <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);-webkit-text-fill-color:rgba(255,255,255,0.4)">cr</span>
+        </div>
+      </div>
+    </div>
+    {% if user.subscription_plan %}
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:8px 14px">
+      <div style="font-size:9px;color:#15803d;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Active Plan</div>
+      <div style="font-size:13px;font-weight:800;color:#166534">{{ 'Starter 50/mo' if user.subscription_plan == 'starter_sub' else 'Pro 250/mo' }}</div>
+    </div>
+    {% else %}
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 14px">
+      <div style="font-size:9px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Plan</div>
+      <div style="font-size:13px;font-weight:800;color:#475569">Pay-as-you-go</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Main 2-col grid -->
+<div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start">
+
+  <!-- LEFT: One-time credit packs -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:13px;font-weight:800;color:#0f172a">One-Time Credit Packs</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px">Buy once, use whenever — credits never expire or reset</div>
+      </div>
+      <div style="font-size:10px;font-weight:700;background:#ede9fe;color:#6d28d9;padding:3px 10px;border-radius:6px;white-space:nowrap">No subscription</div>
+    </div>
+
+    <!-- Pack table -->
+    <div style="padding:0">
+      <div style="display:grid;grid-template-columns:100px 90px 90px 90px 1fr;padding:8px 18px;background:#f8fafc;border-bottom:1px solid #f1f5f9">
+        {% for col in ["Credits","Price","Per report","Savings",""] %}
+        <div style="font-size:9px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.07em">{{ col }}</div>
+        {% endfor %}
+      </div>
+
+      {% for pack, credits, price, per_credit, savings_pct, hot in [
+        ("starter",  10,  14.90, "1.49", 0,  false),
+        ("basic",    25,  27.90, "1.12", 25, false),
+        ("standard", 50,  54.90, "1.10", 26, true),
+        ("business", 100, 104.90,"1.05", 29, false),
+        ("growth",   250, 262.90,"1.05", 37, false),
+        ("scale",    500, 499.90,"1.00", 40, false),
+      ] %}
+      <div style="display:grid;grid-template-columns:100px 90px 90px 90px 1fr;padding:11px 18px;border-bottom:1px solid #f8fafc;align-items:center;
+        {% if hot %}background:linear-gradient(90deg,#fafbff,#fff){% endif %};transition:background 0.1s"
+        onmouseover="this.style.background='#fafbff'" onmouseout="this.style.background='{% if hot %}linear-gradient(90deg,#fafbff,#fff){% else %}transparent{% endif %}'">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:16px;font-weight:900;color:#0f172a;line-height:1">{{ credits }}</div>
+          <div style="font-size:10px;color:#94a3b8;font-weight:600">credits
+          {% if hot %}<br/><span style="background:linear-gradient(135deg,#6366f1,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800">★ Popular</span>{% endif %}</div>
+        </div>
+        <div style="font-size:14px;font-weight:800;color:#0f172a">${{ "%.2f"|format(price) }}</div>
+        <div style="font-size:13px;font-weight:700;color:{% if hot %}#6366f1{% else %}#0284c7{% endif %}">${{ per_credit }}</div>
+        <div>
+          {% if savings_pct > 0 %}
+          <span style="background:#dcfce7;color:#15803d;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px">-{{ savings_pct }}%</span>
+          {% else %}
+          <span style="font-size:10px;color:#cbd5e1">—</span>
+          {% endif %}
+        </div>
+        <div style="text-align:right">
+          <form method="POST" action="/billing/checkout" style="display:inline">
+            <input type="hidden" name="pack" value="{{ pack }}">
+            <button type="submit" style="font-size:11px;font-weight:800;padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s;
+              {% if hot %}background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;box-shadow:0 3px 12px rgba(99,102,241,0.3)
+              {% else %}background:#f1f5f9;color:#334155{% endif %}"
+              onmouseover="{% if not hot %}this.style.background='#e0e7ff';this.style.color='#4f46e5'{% endif %}"
+              onmouseout="{% if not hot %}this.style.background='#f1f5f9';this.style.color='#334155'{% endif %}">
+              Buy {{ credits }}
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div style="padding:10px 18px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;align-items:center;gap:16px">
+      {% for t in ["Credits stack &amp; never expire","Instant activation","Refund within 14 days"] %}
+      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b">
+        <svg style="width:11px;height:11px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        {{ t }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- RIGHT: Subscriptions + info -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+
+    <!-- Subscription cards -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:13px;font-weight:800;color:#0f172a">Monthly Plans</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:1px">Credits refill every month · Cancel any time</div>
+      </div>
+
+      <!-- Starter sub -->
+      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div style="font-size:12px;font-weight:800;color:#0f172a">Starter</div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:1px">50 credits/mo · $0.98 each</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:18px;font-weight:900;color:#0f172a;line-height:1">$49</div>
+            <div style="font-size:10px;color:#94a3b8">/month</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+          {% for f in ["50 credits/mo","Roll over","Cancel any time"] %}
+          <span style="font-size:10px;font-weight:600;background:#f0f9ff;color:#0369a1;padding:2px 8px;border-radius:5px">{{ f }}</span>
+          {% endfor %}
+        </div>
+        <form method="POST" action="/billing/subscribe">
+          <input type="hidden" name="plan" value="starter_sub">
+          <button type="submit" style="width:100%;padding:9px;border-radius:9px;font-size:12px;font-weight:800;background:#f1f5f9;color:#334155;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s"
+            onmouseover="this.style.background='#e0e7ff';this.style.color='#4f46e5'"
+            onmouseout="this.style.background='#f1f5f9';this.style.color='#334155'">
+            Subscribe $49/mo →
+          </button>
+        </form>
+      </div>
+
+      <!-- Pro sub -->
+      <div style="padding:14px 16px;background:linear-gradient(135deg,#fafbff,#f5f3ff)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:12px;font-weight:800;color:#0f172a">Pro</span>
+              <span style="font-size:9px;font-weight:900;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;padding:2px 7px;border-radius:4px;letter-spacing:0.04em">BEST VALUE</span>
+            </div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:1px">250 credits/mo · $0.60 each</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:18px;font-weight:900;color:#0f172a;line-height:1">$149</div>
+            <div style="font-size:10px;color:#94a3b8">/month</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+          {% for f in ["250 credits/mo","Roll over","Priority support","Cancel any time"] %}
+          <span style="font-size:10px;font-weight:600;background:#ede9fe;color:#6d28d9;padding:2px 8px;border-radius:5px">{{ f }}</span>
+          {% endfor %}
+        </div>
+        <form method="POST" action="/billing/subscribe">
+          <input type="hidden" name="plan" value="pro_sub">
+          <button type="submit" style="width:100%;padding:9px;border-radius:9px;font-size:12px;font-weight:800;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(99,102,241,0.3);transition:all 0.15s"
+            onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            Subscribe $149/mo →
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Compare packs vs sub -->
+    <div class="card" style="padding:14px 16px">
+      <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px">Credits vs Subscription</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        {% for icon, label, rec in [
+          ("💳","Occasional use (1–15/mo)","Buy a pack"),
+          ("📅","Regular use (16–50/mo)","Starter plan"),
+          ("🚀","High volume (50+/mo)","Pro plan"),
+        ] %}
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px">
+          <span style="font-size:13px">{{ icon }}</span>
+          <span style="color:#64748b;flex:1">{{ label }}</span>
+          <span style="font-weight:700;color:#6366f1">{{ rec }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Security note -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px">
+      <div style="display:flex;gap:6px;flex-direction:column">
+        {% for icon, text in [
+          ("🔒","Payments via Stripe — card never stored here"),
+          ("🗑️","PDFs deleted within 24h of upload"),
+          ("🔁","Refund unused credits within 14 days"),
+        ] %}
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#64748b">
+          <span>{{ icon }}</span>{{ text }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

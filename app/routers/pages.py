@@ -18,7 +18,10 @@ async def compare(request: Request):
 @router.get("/credits", response_class=HTMLResponse)
 async def credits(request: Request, db: Session = Depends(get_db)):
     user = get_current_user(request, db)
-    return templates.TemplateResponse("credits.html", {"request": request, "user": user})
+    if user:
+        # Logged-in users get the compact in-app billing page
+        return templates.TemplateResponse("billing_plans.html", {"request": request, "user": user, "active_page": "credits"})
+    return templates.TemplateResponse("credits.html", {"request": request, "user": None})
 
 
 @router.get("/terms", response_class=HTMLResponse)
