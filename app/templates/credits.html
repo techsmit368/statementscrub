@@ -250,11 +250,14 @@
           {% endfor %}
         </ul>
 
-        <a href="/auth/register"
-          class="block w-full py-3.5 rounded-xl text-center font-black text-sm transition-all duration-150 {% if hot %}text-white hover:opacity-90{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}"
-          {% if hot %}style="background:linear-gradient(135deg,#6366f1,#0ea5e9);box-shadow:0 8px 24px rgba(99,102,241,0.3)"{% endif %}>
-          Get {{ credits }} Credits &rarr;
-        </a>
+        <form method="POST" action="/billing/checkout">
+          <input type="hidden" name="pack" value="{{ pack|lower }}">
+          <button type="submit"
+            class="block w-full py-3.5 rounded-xl text-center font-black text-sm transition-all duration-150 {% if hot %}text-white hover:opacity-90{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}"
+            {% if hot %}style="background:linear-gradient(135deg,#6366f1,#0ea5e9);box-shadow:0 8px 24px rgba(99,102,241,0.3)"{% endif %}>
+            Get {{ credits }} Credits &rarr;
+          </button>
+        </form>
       </div>
       {% endfor %}
 

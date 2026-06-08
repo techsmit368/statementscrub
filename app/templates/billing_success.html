@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Payment Successful — StatementScrub{% endblock %}
+
+{% block content %}
+<section style="min-height:80vh;display:flex;align-items:center;justify-content:center;background:#f8fafc">
+  <div style="max-width:480px;width:100%;margin:0 auto;padding:2rem 1rem;text-align:center">
+
+    <div style="width:72px;height:72px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem">
+      <svg style="width:36px;height:36px;color:#10b981" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+      </svg>
+    </div>
+
+    <h1 style="font-size:1.75rem;font-weight:900;color:#0f172a;margin-bottom:0.75rem">Payment Successful!</h1>
+
+    {% if pack %}
+    <p style="font-size:1.05rem;color:#475569;margin-bottom:0.5rem">
+      <strong style="color:#6366f1">{{ pack.credits }} credits</strong> have been added to your account.
+    </p>
+    {% endif %}
+
+    <p style="font-size:0.9rem;color:#64748b;margin-bottom:2rem">
+      Credits never expire — use them whenever you need.
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <a href="/dashboard"
+        style="display:block;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-weight:800;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:0.95rem">
+        Go to Dashboard &rarr;
+      </a>
+      <a href="/credits"
+        style="display:block;background:#f1f5f9;color:#475569;font-weight:600;padding:12px 28px;border-radius:12px;text-decoration:none;font-size:0.9rem">
+        Buy More Credits
+      </a>
+    </div>
+
+    {% if user %}
+    <p style="margin-top:2rem;font-size:0.8rem;color:#94a3b8">
+      Logged in as {{ user.email }}
+    </p>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

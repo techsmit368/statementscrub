@@ -7,7 +7,9 @@ class Settings(BaseSettings):
     secret_key: str = "dev-secret-change-in-production"
     database_url: str = "sqlite:///./bankanalyzer.db"
     stripe_secret_key: str = ""
+    stripe_publishable_key: str = ""
     stripe_webhook_secret: str = ""
+    app_url: str = "https://statementscrub.com"
     upload_dir: str = "uploads"
     max_upload_size_mb: int = 20
     telegram_bot_token: str = ""

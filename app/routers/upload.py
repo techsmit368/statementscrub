@@ -223,7 +223,10 @@ async def upload_statement(
         analysis.raw_text = raw_text[:5000]  # Store first 5k chars for reference
         analysis.status = "complete"
 
-        user.analyses_used += 1
+        if (user.credits or 0) > 0:
+            user.credits -= 1
+        else:
+            user.analyses_used += 1
         db.commit()
 
         background_tasks.add_task(
@@ -476,7 +479,10 @@ async def batch_upload(
             analysis.result_json = result
             analysis.raw_text = raw_text[:5000]
             analysis.status = "complete"
-            user.analyses_used += 1
+            if (user.credits or 0) > 0:
+                user.credits -= 1
+            else:
+                user.analyses_used += 1
             db.commit()
             processed += 1
 

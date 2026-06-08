@@ -54,5 +54,7 @@ PLAN_LIMITS = {"free": 3, "starter": 50, "pro": 999999}
 
 
 def check_usage_limit(user: User) -> bool:
+    if (user.credits or 0) > 0:
+        return True
     limit = PLAN_LIMITS.get(user.plan, 3)
     return user.analyses_used < limit
