@@ -14,6 +14,8 @@ class User(Base):
     analyses_used = Column(Integer, default=0)
     credits = Column(Integer, default=0)
     stripe_customer_id = Column(String, nullable=True)
+    stripe_subscription_id = Column(String, nullable=True)
+    subscription_plan = Column(String, nullable=True)  # starter_sub, pro_sub
     telegram_id = Column(String, nullable=True)
     telegram_token = Column(String, nullable=True)
     api_key = Column(String, nullable=True, unique=True, index=True)

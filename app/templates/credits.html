@@ -402,9 +402,80 @@
           </li>
           {% endfor %}
         </ul>
-        <a href="/#pricing" class="block text-center bg-white text-indigo-700 font-black py-3 rounded-xl hover:bg-indigo-50 transition text-sm shadow-lg">View Subscription Plans &rarr;</a>
+        <a href="#subscriptions" class="block text-center bg-white text-indigo-700 font-black py-3 rounded-xl hover:bg-indigo-50 transition text-sm shadow-lg">See Monthly Plans &darr;</a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Monthly Subscriptions -->
+<section id="subscriptions" class="py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="text-center mb-12">
+      <p class="text-indigo-600 text-sm font-bold uppercase tracking-widest mb-2">Auto-renewing monthly plans</p>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3">Subscribe &amp; save</h2>
+      <p class="text-slate-500 max-w-xl mx-auto">Credits refill automatically every month. Cancel any time, no questions asked.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+
+      <!-- Starter Monthly -->
+      <div class="bg-white rounded-2xl border-2 border-slate-200 p-8 hover:border-indigo-300 hover:shadow-lg transition-all">
+        <div class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Starter Monthly</div>
+        <div class="flex items-end gap-2 mb-1">
+          <span class="text-5xl font-black text-slate-900">$49</span>
+          <span class="text-slate-400 text-sm mb-2">/month</span>
+        </div>
+        <div class="text-indigo-600 font-bold text-sm mb-5">50 credits · $0.98/report · auto-renews</div>
+        <ul class="space-y-2.5 mb-7">
+          {% for f in ["50 credits added every month","Credits roll over if unused","Full analysis every report","Cancel any time","Email receipt each billing cycle"] %}
+          <li class="flex items-center gap-2.5 text-sm text-slate-600">
+            <div class="w-4 h-4 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center">
+              <svg style="width:9px;height:9px;color:#6366f1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ f }}
+          </li>
+          {% endfor %}
+        </ul>
+        <form method="POST" action="/billing/subscribe">
+          <input type="hidden" name="plan" value="starter_sub">
+          <button type="submit" class="block w-full py-3.5 rounded-xl font-black text-sm bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all">
+            Subscribe — $49/mo &rarr;
+          </button>
+        </form>
+      </div>
+
+      <!-- Pro Monthly -->
+      <div class="relative bg-white rounded-2xl border-2 border-indigo-500 p-8 shadow-2xl shadow-indigo-100">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-white text-xs px-5 py-1.5 rounded-full font-black tracking-wide shadow-lg" style="background:linear-gradient(135deg,#6366f1,#0ea5e9)">BEST VALUE</div>
+        <div class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Pro Monthly</div>
+        <div class="flex items-end gap-2 mb-1">
+          <span class="text-5xl font-black text-slate-900">$149</span>
+          <span class="text-slate-400 text-sm mb-2">/month</span>
+        </div>
+        <div class="text-indigo-600 font-bold text-sm mb-5">250 credits · $0.60/report · auto-renews</div>
+        <ul class="space-y-2.5 mb-7">
+          {% for f in ["250 credits added every month","Credits roll over if unused","Full analysis every report","Priority support","Cancel any time"] %}
+          <li class="flex items-center gap-2.5 text-sm text-slate-600">
+            <div class="w-4 h-4 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center">
+              <svg style="width:9px;height:9px;color:#6366f1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ f }}
+          </li>
+          {% endfor %}
+        </ul>
+        <form method="POST" action="/billing/subscribe">
+          <input type="hidden" name="plan" value="pro_sub">
+          <button type="submit" class="block w-full py-3.5 rounded-xl font-black text-sm text-white hover:opacity-90 transition-all" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);box-shadow:0 8px 24px rgba(99,102,241,0.3)">
+            Subscribe — $149/mo &rarr;
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <p class="text-center text-slate-400 text-xs mt-8">Subscriptions are charged monthly. Cancel any time from your account settings. Unused credits carry forward.</p>
   </div>
 </section>
 

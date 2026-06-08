@@ -18,6 +18,8 @@ def _run_migrations():
         for sql in [
             "ALTER TABLE users ADD COLUMN api_key VARCHAR",
             "ALTER TABLE users ADD COLUMN credits INTEGER DEFAULT 0",
+            "ALTER TABLE users ADD COLUMN stripe_subscription_id VARCHAR",
+            "ALTER TABLE users ADD COLUMN subscription_plan VARCHAR",
         ]:
             try:
                 conn.execute(text(sql))

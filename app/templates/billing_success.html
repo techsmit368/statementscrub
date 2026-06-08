@@ -11,26 +11,48 @@
       </svg>
     </div>
 
+    {% if sub %}
+    <h1 style="font-size:1.75rem;font-weight:900;color:#0f172a;margin-bottom:0.75rem">Subscription Active!</h1>
+    <p style="font-size:1.05rem;color:#475569;margin-bottom:0.5rem">
+      <strong style="color:#6366f1">{{ sub.credits_per_month }} credits</strong> added to your account now.
+    </p>
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:14px 18px;margin:1rem 0;text-align:left">
+      <div style="font-size:12px;font-weight:800;color:#0284c7;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">What happens next</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px">
+        {% for item in [
+          "Your " ~ sub.credits_per_month ~ " credits renew automatically every month",
+          "You'll be charged " ~ "${:.0f}".format(sub.price_cents / 100) ~ "/month — cancel any time",
+          "Credits stack — unused credits carry over",
+          "A receipt is on its way to your email"
+        ] %}
+        <li style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#0369a1">
+          <svg style="width:13px;height:13px;color:#0ea5e9;flex-shrink:0;margin-top:2px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+          {{ item }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% elif pack %}
     <h1 style="font-size:1.75rem;font-weight:900;color:#0f172a;margin-bottom:0.75rem">Payment Successful!</h1>
-
-    {% if pack %}
     <p style="font-size:1.05rem;color:#475569;margin-bottom:0.5rem">
       <strong style="color:#6366f1">{{ pack.credits }} credits</strong> have been added to your account.
     </p>
-    {% endif %}
-
-    <p style="font-size:0.9rem;color:#64748b;margin-bottom:2rem">
+    <p style="font-size:0.9rem;color:#64748b;margin-bottom:0.5rem">
       Credits never expire — use them whenever you need.
     </p>
+    {% else %}
+    <h1 style="font-size:1.75rem;font-weight:900;color:#0f172a;margin-bottom:0.75rem">Payment Successful!</h1>
+    <p style="font-size:1rem;color:#475569;margin-bottom:1.5rem">Your credits will appear in your account within a few seconds.</p>
+    {% endif %}
 
-    <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.5rem">
       <a href="/dashboard"
         style="display:block;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-weight:800;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:0.95rem">
         Go to Dashboard &rarr;
       </a>
       <a href="/credits"
         style="display:block;background:#f1f5f9;color:#475569;font-weight:600;padding:12px 28px;border-radius:12px;text-decoration:none;font-size:0.9rem">
-        Buy More Credits
+        {% if sub %}Manage Subscription{% else %}Buy More Credits{% endif %}
       </a>
     </div>
 

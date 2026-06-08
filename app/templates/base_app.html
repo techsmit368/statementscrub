@@ -101,9 +101,17 @@
         </div>
         <div class="hidden sm:block" style="line-height:1.2">
           <div style="font-size:12px;font-weight:700;color:#0f172a;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ user.full_name or user.email }}</div>
+          {% set _cr = user.credits or 0 %}
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;
-            {% if user.plan == 'pro' %}color:#7c3aed{% elif user.plan == 'starter' %}color:#0284c7{% else %}color:#64748b{% endif %}">
-            {{ user.plan }} · {{ user.analyses_used }} used
+            {% if _cr == 0 and user.plan == 'free' and user.analyses_used >= 3 %}color:#dc2626
+            {% elif _cr > 0 and _cr <= 2 %}color:#d97706
+            {% elif _cr > 0 %}color:#15803d
+            {% elif user.plan == 'pro' %}color:#7c3aed
+            {% elif user.plan == 'starter' %}color:#0284c7
+            {% else %}color:#64748b{% endif %}">
+            {% if _cr > 0 %}{{ _cr }} credit{{ 's' if _cr != 1 }} left
+            {% elif user.plan != 'free' %}{{ user.plan }} plan
+            {% else %}{{ [3 - user.analyses_used, 0] | max }} free left{% endif %}
           </div>
         </div>
       </div>
