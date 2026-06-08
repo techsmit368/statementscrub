@@ -1,6 +1,9 @@
-from fastapi import APIRouter, Request, Form, BackgroundTasks
+from fastapi import APIRouter, Request, Form, BackgroundTasks, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.services.auth import get_current_user
 from app.services.notifications import notify_contact_form, notify_demo_request
 
 router = APIRouter(tags=["pages"])
@@ -13,8 +16,9 @@ async def compare(request: Request):
 
 
 @router.get("/credits", response_class=HTMLResponse)
-async def credits(request: Request):
-    return templates.TemplateResponse("credits.html", {"request": request, "user": None})
+async def credits(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    return templates.TemplateResponse("credits.html", {"request": request, "user": user})
 
 
 @router.get("/terms", response_class=HTMLResponse)

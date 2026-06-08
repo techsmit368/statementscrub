@@ -129,9 +129,61 @@
 </script>
 {% endblock %}
 
+{% block head_extra %}
+<style>
+  .credit-card { background:#fff; border:1.5px solid #e2e8f0; border-radius:20px; padding:28px; transition:all 0.2s; position:relative; }
+  .credit-card:hover { border-color:#a5b4fc; box-shadow:0 12px 40px rgba(99,102,241,0.1); transform:translateY(-3px); }
+  .credit-card.hot { border-color:#6366f1; box-shadow:0 8px 40px rgba(99,102,241,0.18); }
+  .credit-card.hot:hover { box-shadow:0 16px 56px rgba(99,102,241,0.28); transform:translateY(-4px); }
+  .sub-card { border-radius:24px; padding:36px; position:relative; overflow:hidden; }
+  .btn-buy { display:block; width:100%; padding:13px; border-radius:13px; font-weight:800; font-size:13px; text-align:center; transition:all 0.18s; cursor:pointer; border:none; font-family:inherit; }
+  .btn-buy-default { background:#f1f5f9; color:#334155; }
+  .btn-buy-default:hover { background:#e0e7ff; color:#4f46e5; }
+  .btn-buy-hot { background:linear-gradient(135deg,#6366f1,#0ea5e9); color:#fff; box-shadow:0 6px 20px rgba(99,102,241,0.35); }
+  .btn-buy-hot:hover { opacity:0.92; box-shadow:0 8px 28px rgba(99,102,241,0.45); transform:translateY(-1px); }
+  .badge-top { position:absolute; top:-13px; left:50%; transform:translateX(-50%); white-space:nowrap; font-size:10px; font-weight:900; padding:4px 14px; border-radius:100px; letter-spacing:0.06em; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .float { animation:float 4s ease-in-out infinite; }
+</style>
+{% endblock %}
+
 {% block content %}
 
-<!-- Hero -->
+<!-- ══ USER BALANCE BANNER (logged-in only) ══ -->
+{% if user %}
+{% set _cr = user.credits or 0 %}
+<div style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border-bottom:1px solid rgba(255,255,255,0.06)">
+  <div style="max-width:1200px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:20px">
+      <div style="background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.35);border-radius:14px;padding:12px 20px;display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg style="width:18px;height:18px;color:#fff" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
+        </div>
+        <div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.5);font-weight:700;text-transform:uppercase;letter-spacing:0.07em">Your Balance</div>
+          <div style="font-size:24px;font-weight:900;color:#fff;line-height:1.1">
+            {{ _cr }} <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.5)">credit{{ 's' if _cr != 1 }}</span>
+          </div>
+        </div>
+      </div>
+      {% if user.subscription_plan %}
+      <div style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:8px 14px">
+        <div style="font-size:10px;color:#6ee7b7;font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Active Subscription</div>
+        <div style="font-size:13px;font-weight:800;color:#a7f3d0">{{ 'Starter 50/mo' if user.subscription_plan == 'starter_sub' else 'Pro 250/mo' }}</div>
+      </div>
+      {% endif %}
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      {% if _cr <= 5 %}
+      <span style="font-size:12px;color:#fbbf24;font-weight:600">{{ '⚠ Low balance — top up below' if _cr > 0 else '⚠ Out of credits' }}</span>
+      {% endif %}
+      <a href="#packs" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:13px;font-weight:800;padding:10px 22px;border-radius:11px;text-decoration:none;box-shadow:0 4px 15px rgba(99,102,241,0.4)">Top Up Credits →</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- ══ HERO ══ -->
 <section class="relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%)">
   <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle at 20% 50%,rgba(99,102,241,0.15) 0%,transparent 60%),radial-gradient(circle at 80% 20%,rgba(14,165,233,0.12) 0%,transparent 50%)"></div>
   <div class="absolute inset-0 pointer-events-none" style="background-image:radial-gradient(circle,rgba(148,163,184,0.12) 1px,transparent 1px);background-size:28px 28px"></div>
@@ -186,110 +238,95 @@
   </div>
 </section>
 
-<!-- Credit Packs -->
-<section id="packs" class="py-20 bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+<!-- ══ CREDIT PACKS ══ -->
+<section id="packs" style="background:#f8fafc;padding:80px 0">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
 
-    <div class="text-center mb-12">
-      <p class="text-sky-600 text-sm font-bold uppercase tracking-widest mb-2">One-time purchase</p>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3">Choose your credit pack</h2>
-      <p class="text-slate-500 max-w-xl mx-auto">The more you buy, the less you pay per report. All credits stack &mdash; never reset.</p>
+    <div style="text-align:center;margin-bottom:52px">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:800;padding:5px 14px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px">
+        <svg style="width:11px;height:11px" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9z" clip-rule="evenodd"/></svg>
+        One-time · No subscription
+      </div>
+      <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:#0f172a;margin:0 0 12px;letter-spacing:-0.02em">Choose your credit pack</h2>
+      <p style="color:#64748b;font-size:1rem;max-width:480px;margin:0 auto;line-height:1.65">Buy once, use whenever. Credits never expire and stack with future purchases.</p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:960px;margin:0 auto">
       {% for pack, credits, price, per_credit, savings_pct, badge, hot, note in [
-        ("Starter",   10,  14.90, "1.49", 0,  "",             false, "Perfect for occasional use"),
-        ("Basic",     25,  27.90, "1.12", 25, "",             false, "Great for exploring the platform"),
-        ("Standard",  50,  54.90, "1.10", 26, "POPULAR",      true,  "Ideal for small mortgage brokerages"),
-        ("Business", 100, 104.90, "1.05", 29, "",             false, "High-volume mortgage brokers"),
-        ("Growth",   250, 262.90, "1.05", 37, "BEST VALUE",   false, "Teams processing 250+ statements"),
-        ("Scale",    500, 499.90, "1.00", 40, "LOWEST PRICE", false, "Enterprise &amp; large lenders"),
+        ("Starter",   10,  14.90, "1.49", 0,  "",             false, "Try it out"),
+        ("Basic",     25,  27.90, "1.12", 25, "",             false, "Small teams"),
+        ("Standard",  50,  54.90, "1.10", 26, "MOST POPULAR", true,  "Best for brokers"),
+        ("Business", 100, 104.90, "1.05", 29, "",             false, "High volume"),
+        ("Growth",   250, 262.90, "1.05", 37, "BEST VALUE",   false, "Power users"),
+        ("Scale",    500, 499.90, "1.00", 40, "",             false, "Enterprise"),
       ] %}
-      <div class="relative bg-white rounded-2xl p-7 transition-all duration-200 {% if hot %}border-2 border-indigo-500 shadow-2xl shadow-indigo-100{% else %}border-2 border-slate-200 hover:border-slate-300 hover:shadow-lg{% endif %}">
-
+      <div class="credit-card {% if hot %}hot{% endif %}" style="{% if hot %}background:linear-gradient(180deg,#fafbff 0%,#fff 100%){% endif %}">
         {% if badge %}
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-white text-xs px-5 py-1.5 rounded-full font-black tracking-wide shadow-lg"
-          style="{% if hot %}background:linear-gradient(135deg,#6366f1,#0ea5e9){% elif badge == 'BEST VALUE' %}background:linear-gradient(135deg,#7c3aed,#6366f1){% else %}background:linear-gradient(135deg,#1e293b,#334155){% endif %}">
+        <div class="badge-top" style="{% if hot %}background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff{% else %}background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0{% endif %}">
           {{ badge }}
         </div>
         {% endif %}
 
-        <div class="flex items-start justify-between mb-5">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
           <div>
-            <div class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-0.5">{{ pack }} Pack</div>
-            <div class="text-5xl font-black text-slate-900 leading-none">{{ credits }}<span class="text-base font-semibold text-slate-400 ml-1">credits</span></div>
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:6px">{{ pack }}</div>
+            <div style="font-size:3rem;font-weight:900;color:#0f172a;line-height:1;letter-spacing:-0.03em">{{ credits }}</div>
+            <div style="font-size:12px;font-weight:600;color:#94a3b8;margin-top:2px">credits</div>
           </div>
-          {% if savings_pct > 0 %}
-          <div class="bg-green-50 border border-green-200 text-green-700 text-xs font-black px-2.5 py-1.5 rounded-xl">Save {{ savings_pct }}%</div>
-          {% endif %}
+          <div style="text-align:right">
+            <div style="font-size:1.6rem;font-weight:900;color:#0f172a;line-height:1">${{ "%.0f"|format(price) }}</div>
+            <div style="font-size:11px;color:#94a3b8;font-weight:500">one-time</div>
+            {% if savings_pct > 0 %}
+            <div style="margin-top:5px;background:#dcfce7;color:#15803d;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;display:inline-block">Save {{ savings_pct }}%</div>
+            {% endif %}
+          </div>
         </div>
 
-        <div class="border-t border-slate-100 pt-4 mb-5">
-          <div class="flex items-end gap-1.5">
-            <span class="text-4xl font-black text-slate-900">${{ "%.0f"|format(price) }}</span>
-            <span class="text-slate-400 text-sm mb-2 font-medium">one-time</span>
-          </div>
-          <div class="flex items-center gap-2 mt-1.5">
-            <span class="font-bold text-sm {% if hot %}text-indigo-600{% else %}text-sky-600{% endif %}">${{ per_credit }}/report</span>
-            {% if savings_pct > 0 %}<span class="text-slate-400 text-xs line-through">$1.49</span>{% endif %}
-          </div>
-          <div class="text-slate-400 text-xs mt-1">{{ note }}</div>
+        <div style="background:{% if hot %}#f0f0ff{% else %}#f8fafc{% endif %};border-radius:10px;padding:10px 14px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;font-weight:800;color:{% if hot %}#4f46e5{% else %}#0284c7{% endif %}">${{ per_credit }}/report</span>
+          <span style="font-size:11px;color:#94a3b8">{{ note }}</span>
         </div>
 
-        <ul class="space-y-2 mb-6">
-          {% for feature in ["Full AI statement analysis","Income verification report","NSF &amp; MCA detection","Risk score 0&ndash;100","APPROVE / REVIEW / DECLINE","Report history saved forever"] %}
-          <li class="flex items-center gap-2.5 text-sm text-slate-600">
-            <div class="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center {% if hot %}bg-indigo-100{% else %}bg-green-100{% endif %}">
-              <svg style="width:9px;height:9px" fill="currentColor" viewBox="0 0 20 20" class="{% if hot %}text-indigo-600{% else %}text-green-600{% endif %}">
-                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-              </svg>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+          {% for f in ["Income verification","NSF &amp; overdraft count","MCA loan detection","Risk score 0–100","APPROVE / REVIEW / DECLINE"] %}
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569">
+            <div style="width:16px;height:16px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:{% if hot %}#e0e7ff{% else %}#f0fdf4{% endif %}">
+              <svg style="width:8px;height:8px;color:{% if hot %}#6366f1{% else %}#16a34a{% endif %}" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             </div>
-            {{ feature }}
-          </li>
+            {{ f }}
+          </div>
           {% endfor %}
-        </ul>
+        </div>
 
         <form method="POST" action="/billing/checkout">
           <input type="hidden" name="pack" value="{{ pack|lower }}">
-          <button type="submit"
-            class="block w-full py-3.5 rounded-xl text-center font-black text-sm transition-all duration-150 {% if hot %}text-white hover:opacity-90{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}"
-            {% if hot %}style="background:linear-gradient(135deg,#6366f1,#0ea5e9);box-shadow:0 8px 24px rgba(99,102,241,0.3)"{% endif %}>
-            Get {{ credits }} Credits &rarr;
+          <button type="submit" class="btn-buy {% if hot %}btn-buy-hot{% else %}btn-buy-default{% endif %}">
+            Buy {{ credits }} Credits — ${{ "%.0f"|format(price) }}
           </button>
         </form>
       </div>
       {% endfor %}
-
     </div>
 
-    <!-- Price per report bar chart -->
-    <div class="mt-20 max-w-3xl mx-auto">
-      <h3 class="text-center text-xl font-black text-slate-900 mb-2">Price per analysis drops as you scale</h3>
-      <p class="text-center text-slate-500 text-sm mb-8">Industry average is $3&ndash;5 per report. Even our Starter pack beats that.</p>
-      <div class="space-y-3">
-        {% for label, pct, price_per, savings in [
-          ("Starter (10)", 100, "$1.49", ""),
-          ("Basic (25)", 75, "$1.12", "25% off"),
-          ("Standard (50)", 74, "$1.10", "26% off"),
-          ("Business (100)", 70, "$1.05", "29% off"),
-          ("Growth (250)", 70, "$1.05", "29% off"),
-          ("Scale (500)", 67, "$1.00", "33% off"),
-        ] %}
-        <div class="flex items-center gap-4">
-          <div class="w-36 text-sm text-slate-600 text-right flex-shrink-0 font-medium">{{ label }}</div>
-          <div class="flex-1 bg-slate-200 rounded-full h-9 overflow-hidden">
-            <div class="h-full rounded-full flex items-center px-3 text-white text-xs font-bold"
-              style="width:{{ pct }}%;min-width:5rem;{% if pct > 85 %}background:#94a3b8{% elif pct > 72 %}background:#38bdf8{% else %}background:linear-gradient(135deg,#6366f1,#0ea5e9){% endif %}">
-              {{ price_per }}/report
-            </div>
+    <!-- Value bar -->
+    <div style="max-width:640px;margin:60px auto 0;background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:28px 32px">
+      <div style="font-size:13px;font-weight:800;color:#0f172a;margin-bottom:4px;text-align:center">Cost per report compared to alternatives</div>
+      <div style="font-size:11px;color:#94a3b8;text-align:center;margin-bottom:20px">Industry tools charge $2–5/report. We start at $1.49.</div>
+      {% for label, pct, price_per, col in [
+        ("Industry avg", 100, "$3–5", "#ef4444"),
+        ("Starter (10)", 45, "$1.49", "#94a3b8"),
+        ("Standard (50)", 34, "$1.10", "#6366f1"),
+        ("Scale (500)", 30, "$1.00", "#0ea5e9"),
+      ] %}
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <div style="width:110px;font-size:11px;font-weight:600;color:#64748b;text-align:right;flex-shrink:0">{{ label }}</div>
+        <div style="flex:1;background:#f1f5f9;border-radius:100px;height:28px;overflow:hidden">
+          <div style="height:100%;width:{{ pct }}%;background:{{ col }};border-radius:100px;display:flex;align-items:center;padding:0 10px;min-width:60px">
+            <span style="font-size:11px;font-weight:800;color:#fff">{{ price_per }}</span>
           </div>
-          {% if savings %}
-          <div class="flex-shrink-0 text-xs font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-1 rounded-lg w-16 text-center">{{ savings }}</div>
-          {% else %}<div class="w-16"></div>{% endif %}
         </div>
-        {% endfor %}
       </div>
+      {% endfor %}
     </div>
 
   </div>
@@ -408,74 +445,82 @@
   </div>
 </section>
 
-<!-- Monthly Subscriptions -->
-<section id="subscriptions" class="py-20 bg-white">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+<!-- ══ MONTHLY SUBSCRIPTIONS ══ -->
+<section id="subscriptions" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0c1a35 100%);padding:80px 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 25% 40%,rgba(99,102,241,0.15) 0%,transparent 50%),radial-gradient(circle at 75% 60%,rgba(14,165,233,0.1) 0%,transparent 50%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:26px 26px;pointer-events:none"></div>
 
-    <div class="text-center mb-12">
-      <p class="text-indigo-600 text-sm font-bold uppercase tracking-widest mb-2">Auto-renewing monthly plans</p>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3">Subscribe &amp; save</h2>
-      <p class="text-slate-500 max-w-xl mx-auto">Credits refill automatically every month. Cancel any time, no questions asked.</p>
+  <div style="max-width:900px;margin:0 auto;padding:0 24px;position:relative">
+
+    <div style="text-align:center;margin-bottom:52px">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:11px;font-weight:800;padding:5px 14px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px;border:1px solid rgba(99,102,241,0.3)">
+        <svg style="width:11px;height:11px" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
+        Auto-renews monthly · Cancel any time
+      </div>
+      <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-0.02em">Monthly subscriptions</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:1rem;max-width:440px;margin:0 auto">Credits refill every month automatically. Unused credits carry forward — they never disappear.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
 
-      <!-- Starter Monthly -->
-      <div class="bg-white rounded-2xl border-2 border-slate-200 p-8 hover:border-indigo-300 hover:shadow-lg transition-all">
-        <div class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Starter Monthly</div>
-        <div class="flex items-end gap-2 mb-1">
-          <span class="text-5xl font-black text-slate-900">$49</span>
-          <span class="text-slate-400 text-sm mb-2">/month</span>
+      <!-- Starter Sub -->
+      <div class="sub-card" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12)">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:10px">Starter Monthly</div>
+        <div style="display:flex;align-items:flex-end;gap:6px;margin-bottom:4px">
+          <span style="font-size:3.2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.03em">$49</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:8px">/month</span>
         </div>
-        <div class="text-indigo-600 font-bold text-sm mb-5">50 credits · $0.98/report · auto-renews</div>
-        <ul class="space-y-2.5 mb-7">
-          {% for f in ["50 credits added every month","Credits roll over if unused","Full analysis every report","Cancel any time","Email receipt each billing cycle"] %}
-          <li class="flex items-center gap-2.5 text-sm text-slate-600">
-            <div class="w-4 h-4 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center">
-              <svg style="width:9px;height:9px;color:#6366f1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        <div style="font-size:12px;color:#818cf8;font-weight:700;margin-bottom:24px">50 credits · $0.98/report</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+          {% for f in ["50 credits added every month","Unused credits carry forward","Full analysis per report","Email receipt monthly","Cancel any time — no lock-in"] %}
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.75)">
+            <div style="width:18px;height:18px;background:rgba(99,102,241,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg style="width:9px;height:9px;color:#818cf8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             </div>
             {{ f }}
-          </li>
+          </div>
           {% endfor %}
-        </ul>
+        </div>
         <form method="POST" action="/billing/subscribe">
           <input type="hidden" name="plan" value="starter_sub">
-          <button type="submit" class="block w-full py-3.5 rounded-xl font-black text-sm bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all">
-            Subscribe — $49/mo &rarr;
+          <button type="submit" style="width:100%;padding:14px;border-radius:13px;font-weight:800;font-size:13px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-family:inherit;transition:all 0.18s"
+            onmouseover="this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+            Subscribe — $49/mo →
           </button>
         </form>
       </div>
 
-      <!-- Pro Monthly -->
-      <div class="relative bg-white rounded-2xl border-2 border-indigo-500 p-8 shadow-2xl shadow-indigo-100">
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-white text-xs px-5 py-1.5 rounded-full font-black tracking-wide shadow-lg" style="background:linear-gradient(135deg,#6366f1,#0ea5e9)">BEST VALUE</div>
-        <div class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">Pro Monthly</div>
-        <div class="flex items-end gap-2 mb-1">
-          <span class="text-5xl font-black text-slate-900">$149</span>
-          <span class="text-slate-400 text-sm mb-2">/month</span>
+      <!-- Pro Sub -->
+      <div class="sub-card" style="background:linear-gradient(145deg,rgba(99,102,241,0.25),rgba(14,165,233,0.15));border:1px solid rgba(99,102,241,0.45);position:relative">
+        <div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:10px;font-weight:900;padding:4px 16px;border-radius:100px;letter-spacing:0.07em;white-space:nowrap">BEST VALUE</div>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);margin-bottom:10px">Pro Monthly</div>
+        <div style="display:flex;align-items:flex-end;gap:6px;margin-bottom:4px">
+          <span style="font-size:3.2rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.03em">$149</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:8px">/month</span>
         </div>
-        <div class="text-indigo-600 font-bold text-sm mb-5">250 credits · $0.60/report · auto-renews</div>
-        <ul class="space-y-2.5 mb-7">
-          {% for f in ["250 credits added every month","Credits roll over if unused","Full analysis every report","Priority support","Cancel any time"] %}
-          <li class="flex items-center gap-2.5 text-sm text-slate-600">
-            <div class="w-4 h-4 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center">
-              <svg style="width:9px;height:9px;color:#6366f1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        <div style="font-size:12px;color:#67e8f9;font-weight:700;margin-bottom:24px">250 credits · $0.60/report</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+          {% for f in ["250 credits added every month","Unused credits carry forward","Full analysis per report","Priority support response","Cancel any time — no lock-in"] %}
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.85)">
+            <div style="width:18px;height:18px;background:rgba(14,165,233,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg style="width:9px;height:9px;color:#38bdf8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             </div>
             {{ f }}
-          </li>
+          </div>
           {% endfor %}
-        </ul>
+        </div>
         <form method="POST" action="/billing/subscribe">
           <input type="hidden" name="plan" value="pro_sub">
-          <button type="submit" class="block w-full py-3.5 rounded-xl font-black text-sm text-white hover:opacity-90 transition-all" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);box-shadow:0 8px 24px rgba(99,102,241,0.3)">
-            Subscribe — $149/mo &rarr;
+          <button type="submit" style="width:100%;padding:14px;border-radius:13px;font-weight:800;font-size:13px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;cursor:pointer;font-family:inherit;box-shadow:0 6px 24px rgba(99,102,241,0.45);transition:all 0.18s"
+            onmouseover="this.style.opacity='0.9';this.style.transform='translateY(-1px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">
+            Subscribe — $149/mo →
           </button>
         </form>
       </div>
 
     </div>
+    <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:11px">Charged monthly to your card. Cancel any time from account settings. Unused credits never expire.</p>
 
-    <p class="text-center text-slate-400 text-xs mt-8">Subscriptions are charged monthly. Cancel any time from your account settings. Unused credits carry forward.</p>
   </div>
 </section>
 
