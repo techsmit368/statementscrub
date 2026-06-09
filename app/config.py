@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     smtp_user: str = ""
     smtp_password: str = ""
     notify_email: str = "patelsmit368@gmail.com"
+    superadmin_password: str = "admin@stmtscrub2024"
 
     class Config:
         env_file = ".env"

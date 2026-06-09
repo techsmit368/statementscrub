@@ -10,6 +10,31 @@ from app.services.auth import get_current_user
 from app.config import settings
 
 router = APIRouter(prefix="/billing", tags=["billing"])
+
+# Team subscription plans (separate from individual plans)
+TEAM_SUBSCRIPTIONS = {
+    "starter_team": {
+        "seats": 3,
+        "reports_monthly": 150,
+        "price_cents": 39900,
+        "label": "Starter Team — 3 seats, 150 reports/month",
+        "description": "3 broker seats + 150 shared analyses/month. Partner/Admin/Broker roles.",
+    },
+    "business_team": {
+        "seats": 10,
+        "reports_monthly": 500,
+        "price_cents": 79900,
+        "label": "Business Team — 10 seats, 500 reports/month",
+        "description": "10 broker seats + 500 shared analyses/month. Full role management.",
+    },
+    "enterprise": {
+        "seats": 9999,
+        "reports_monthly": 2000,
+        "price_cents": 199900,
+        "label": "Enterprise — Unlimited seats, 2000 reports/month",
+        "description": "Unlimited seats + 2000 shared analyses/month. Dedicated support.",
+    },
+}
 templates = Jinja2Templates(directory="app/templates")
 
 stripe.api_key = settings.stripe_secret_key
@@ -203,6 +228,50 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
                 db.commit()
 
     return {"status": "ok"}
+
+
+@router.post("/team-subscribe")
+async def create_team_subscription(
+    request: Request,
+    plan: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse("/auth/login", status_code=302)
+
+    if plan not in TEAM_SUBSCRIPTIONS:
+        raise HTTPException(status_code=400, detail="Invalid team plan")
+
+    s = TEAM_SUBSCRIPTIONS[plan]
+    session = stripe.checkout.Session.create(
+        payment_method_types=["card"],
+        line_items=[{
+            "price_data": {
+                "currency": "usd",
+                "unit_amount": s["price_cents"],
+                "recurring": {"interval": "month"},
+                "product_data": {
+                    "name": s["label"],
+                    "description": s["description"],
+                },
+            },
+            "quantity": 1,
+        }],
+        mode="subscription",
+        customer_email=user.email,
+        subscription_data={
+            "metadata": {
+                "user_id": str(user.id),
+                "sub_plan": plan,
+                "credits_per_month": str(s["reports_monthly"]),
+            }
+        },
+        metadata={"user_id": str(user.id), "sub_plan": plan, "credits_per_month": str(s["reports_monthly"])},
+        success_url=f"{settings.app_url}/billing/success?sub={plan}",
+        cancel_url=f"{settings.app_url}/credits#teams",
+    )
+    return RedirectResponse(session.url, status_code=303)
 
 
 @router.get("/plans", response_class=HTMLResponse)

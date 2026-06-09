@@ -1,0 +1,89 @@
+{% extends "superadmin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="sa-stats">
+  <div class="sa-stat">
+    <div class="sa-stat-num" style="color:#818cf8">{{ total_users }}</div>
+    <div class="sa-stat-label">Total Users</div>
+  </div>
+  <div class="sa-stat">
+    <div class="sa-stat-num" style="color:#22c55e">${{ mrr }}</div>
+    <div class="sa-stat-label">Est. MRR</div>
+  </div>
+  <div class="sa-stat">
+    <div class="sa-stat-num" style="color:#38bdf8">{{ total_analyses }}</div>
+    <div class="sa-stat-label">Total Analyses</div>
+  </div>
+  <div class="sa-stat">
+    <div class="sa-stat-num" style="color:#f59e0b">{{ total_lenders }}</div>
+    <div class="sa-stat-label">Lenders</div>
+  </div>
+  <div class="sa-stat">
+    <div class="sa-stat-num" style="color:#a78bfa">{{ total_orgs }}</div>
+    <div class="sa-stat-label">Team Accounts</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+  <!-- Lender grade breakdown -->
+  <div class="sa-card">
+    <div class="sa-card-title">Lender Grade Breakdown</div>
+    {% for grade, count in grade_counts.items() %}
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+      <span class="sa-badge-grade grade-{{ grade|lower }}">{{ grade }}</span>
+      <div style="flex:1;background:#0f172a;border-radius:100px;height:22px;overflow:hidden">
+        <div style="height:100%;width:{{ (count / (grade_counts.values()|sum or 1) * 100)|round }}%;background:{% if grade=='A' %}#15803d{% elif grade=='B' %}#1d4ed8{% elif grade=='C' %}#b45309{% else %}#7c3aed{% endif %};border-radius:100px;display:flex;align-items:center;padding:0 10px;min-width:40px">
+          <span style="font-size:11px;font-weight:800;color:#fff">{{ count }}</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <div style="margin-top:14px">
+      <a href="/superadmin/lenders" class="sa-btn sa-btn-ghost sa-btn-sm">Manage Lenders →</a>
+    </div>
+  </div>
+
+  <!-- Recent signups -->
+  <div class="sa-card">
+    <div class="sa-card-title">Recent Signups</div>
+    <table class="sa-table">
+      <thead><tr><th>Email</th><th>Plan</th><th>Credits</th></tr></thead>
+      <tbody>
+        {% for u in recent_users %}
+        <tr>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ u.email }}</td>
+          <td>
+            {% if u.subscription_plan %}
+            <span style="background:rgba(99,102,241,0.2);color:#818cf8;font-size:10px;font-weight:800;padding:2px 8px;border-radius:100px">{{ u.subscription_plan }}</span>
+            {% else %}
+            <span style="color:#475569;font-size:11px">free</span>
+            {% endif %}
+          </td>
+          <td style="color:#22c55e;font-weight:800">{{ u.credits or 0 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div style="margin-top:14px">
+      <a href="/superadmin/users" class="sa-btn sa-btn-ghost sa-btn-sm">All Users →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Quick actions -->
+<div class="sa-card">
+  <div class="sa-card-title">Quick Actions</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <a href="/superadmin/lenders/add" class="sa-btn sa-btn-primary">➕ Add Lender</a>
+    <a href="/superadmin/export" class="sa-btn sa-btn-ghost">📤 Export Lenders</a>
+    <a href="/superadmin/users" class="sa-btn sa-btn-ghost">👥 Manage Users</a>
+    <a href="/lender-match" target="_blank" class="sa-btn sa-btn-ghost">⚡ Test Lender Match ↗</a>
+  </div>
+</div>
+
+{% endblock %}

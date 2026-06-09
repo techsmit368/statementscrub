@@ -1,0 +1,194 @@
+{% extends "base_app.html" %}
+{% block title %}My Team — StatementScrub{% endblock %}
+
+{% block content %}
+<div style="max-width:900px;margin:0 auto;padding:28px 24px">
+
+{% if msg %}
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:20px;word-break:break-all">
+  ✓ {{ msg }}
+</div>
+{% endif %}
+
+{% if not org %}
+<!-- ── No team yet — Create form ── -->
+<div style="text-align:center;padding:60px 20px;background:#fff;border-radius:20px;border:1.5px solid #e2e8f0;max-width:520px;margin:0 auto">
+  <div style="font-size:44px;margin-bottom:16px">🏢</div>
+  <h2 style="font-size:22px;font-weight:900;color:#0f172a;margin-bottom:8px">Create Your Team</h2>
+  <p style="color:#64748b;font-size:14px;margin-bottom:28px;line-height:1.65">
+    Invite your brokers and admins under one account. Share a report pool and manage everyone from one place.
+  </p>
+
+  {% if user.subscription_plan in ['starter_team','business_team','enterprise'] %}
+  <form method="POST" action="/team/create">
+    <input name="org_name" placeholder="Company / ISO shop name" required
+      style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:13px 16px;font-size:14px;color:#0f172a;margin-bottom:14px;font-family:inherit;outline:none;box-sizing:border-box">
+    <button type="submit"
+      style="width:100%;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
+      Create Team →
+    </button>
+  </form>
+  {% else %}
+  <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:20px">
+    <div style="font-size:13px;color:#b91c1c;font-weight:700">Team plans required</div>
+    <div style="font-size:12px;color:#ef4444;margin-top:4px">Upgrade to a Team plan to unlock multi-seat access.</div>
+  </div>
+  <a href="/credits#teams" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border-radius:12px;padding:13px 28px;font-size:14px;font-weight:800;text-decoration:none;display:inline-block">
+    View Team Plans →
+  </a>
+  {% endif %}
+</div>
+
+{% else %}
+<!-- ── Team Dashboard ── -->
+<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+  <div>
+    <h1 style="font-size:22px;font-weight:900;color:#0f172a;letter-spacing:-0.02em">{{ org.name }}</h1>
+    <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
+      <span style="background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:800;padding:3px 10px;border-radius:100px">{{ org.plan|replace('_',' ')|title }}</span>
+      <span style="background:#f0fdf4;color:#15803d;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px">{{ seats_used }} / {{ seats_limit }} seats</span>
+      {% if member %}
+      <span style="background:#f8fafc;color:#64748b;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;border:1px solid #e2e8f0">
+        Your role: <strong>{{ member.role|title }}</strong>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if can_manage %}
+  <button onclick="document.getElementById('inviteModal').style.display='flex'"
+    style="background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">
+    + Invite Member
+  </button>
+  {% endif %}
+</div>
+
+<!-- Seat usage bar -->
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;padding:20px 24px;margin-bottom:20px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <span style="font-size:13px;font-weight:700;color:#0f172a">Seats Used</span>
+    <span style="font-size:13px;font-weight:800;color:#6366f1">{{ seats_used }} / {{ seats_limit }}</span>
+  </div>
+  <div style="background:#f1f5f9;border-radius:100px;height:10px;overflow:hidden">
+    <div style="height:100%;width:{{ [(seats_used / seats_limit * 100)|round, 100]|min }}%;background:linear-gradient(90deg,#6366f1,#0ea5e9);border-radius:100px;transition:width 0.4s"></div>
+  </div>
+</div>
+
+<!-- Members table -->
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;overflow:hidden">
+  <div style="padding:18px 24px;border-bottom:1px solid #f1f5f9;font-size:14px;font-weight:800;color:#0f172a">
+    Team Members ({{ members|length }})
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead>
+      <tr style="background:#f8fafc">
+        <th style="padding:10px 20px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#64748b;border-bottom:1px solid #f1f5f9">Member</th>
+        <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#64748b;border-bottom:1px solid #f1f5f9">Role</th>
+        <th style="padding:10px 16px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#64748b;border-bottom:1px solid #f1f5f9">Status</th>
+        {% if can_manage %}<th style="padding:10px 16px;border-bottom:1px solid #f1f5f9"></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in members %}
+      {% set mu = member_users.get(m.id) %}
+      <tr style="border-bottom:1px solid #f8fafc">
+        <td style="padding:14px 20px">
+          <div style="font-weight:700;color:#0f172a">{{ mu.email if mu else m.invited_email }}</div>
+          {% if mu and mu.full_name %}<div style="font-size:11px;color:#94a3b8">{{ mu.full_name }}</div>{% endif %}
+        </td>
+        <td style="padding:14px 16px">
+          <span style="padding:3px 10px;border-radius:100px;font-size:11px;font-weight:800;
+            background:{% if m.role=='partner' %}#fef9c3{% elif m.role=='admin' %}#dbeafe{% else %}#f0fdf4{% endif %};
+            color:{% if m.role=='partner' %}#a16207{% elif m.role=='admin' %}#1d4ed8{% else %}#15803d{% endif %}">
+            {{ m.role|title }}
+          </span>
+        </td>
+        <td style="padding:14px 16px">
+          {% if m.accepted %}
+          <span style="color:#22c55e;font-size:12px">● Active</span>
+          {% else %}
+          <span style="color:#f59e0b;font-size:12px">⏳ Pending invite</span>
+          {% endif %}
+        </td>
+        {% if can_manage and m.role != 'partner' %}
+        <td style="padding:14px 16px">
+          <div style="display:flex;gap:6px">
+            {% if is_partner %}
+            <form method="POST" action="/team/members/{{ m.id }}/role" style="display:inline-flex;gap:4px">
+              <select name="role" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:4px 8px;font-size:11px;color:#334155;font-family:inherit">
+                <option value="admin" {{ 'selected' if m.role=='admin' }}>Admin</option>
+                <option value="broker" {{ 'selected' if m.role=='broker' }}>Broker</option>
+              </select>
+              <button type="submit" style="background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">Set</button>
+            </form>
+            {% endif %}
+            <form method="POST" action="/team/members/{{ m.id }}/remove"
+              onsubmit="return confirm('Remove this member?')">
+              <button type="submit" style="background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">Remove</button>
+            </form>
+          </div>
+        </td>
+        {% elif can_manage %}
+        <td></td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Role guide -->
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:18px 22px;margin-top:20px">
+  <div style="font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px">Role Permissions</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12.5px">
+    <div>
+      <div style="font-weight:800;color:#a16207;margin-bottom:4px">👑 Partner</div>
+      <div style="color:#64748b;line-height:1.7">Full access · Billing · Invite · Remove members · Change roles · All reports</div>
+    </div>
+    <div>
+      <div style="font-weight:800;color:#1d4ed8;margin-bottom:4px">🔧 Admin</div>
+      <div style="color:#64748b;line-height:1.7">Invite brokers · See all team reports · Remove brokers · Lender matching</div>
+    </div>
+    <div>
+      <div style="font-weight:800;color:#15803d;margin-bottom:4px">📋 Broker</div>
+      <div style="color:#64748b;line-height:1.7">Own analyses · Lender matching · ISO contacts · Cannot see other brokers</div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+</div>
+
+<!-- Invite Modal -->
+<div id="inviteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:420px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:17px;font-weight:900;color:#0f172a">Invite Team Member</h3>
+      <button onclick="document.getElementById('inviteModal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#94a3b8">✕</button>
+    </div>
+    <form method="POST" action="/team/invite">
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Email Address</label>
+      <input type="email" name="invited_email" required placeholder="broker@company.com"
+        style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:13px;color:#0f172a;margin-bottom:14px;font-family:inherit;outline:none">
+
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Role</label>
+      <select name="role" style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:13px;color:#0f172a;margin-bottom:20px;font-family:inherit">
+        <option value="broker">Broker — runs analyses, sees own work</option>
+        <option value="admin">Admin — manages brokers, sees all reports</option>
+      </select>
+
+      <div style="background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:10px 14px;font-size:12px;color:#713f12;margin-bottom:16px">
+        The invite link will be shown on the next page. Send it manually to the team member.
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <button type="submit" style="flex:1;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;border-radius:11px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">
+          Send Invite
+        </button>
+        <button type="button" onclick="document.getElementById('inviteModal').style.display='none'"
+          style="background:#f1f5f9;color:#334155;border:none;border-radius:11px;padding:12px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

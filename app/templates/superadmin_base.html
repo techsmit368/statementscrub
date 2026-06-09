@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Superadmin{% endblock %} — StatementScrub</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; }
+
+  /* Sidebar */
+  .sa-sidebar { width: 220px; background: #0a0f1e; border-right: 1px solid #1e293b; min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; }
+  .sa-logo { padding: 24px 20px; border-bottom: 1px solid #1e293b; }
+  .sa-logo-text { font-size: 16px; font-weight: 900; color: #fff; }
+  .sa-logo-text span { background: linear-gradient(135deg, #818cf8, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .sa-badge { font-size: 9px; font-weight: 800; background: #ef4444; color: #fff; padding: 2px 7px; border-radius: 100px; letter-spacing: 0.06em; margin-top: 4px; display: inline-block; }
+  .sa-nav { padding: 16px 12px; flex: 1; }
+  .sa-nav a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #64748b; text-decoration: none; margin-bottom: 2px; transition: all 0.15s; }
+  .sa-nav a:hover { background: #1e293b; color: #e2e8f0; }
+  .sa-nav a.active { background: rgba(99,102,241,0.15); color: #818cf8; }
+  .sa-nav .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+  .sa-footer { padding: 16px 20px; border-top: 1px solid #1e293b; }
+  .sa-footer a { font-size: 12px; color: #475569; text-decoration: none; }
+  .sa-footer a:hover { color: #94a3b8; }
+
+  /* Main */
+  .sa-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .sa-topbar { background: #0a0f1e; border-bottom: 1px solid #1e293b; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .sa-topbar-title { font-size: 16px; font-weight: 800; color: #fff; }
+  .sa-content { padding: 28px; flex: 1; }
+
+  /* Cards */
+  .sa-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+  .sa-card-title { font-size: 13px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 16px; }
+
+  /* Stats */
+  .sa-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  .sa-stat { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 18px 16px; }
+  .sa-stat-num { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: -0.04em; }
+  .sa-stat-label { font-size: 11px; color: #64748b; font-weight: 600; margin-top: 3px; }
+
+  /* Tables */
+  .sa-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sa-table th { padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: #475569; border-bottom: 1px solid #334155; }
+  .sa-table td { padding: 11px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; vertical-align: middle; }
+  .sa-table tr:last-child td { border-bottom: none; }
+  .sa-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Forms */
+  .sa-label { display: block; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; margin-top: 14px; }
+  .sa-input, .sa-select, .sa-textarea { width: 100%; background: #0f172a; border: 1.5px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #e2e8f0; outline: none; font-family: inherit; }
+  .sa-input:focus, .sa-select:focus, .sa-textarea:focus { border-color: #6366f1; }
+  .sa-textarea { min-height: 80px; resize: vertical; }
+  .sa-select option { background: #1e293b; }
+
+  /* Buttons */
+  .sa-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 9px; font-size: 12px; font-weight: 800; border: none; cursor: pointer; font-family: inherit; text-decoration: none; transition: all 0.15s; }
+  .sa-btn-primary { background: linear-gradient(135deg, #6366f1, #0ea5e9); color: #fff; }
+  .sa-btn-primary:hover { opacity: 0.88; }
+  .sa-btn-success { background: #15803d; color: #fff; }
+  .sa-btn-danger { background: #991b1b; color: #fff; }
+  .sa-btn-danger:hover { background: #7f1d1d; }
+  .sa-btn-ghost { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+  .sa-btn-ghost:hover { border-color: #6366f1; color: #818cf8; }
+  .sa-btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 7px; }
+
+  /* Badges */
+  .sa-badge-grade { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 900; letter-spacing: 0.05em; }
+  .grade-a { background: #14532d; color: #86efac; }
+  .grade-b { background: #1e3a5f; color: #93c5fd; }
+  .grade-c { background: #3b1f00; color: #fcd34d; }
+  .grade-d { background: #3b0764; color: #d8b4fe; }
+
+  /* Search bar */
+  .sa-search { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
+  .sa-search input, .sa-search select { flex: 1; min-width: 160px; }
+
+  /* Flash msg */
+  .sa-msg { background: #14532d; border: 1px solid #15803d; color: #86efac; border-radius: 10px; padding: 10px 16px; font-size: 13px; margin-bottom: 16px; }
+
+  /* Grid */
+  .sa-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+  .sa-form-grid .full { grid-column: 1 / -1; }
+
+  /* Pagination */
+  .sa-pager { display: flex; gap: 8px; align-items: center; margin-top: 16px; }
+  .sa-pager a { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; background: #1e293b; color: #94a3b8; text-decoration: none; border: 1px solid #334155; }
+  .sa-pager a:hover, .sa-pager a.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+</style>
+</head>
+<body>
+
+<div class="sa-sidebar">
+  <div class="sa-logo">
+    <div class="sa-logo-text">Statement<span>Scrub</span></div>
+    <div class="sa-badge">SUPERADMIN</div>
+  </div>
+  <nav class="sa-nav">
+    <a href="/superadmin/dashboard" class="{{ 'active' if active_page=='dashboard' }}">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+    <a href="/superadmin/users" class="{{ 'active' if active_page=='users' }}">
+      <span class="nav-icon">👥</span> Users
+    </a>
+    <a href="/superadmin/lenders" class="{{ 'active' if active_page=='lenders' }}">
+      <span class="nav-icon">🏦</span> Lenders
+    </a>
+    <a href="/superadmin/lenders/add" class="{{ 'active' if active_page=='lender_add' }}">
+      <span class="nav-icon">➕</span> Add Lender
+    </a>
+    <a href="/superadmin/export" class="{{ 'active' if active_page=='export' }}">
+      <span class="nav-icon">📤</span> Export
+    </a>
+  </nav>
+  <div class="sa-footer">
+    <a href="/superadmin/logout">⬅ Logout</a>&nbsp;&nbsp;
+    <a href="/" target="_blank" style="float:right">View Site ↗</a>
+  </div>
+</div>
+
+<div class="sa-main">
+  <div class="sa-topbar">
+    <div class="sa-topbar-title">{% block page_title %}Superadmin{% endblock %}</div>
+    <div style="font-size:11px;color:#475569">StatementScrub Control Panel</div>
+  </div>
+  <div class="sa-content">
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+</body>
+</html>

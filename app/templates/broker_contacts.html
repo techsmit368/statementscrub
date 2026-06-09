@@ -1,0 +1,168 @@
+{% extends "base_app.html" %}
+{% block title %}My ISO Contacts — StatementScrub{% endblock %}
+
+{% block content %}
+<div style="max-width:1100px;margin:0 auto;padding:28px 24px">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1 style="font-size:22px;font-weight:900;color:#0f172a;letter-spacing:-0.02em">My ISO Contacts</h1>
+      <p style="color:#64748b;font-size:13px;margin-top:3px">Your private lender contact list. Add ISO rep details to any lender in the directory.</p>
+    </div>
+    <button onclick="document.getElementById('addModal').style.display='flex'"
+      style="background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">
+      + Add Contact
+    </button>
+  </div>
+
+  {% set msg = request.query_params.get('msg','') %}
+  {% if msg %}
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;border-radius:10px;padding:10px 16px;font-size:13px;margin-bottom:16px">
+    ✓ Contact saved successfully.
+  </div>
+  {% endif %}
+
+  <!-- Search -->
+  <form method="GET" style="margin-bottom:20px;display:flex;gap:10px">
+    <input name="q" value="{{ q }}" placeholder="Search lender name…"
+      style="flex:1;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f172a;outline:none">
+    <button type="submit" style="background:#6366f1;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">Search</button>
+  </form>
+
+  <!-- Contact list -->
+  {% if rows %}
+  <div style="display:flex;flex-direction:column;gap:12px">
+    {% for contact, lender in rows %}
+    <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;padding:20px 24px;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <!-- Grade badge -->
+      <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;
+        background:{% if lender and lender.grade=='a' %}#dcfce7{% elif lender and lender.grade=='b' %}#dbeafe{% elif lender and lender.grade=='c' %}#fef9c3{% else %}#f3e8ff{% endif %};
+        color:{% if lender and lender.grade=='a' %}#15803d{% elif lender and lender.grade=='b' %}#1d4ed8{% elif lender and lender.grade=='c' %}#a16207{% else %}#7c3aed{% endif %}">
+        {{ (lender.grade or '?')|upper if lender else '?' }}
+      </div>
+
+      <!-- Info -->
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:15px;font-weight:800;color:#0f172a">{{ lender.lender_name if lender else 'Unknown Lender' }}</div>
+        <div style="font-size:12px;color:#64748b;margin-top:2px">{{ lender.lender_code or '' if lender }}</div>
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:10px">
+          {% if contact.iso_rep_name %}
+          <span style="font-size:13px;color:#334155"><strong>Rep:</strong> {{ contact.iso_rep_name }}</span>
+          {% endif %}
+          {% if contact.iso_rep_email %}
+          <span style="font-size:13px;color:#6366f1"><strong>✉</strong> {{ contact.iso_rep_email }}</span>
+          {% endif %}
+          {% if contact.iso_rep_phone %}
+          <span style="font-size:13px;color:#0ea5e9"><strong>📞</strong> {{ contact.iso_rep_phone }}</span>
+          {% endif %}
+          {% if contact.notes %}
+          <span style="font-size:12px;color:#94a3b8;font-style:italic">{{ contact.notes }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        {% if contact.iso_rep_email %}
+        <a href="/broker/contacts/email/{{ contact.id }}?merchant=&industry=&state=&deposits=&balance=&nsf=&time_in_biz=&positions=&credit_score="
+          style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none">
+          ✉ Email Rep
+        </a>
+        {% endif %}
+        <button onclick="openEdit({{ contact.id }}, {{ contact.lender_id }}, '{{ contact.iso_rep_name or '' }}', '{{ contact.iso_rep_email or '' }}', '{{ contact.iso_rep_phone or '' }}', '{{ contact.notes or '' }}')"
+          style="background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">
+          Edit
+        </button>
+        <form method="POST" action="/broker/contacts/{{ contact.id }}/delete"
+          onsubmit="return confirm('Remove this contact?')">
+          <button type="submit" style="background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">
+            Remove
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:60px 20px;background:#f8fafc;border-radius:16px;border:1.5px dashed #e2e8f0">
+    <div style="font-size:36px;margin-bottom:12px">📇</div>
+    <div style="font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px">No contacts yet</div>
+    <div style="font-size:13px;color:#64748b;margin-bottom:20px">Add ISO rep details for any lender in the directory.</div>
+    <button onclick="document.getElementById('addModal').style.display='flex'"
+      style="background:#6366f1;color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">
+      + Add Your First Contact
+    </button>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ── Add Contact Modal ─────────────────────────────────────────────────────── -->
+<div id="addModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:17px;font-weight:900;color:#0f172a">Add ISO Contact</h3>
+      <button onclick="document.getElementById('addModal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#94a3b8">✕</button>
+    </div>
+    <form method="POST" action="/broker/contacts/save">
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Select Lender *</label>
+      <select name="lender_id" required style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f172a;margin-bottom:14px;font-family:inherit">
+        <option value="">Choose a lender…</option>
+        {% for l in all_lenders %}
+        <option value="{{ l.id }}">[{{ (l.grade or '?')|upper }}] {{ l.lender_name }}</option>
+        {% endfor %}
+      </select>
+      {% for field, label, type in [('iso_rep_name','ISO Rep Name','text'),('iso_rep_email','ISO Rep Email','email'),('iso_rep_phone','Direct Phone','tel')] %}
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">{{ label }}</label>
+      <input type="{{ type }}" name="{{ field }}"
+        style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f172a;margin-bottom:14px;font-family:inherit;outline:none">
+      {% endfor %}
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Notes</label>
+      <textarea name="notes" rows="2"
+        style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f172a;margin-bottom:20px;font-family:inherit;resize:vertical;outline:none"></textarea>
+      <div style="display:flex;gap:10px">
+        <button type="submit" style="flex:1;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;border-radius:11px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">Save Contact</button>
+        <button type="button" onclick="document.getElementById('addModal').style.display='none'"
+          style="background:#f1f5f9;color:#334155;border:none;border-radius:11px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:480px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:17px;font-weight:900;color:#0f172a">Edit ISO Contact</h3>
+      <button onclick="document.getElementById('editModal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#94a3b8">✕</button>
+    </div>
+    <form method="POST" action="/broker/contacts/save">
+      <input type="hidden" name="lender_id" id="edit_lender_id">
+      {% for field, label, type in [('iso_rep_name','ISO Rep Name','text'),('iso_rep_email','ISO Rep Email','email'),('iso_rep_phone','Direct Phone','tel')] %}
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">{{ label }}</label>
+      <input type="{{ type }}" name="{{ field }}" id="edit_{{ field }}"
+        style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f172a;margin-bottom:14px;font-family:inherit;outline:none">
+      {% endfor %}
+      <label style="display:block;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px">Notes</label>
+      <textarea name="notes" id="edit_notes" rows="2"
+        style="width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f172a;margin-bottom:20px;font-family:inherit;resize:vertical;outline:none"></textarea>
+      <div style="display:flex;gap:10px">
+        <button type="submit" style="flex:1;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;border:none;border-radius:11px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">Save Changes</button>
+        <button type="button" onclick="document.getElementById('editModal').style.display='none'"
+          style="background:#f1f5f9;color:#334155;border:none;border-radius:11px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEdit(id, lenderId, name, email, phone, notes) {
+  document.getElementById('edit_lender_id').value = lenderId;
+  document.getElementById('edit_iso_rep_name').value = name;
+  document.getElementById('edit_iso_rep_email').value = email;
+  document.getElementById('edit_iso_rep_phone').value = phone;
+  document.getElementById('edit_notes').value = notes;
+  document.getElementById('editModal').style.display = 'flex';
+}
+</script>
+{% endblock %}

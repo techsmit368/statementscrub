@@ -1,0 +1,92 @@
+{% extends "superadmin_base.html" %}
+{% block title %}Users{% endblock %}
+{% block page_title %}Users ({{ users|length }}){% endblock %}
+
+{% block content %}
+
+{% set msg = request.query_params.get('msg','') %}
+{% if msg %}<div class="sa-msg">{{ msg }}</div>{% endif %}
+
+<div class="sa-search">
+  <form method="GET" action="/superadmin/users" style="display:flex;gap:10px;flex:1">
+    <input class="sa-input" name="q" value="{{ q }}" placeholder="Search by email…" style="flex:1">
+    <button type="submit" class="sa-btn sa-btn-primary">Search</button>
+    {% if q %}<a href="/superadmin/users" class="sa-btn sa-btn-ghost">Clear</a>{% endif %}
+  </form>
+</div>
+
+<div class="sa-card" style="padding:0;overflow:hidden">
+  <table class="sa-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Plan</th>
+        <th>Credits</th>
+        <th>Analyses</th>
+        <th>Active</th>
+        <th>Joined</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td style="color:#475569;font-size:11px">#{{ u.id }}</td>
+        <td>
+          <div style="font-weight:700;color:#e2e8f0">{{ u.email }}</div>
+          {% if u.full_name %}<div style="font-size:11px;color:#475569">{{ u.full_name }}</div>{% endif %}
+        </td>
+        <td>
+          {% if u.subscription_plan %}
+          <span style="background:rgba(99,102,241,0.2);color:#818cf8;font-size:10px;font-weight:800;padding:3px 9px;border-radius:100px">{{ u.subscription_plan }}</span>
+          {% else %}
+          <span style="color:#475569;font-size:11px">free</span>
+          {% endif %}
+        </td>
+        <td style="font-weight:800;color:#22c55e">{{ u.credits or 0 }}</td>
+        <td style="color:#94a3b8">{{ u.analyses_used or 0 }}</td>
+        <td>
+          {% if u.is_active %}
+          <span style="color:#22c55e;font-size:13px">●</span>
+          {% else %}
+          <span style="color:#ef4444;font-size:13px">●</span>
+          {% endif %}
+        </td>
+        <td style="color:#64748b;font-size:11px">{{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '—' }}</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <!-- Add credits -->
+            <form method="POST" action="/superadmin/users/{{ u.id }}/add-credits" style="display:inline-flex;gap:4px">
+              <input type="number" name="credits" value="10" min="1" max="10000"
+                style="width:58px;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:4px 8px;font-size:11px;color:#e2e8f0;font-family:inherit">
+              <button type="submit" class="sa-btn sa-btn-success sa-btn-sm">+ Credits</button>
+            </form>
+            <!-- Set plan -->
+            <form method="POST" action="/superadmin/users/{{ u.id }}/set-plan" style="display:inline-flex;gap:4px">
+              <select name="plan" class="sa-select" style="width:100px;padding:4px 8px;font-size:11px">
+                <option value="">free</option>
+                <option value="broker" {{ 'selected' if u.subscription_plan=='broker' }}>broker</option>
+                <option value="pro" {{ 'selected' if u.subscription_plan=='pro' }}>pro</option>
+                <option value="agency" {{ 'selected' if u.subscription_plan=='agency' }}>agency</option>
+                <option value="starter_team" {{ 'selected' if u.subscription_plan=='starter_team' }}>starter team</option>
+                <option value="business_team" {{ 'selected' if u.subscription_plan=='business_team' }}>business team</option>
+                <option value="enterprise" {{ 'selected' if u.subscription_plan=='enterprise' }}>enterprise</option>
+              </select>
+              <button type="submit" class="sa-btn sa-btn-ghost sa-btn-sm">Set</button>
+            </form>
+            <!-- Toggle active -->
+            <form method="POST" action="/superadmin/users/{{ u.id }}/toggle-active">
+              <button type="submit" class="sa-btn sa-btn-sm" style="background:{% if u.is_active %}#450a0a{% else %}#14532d{% endif %};color:{% if u.is_active %}#fca5a5{% else %}#86efac{% endif %}">
+                {{ 'Disable' if u.is_active else 'Enable' }}
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

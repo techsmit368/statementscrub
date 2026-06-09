@@ -1,0 +1,163 @@
+{% extends "superadmin_base.html" %}
+{% block title %}{{ 'Edit' if lender else 'Add' }} Lender{% endblock %}
+{% block page_title %}{{ 'Edit: ' + lender.lender_name if lender else 'Add New Lender' }}{% endblock %}
+
+{% block content %}
+
+{% if msg %}<div class="sa-msg">{{ msg }}</div>{% endif %}
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+
+  <!-- Lender Info Form -->
+  <div class="sa-card">
+    <div class="sa-card-title">Lender Details</div>
+    <form method="POST" action="{{ '/superadmin/lenders/' + lender.id|string + '/edit' if lender else '/superadmin/lenders/add' }}">
+      <div class="sa-form-grid">
+        <div>
+          <label class="sa-label">Lender Name *</label>
+          <input class="sa-input" name="lender_name" value="{{ lender.lender_name if lender else '' }}" required>
+        </div>
+        <div>
+          <label class="sa-label">Lender Code</label>
+          <input class="sa-input" name="lender_code" value="{{ lender.lender_code or '' if lender else '' }}">
+        </div>
+        <div>
+          <label class="sa-label">Grade</label>
+          <select class="sa-select" name="grade">
+            {% for g in ['a','b','c','d'] %}
+            <option value="{{ g }}" {{ 'selected' if lender and lender.grade == g }}>Grade {{ g|upper }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="sa-label">Status</label>
+          <select class="sa-select" name="status">
+            <option value="1" {{ 'selected' if not lender or lender.status == 1 }}>Active</option>
+            <option value="0" {{ 'selected' if lender and lender.status == 0 }}>Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label class="sa-label">Email 1</label>
+          <input class="sa-input" name="email_1" type="email" value="{{ lender.email_1 or '' if lender else '' }}">
+        </div>
+        <div>
+          <label class="sa-label">Email 2</label>
+          <input class="sa-input" name="email_2" type="email" value="{{ lender.email_2 or '' if lender else '' }}">
+        </div>
+        <div>
+          <label class="sa-label">Phone 1</label>
+          <input class="sa-input" name="phone_1" value="{{ lender.phone_1 or '' if lender else '' }}">
+        </div>
+        <div>
+          <label class="sa-label">Phone 2</label>
+          <input class="sa-input" name="phone_2" value="{{ lender.phone_2 or '' if lender else '' }}">
+        </div>
+        <div>
+          <label class="sa-label">Max Advance Amount ($)</label>
+          <input class="sa-input" name="advance_amount" type="number" value="{{ lender.advance_amount or 0 if lender else 0 }}">
+        </div>
+        <div>
+          <label class="sa-label">ISO Rep Name</label>
+          <input class="sa-input" name="isorep" value="{{ lender.isorep or '' if lender else '' }}">
+        </div>
+        <div class="full">
+          <label class="sa-label">Portal / Website Link</label>
+          <input class="sa-input" name="Web_link" value="{{ lender.Web_link or '' if lender else '' }}">
+        </div>
+        <div class="full">
+          <label class="sa-label">Notes</label>
+          <textarea class="sa-textarea" name="notes">{{ lender.notes or '' if lender else '' }}</textarea>
+        </div>
+        <div class="full">
+          <label class="sa-label">Featured Listing</label>
+          <select class="sa-select" name="featured">
+            <option value="0" {{ 'selected' if not lender or not lender.featured }}>No</option>
+            <option value="1" {{ 'selected' if lender and lender.featured }}>Yes — show first in results</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:10px">
+        <button type="submit" class="sa-btn sa-btn-primary">{{ 'Save Changes' if lender else 'Create Lender' }}</button>
+        <a href="/superadmin/lenders" class="sa-btn sa-btn-ghost">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Requirements -->
+  {% if lender %}
+  <div>
+    <div class="sa-card">
+      <div class="sa-card-title">Qualification Requirements ({{ requirements|length }})</div>
+      <p style="font-size:12px;color:#64748b;margin-bottom:16px">A lender qualifies if ANY requirement row passes all criteria.</p>
+
+      {% for req in requirements %}
+      <div style="background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:14px;margin-bottom:10px;position:relative">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:#94a3b8">
+          <div><span style="color:#475569">Industry:</span> {{ req.allow_industry or 'All' }}</div>
+          <div><span style="color:#475569">States:</span> {{ (req.allow_state or [])|join(', ') or 'All' }}</div>
+          <div><span style="color:#475569">Min Deposits:</span> ${{ req.min_avg_deposit or 0 | int }}</div>
+          <div><span style="color:#475569">Min Balance:</span> ${{ req.min_daily_balance or 0 | int }}</div>
+          <div><span style="color:#475569">Time in Biz:</span> {{ req.time_in_business or 0 }} mo</div>
+          <div><span style="color:#475569">Max NSF:</span> {{ req.max_neg_days or '∞' }}</div>
+          <div><span style="color:#475569">Max Position:</span> {{ req.max_position or '∞' }}</div>
+          <div><span style="color:#475569">Min Credit:</span> {{ req.min_credit_score or 0 }}</div>
+        </div>
+        <form method="POST" action="/superadmin/lenders/{{ lender.id }}/requirements/{{ req.id }}/delete"
+          style="position:absolute;top:10px;right:10px"
+          onsubmit="return confirm('Delete this requirement row?')">
+          <button type="submit" class="sa-btn sa-btn-danger sa-btn-sm">✕</button>
+        </form>
+      </div>
+      {% endfor %}
+
+      {% if not requirements %}
+      <div style="color:#475569;font-size:13px;padding:12px 0">No requirements yet. Add one below.</div>
+      {% endif %}
+
+      <!-- Add requirement -->
+      <div style="border-top:1px solid #1e293b;margin-top:16px;padding-top:16px">
+        <div class="sa-card-title" style="margin-bottom:12px">Add Requirement Row</div>
+        <form method="POST" action="/superadmin/lenders/{{ lender.id }}/requirements/add">
+          <div class="sa-form-grid">
+            <div class="full">
+              <label class="sa-label">Industry (leave blank = all)</label>
+              <input class="sa-input" name="allow_industry" placeholder="e.g. Restaurant">
+            </div>
+            <div class="full">
+              <label class="sa-label">States (comma separated, e.g. CA,TX,FL — blank = all)</label>
+              <input class="sa-input" name="allow_state" placeholder="CA,TX,FL,NY">
+            </div>
+            <div>
+              <label class="sa-label">Min Avg Deposits ($)</label>
+              <input class="sa-input" name="min_avg_deposit" type="number" value="0">
+            </div>
+            <div>
+              <label class="sa-label">Min Daily Balance ($)</label>
+              <input class="sa-input" name="min_daily_balance" type="number" value="0">
+            </div>
+            <div>
+              <label class="sa-label">Time in Business (months)</label>
+              <input class="sa-input" name="time_in_business" type="number" value="6">
+            </div>
+            <div>
+              <label class="sa-label">Max NSF Days</label>
+              <input class="sa-input" name="max_neg_days" type="number" value="10">
+            </div>
+            <div>
+              <label class="sa-label">Max Positions</label>
+              <input class="sa-input" name="max_position" type="number" value="3">
+            </div>
+            <div>
+              <label class="sa-label">Min Credit Score</label>
+              <input class="sa-input" name="min_credit_score" type="number" value="0">
+            </div>
+          </div>
+          <button type="submit" class="sa-btn sa-btn-success" style="margin-top:14px">+ Add Requirement</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from sqlalchemy import text
 from app.database import engine, Base
 from app.routers import auth, upload, telegram, blog, pages
-from app.routers import api_access, billing, lenders
+from app.routers import api_access, billing, lenders, superadmin, broker_contacts, teams
 from app.services.auth import get_current_user
 from app.database import get_db
 import app.models
@@ -20,6 +20,9 @@ def _run_migrations():
             "ALTER TABLE users ADD COLUMN credits INTEGER DEFAULT 0",
             "ALTER TABLE users ADD COLUMN stripe_subscription_id VARCHAR",
             "ALTER TABLE users ADD COLUMN subscription_plan VARCHAR",
+            "ALTER TABLE users ADD COLUMN org_id INTEGER",
+            "ALTER TABLE users ADD COLUMN org_role VARCHAR",
+            "ALTER TABLE lender_infos ADD COLUMN featured INTEGER DEFAULT 0",
         ]:
             try:
                 conn.execute(text(sql))
@@ -47,6 +50,9 @@ app.include_router(pages.router)
 app.include_router(api_access.router)
 app.include_router(billing.router)
 app.include_router(lenders.router)
+app.include_router(superadmin.router)
+app.include_router(broker_contacts.router)
+app.include_router(teams.router)
 
 templates = Jinja2Templates(directory="app/templates")
 

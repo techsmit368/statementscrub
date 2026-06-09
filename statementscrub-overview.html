@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StatementScrub — Product Overview & Growth Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #fff; color: #1e293b;
+    font-size: 13px; line-height: 1.6;
+  }
+
+  /* ── Print ── */
+  @media print {
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    body { font-size: 11px; }
+    .cover { min-height: 100vh; }
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    color: #fff; padding: 80px 60px; min-height: 90vh;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+  }
+  .cover::after {
+    content: ''; position: absolute; bottom: -80px; left: -80px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%);
+  }
+
+  /* ── Layout ── */
+  .page { padding: 50px 60px; max-width: 900px; margin: 0 auto; }
+  .section { margin-bottom: 40px; }
+
+  /* ── Typography ── */
+  h1 { font-size: 42px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; }
+  h2 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 16px; letter-spacing: -0.02em; }
+  h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+  h4 { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+  p { color: #475569; margin-bottom: 10px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #6366f1; margin-bottom: 8px; display: block;
+  }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: #e2e8f0; margin: 32px 0; }
+
+  /* ── Stat grid ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
+  .stat-box {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 18px 16px; text-align: center;
+  }
+  .stat-num { font-size: 26px; font-weight: 900; letter-spacing: -0.04em; color: #0f172a; line-height: 1; }
+  .stat-label { font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 4px; }
+
+  /* ── Feature cards ── */
+  .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 16px 0; }
+  .feature-card {
+    border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 20px;
+    border-left: 4px solid #6366f1;
+  }
+  .feature-card.green { border-left-color: #22c55e; }
+  .feature-card.blue { border-left-color: #0ea5e9; }
+  .feature-card.orange { border-left-color: #f59e0b; }
+  .feature-card.purple { border-left-color: #8b5cf6; }
+  .feature-card.red { border-left-color: #ef4444; }
+
+  /* ── Pricing table ── */
+  .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .price-card {
+    border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px;
+    text-align: center;
+  }
+  .price-card.featured { border-color: #6366f1; background: #eef2ff; }
+  .price-tag { font-size: 22px; font-weight: 900; color: #0f172a; }
+  .price-sub { font-size: 11px; color: #94a3b8; }
+
+  /* ── Bullets ── */
+  ul.checks { list-style: none; padding: 0; }
+  ul.checks li {
+    padding: 5px 0 5px 22px; position: relative;
+    color: #475569; font-size: 13px; border-bottom: 1px solid #f1f5f9;
+  }
+  ul.checks li::before {
+    content: '✓'; position: absolute; left: 0;
+    color: #22c55e; font-weight: 800;
+  }
+
+  ul.issues { list-style: none; padding: 0; }
+  ul.issues li {
+    padding: 5px 0 5px 22px; position: relative;
+    color: #475569; font-size: 13px; border-bottom: 1px solid #f1f5f9;
+  }
+  ul.issues li::before { content: '→'; position: absolute; left: 0; color: #6366f1; font-weight: 800; }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+  th {
+    background: #f8fafc; padding: 10px 14px; text-align: left;
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #64748b; border-bottom: 2px solid #e2e8f0;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700;
+  }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-blue  { background: #dbeafe; color: #1d4ed8; }
+  .badge-red   { background: #fee2e2; color: #b91c1c; }
+  .badge-purple{ background: #faf5ff; color: #7c3aed; }
+
+  /* ── Impact score ── */
+  .impact-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .impact-bar { flex: 1; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+  .impact-fill { height: 100%; border-radius: 4px; }
+  .impact-label { font-size: 12.5px; font-weight: 600; color: #0f172a; width: 240px; }
+  .impact-score { font-size: 12px; font-weight: 800; color: #6366f1; width: 36px; text-align: right; }
+
+  /* ── Print button ── */
+  .print-btn {
+    position: fixed; bottom: 30px; right: 30px; z-index: 999;
+    background: #6366f1; color: #fff; border: none; border-radius: 12px;
+    padding: 14px 24px; font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+  }
+  .print-btn:hover { background: #4f46e5; }
+
+  .toc-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px dotted #e2e8f0; font-size: 13px;
+  }
+  .toc-num { font-weight: 800; color: #6366f1; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨 Save as PDF</button>
+
+<!-- ══════════════════════════════════════════════════════════════
+     COVER PAGE
+══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div style="position:relative;z-index:1">
+    <!-- Logo mark -->
+    <div style="width:56px;height:56px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:32px;font-size:26px">
+      📊
+    </div>
+
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.15em;color:#6366f1;margin-bottom:12px;text-transform:uppercase">
+      Product Overview &amp; Growth Strategy
+    </div>
+    <h1 style="font-size:48px;margin-bottom:16px">
+      Statement<span style="background:linear-gradient(90deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Scrub</span>
+    </h1>
+    <p style="font-size:18px;color:#94a3b8;font-weight:400;max-width:540px;line-height:1.5;margin-bottom:40px">
+      AI-powered bank statement analyzer and lender matching CRM built for MCA brokers, mortgage underwriters, and small business lenders.
+    </p>
+
+    <!-- Quick stats strip -->
+    <div style="display:flex;gap:32px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:28px;font-weight:900;color:#f1f5f9;letter-spacing:-0.04em">435</div>
+        <div style="font-size:11px;color:#64748b;font-weight:600">Active Lenders</div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:900;color:#f1f5f9;letter-spacing:-0.04em">5,255</div>
+        <div style="font-size:11px;color:#64748b;font-weight:600">Lender Requirements</div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:900;color:#f1f5f9;letter-spacing:-0.04em">48</div>
+        <div style="font-size:11px;color:#64748b;font-weight:600">Industries Covered</div>
+      </div>
+      <div>
+        <div style="font-size:28px;font-weight:900;color:#f1f5f9;letter-spacing:-0.04em">56</div>
+        <div style="font-size:11px;color:#64748b;font-weight:600">SEO Blog Posts</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div style="font-size:12px;color:#64748b">statementscrub.com · Deployed on AWS EC2</div>
+    <div style="font-size:12px;color:#64748b">Prepared June 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════════════════════════ -->
+<div class="page" style="padding-top:48px">
+  <span class="section-label">Navigation</span>
+  <h2>Table of Contents</h2>
+
+  <div style="margin-top:16px">
+    <div class="toc-item"><span><span class="toc-num">01 &nbsp;</span>What Is StatementScrub</span><span style="color:#94a3b8">2</span></div>
+    <div class="toc-item"><span><span class="toc-num">02 &nbsp;</span>Target Users &amp; Use Cases</span><span style="color:#94a3b8">3</span></div>
+    <div class="toc-item"><span><span class="toc-num">03 &nbsp;</span>Core Features — Full Breakdown</span><span style="color:#94a3b8">4</span></div>
+    <div class="toc-item"><span><span class="toc-num">04 &nbsp;</span>AI Analysis Engine</span><span style="color:#94a3b8">5</span></div>
+    <div class="toc-item"><span><span class="toc-num">05 &nbsp;</span>Lender Matching System (New)</span><span style="color:#94a3b8">6</span></div>
+    <div class="toc-item"><span><span class="toc-num">06 &nbsp;</span>Pricing &amp; Monetization</span><span style="color:#94a3b8">7</span></div>
+    <div class="toc-item"><span><span class="toc-num">07 &nbsp;</span>Technical Stack</span><span style="color:#94a3b8">8</span></div>
+    <div class="toc-item"><span><span class="toc-num">08 &nbsp;</span>Growth Gaps — What's Missing</span><span style="color:#94a3b8">9</span></div>
+    <div class="toc-item"><span><span class="toc-num">09 &nbsp;</span>Prioritized Improvement Roadmap</span><span style="color:#94a3b8">10</span></div>
+    <div class="toc-item"><span><span class="toc-num">10 &nbsp;</span>User Acquisition Strategy</span><span style="color:#94a3b8">11</span></div>
+    <div class="toc-item"><span><span class="toc-num">11 &nbsp;</span>Competitive Positioning</span><span style="color:#94a3b8">12</span></div>
+  </div>
+</div>
+
+<div class="divider" style="margin:0 60px"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     01 — WHAT IS IT
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 01</span>
+  <h2>What Is StatementScrub?</h2>
+  <p style="font-size:15px;color:#334155;max-width:700px;line-height:1.7">
+    StatementScrub is a <strong>SaaS underwriting CRM</strong> that combines AI-powered bank statement analysis with a smart lender matching engine. It replaces 45 minutes of manual review with a 30-second AI report — then instantly shows which of 435 lenders will fund the merchant.
+  </p>
+
+  <div class="divider"></div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3>🏦 The Problem It Solves</h3>
+      <p>MCA brokers, mortgage underwriters, and business loan consultants waste hours manually reading bank statements — counting NSFs, totaling deposits, checking balances, and then calling each lender to see if they'll fund. StatementScrub automates all of it.</p>
+    </div>
+    <div class="feature-card green">
+      <h3>⚡ The Solution</h3>
+      <p>Upload a bank statement PDF → Claude AI reads every transaction → generates a structured risk report in ~30 seconds → then matches the merchant against 435 lenders filtered by industry, state, deposits, NSFs, credit score, and positions.</p>
+    </div>
+    <div class="feature-card blue">
+      <h3>👥 Who Uses It</h3>
+      <p>MCA brokers submitting deals to funders, mortgage brokers verifying self-employed income, business loan consultants, SBA lenders, and alternative finance ISO reps who process 10–500 statements per month.</p>
+    </div>
+    <div class="feature-card orange">
+      <h3>💰 How It Makes Money</h3>
+      <p>Credit-based pricing ($1.49–$0.10 per analysis depending on pack size) plus monthly subscriptions ($49/mo for 50 analyses, $149/mo for 250). Stripe checkout is live. Free tier: 3 analyses.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num" style="color:#6366f1">435</div>
+      <div class="stat-label">Active Lenders</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#22c55e">5,255</div>
+      <div class="stat-label">Lender Requirements</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#0ea5e9">48</div>
+      <div class="stat-label">Industries Covered</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:#f59e0b">56</div>
+      <div class="stat-label">SEO Blog Posts</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     02 — TARGET USERS
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 02</span>
+  <h2>Target Users &amp; Use Cases</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User Type</th>
+        <th>Primary Use Case</th>
+        <th>Volume</th>
+        <th>Willingness to Pay</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>MCA Brokers / ISOs</strong></td>
+        <td>Quickly pre-screen merchants before submitting to funders. Match to right lender instantly.</td>
+        <td>50–500/mo</td>
+        <td style="color:#15803d;font-weight:700">Very High</td>
+      </tr>
+      <tr>
+        <td><strong>Mortgage Brokers</strong></td>
+        <td>Verify self-employed borrower income from bank statements for bank-statement loan programs.</td>
+        <td>10–100/mo</td>
+        <td style="color:#15803d;font-weight:700">High</td>
+      </tr>
+      <tr>
+        <td><strong>Business Loan Consultants</strong></td>
+        <td>Analyze client financials, identify MCA exposure, and recommend funding options.</td>
+        <td>10–50/mo</td>
+        <td style="color:#1d4ed8;font-weight:700">Medium-High</td>
+      </tr>
+      <tr>
+        <td><strong>SBA / Alternative Lenders</strong></td>
+        <td>Automated underwriting support to reduce manual review time per file.</td>
+        <td>100–1000/mo</td>
+        <td style="color:#15803d;font-weight:700">Very High</td>
+      </tr>
+      <tr>
+        <td><strong>CPA / Accountants</strong></td>
+        <td>Produce cash flow analysis for clients seeking financing.</td>
+        <td>5–30/mo</td>
+        <td style="color:#854d0e;font-weight:700">Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Real Estate Investors</strong></td>
+        <td>DSCR loan analysis, landlord tenant screening via bank statement review.</td>
+        <td>5–20/mo</td>
+        <td style="color:#854d0e;font-weight:700">Medium</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <h3>Key Trigger Moments (When Users Sign Up)</h3>
+  <ul class="checks" style="margin-top:10px">
+    <li>Broker gets burned by a declined deal after manual review missed key red flags</li>
+    <li>MCA shop scales from 10 to 50+ deals/month and manual review becomes bottleneck</li>
+    <li>Mortgage broker needs self-employed income verification faster than 48-hour turnaround</li>
+    <li>ISO rep wants to know which lenders to call BEFORE submitting — to avoid declines</li>
+    <li>Underwriter team needs audit trail of analysis decisions for compliance</li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     03 — CORE FEATURES
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 03</span>
+  <h2>Core Features — Full Breakdown</h2>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3>📄 PDF Upload &amp; Text Extraction</h3>
+      <ul class="checks" style="margin-top:8px">
+        <li>Single PDF upload via dashboard</li>
+        <li>Batch upload (multiple PDFs at once)</li>
+        <li>Up to 20MB per file</li>
+        <li>pdfplumber extraction with fallback</li>
+        <li>Text truncated to fit AI context window</li>
+      </ul>
+    </div>
+    <div class="feature-card green">
+      <h3>🤖 AI Analysis Report</h3>
+      <ul class="checks" style="margin-top:8px">
+        <li>Average monthly deposits/withdrawals</li>
+        <li>Average daily balance &amp; ending balance</li>
+        <li>Income sources with type &amp; frequency</li>
+        <li>NSF count, overdraft count, fees total</li>
+        <li>Monthly breakdown table (per month)</li>
+      </ul>
+    </div>
+    <div class="feature-card purple">
+      <h3>🚨 Fraud Detection (12 Patterns)</h3>
+      <ul class="checks" style="margin-top:8px">
+        <li>Structuring (deposits $9k–$9,999)</li>
+        <li>Circular deposits / account cycling</li>
+        <li>MCA loan detection (40+ lenders)</li>
+        <li>Velocity spikes &amp; ACH returns</li>
+        <li>Round-number deposit patterns</li>
+        <li>Payday loan app indicators</li>
+      </ul>
+    </div>
+    <div class="feature-card blue">
+      <h3>⚡ Lender Matching Engine</h3>
+      <ul class="checks" style="margin-top:8px">
+        <li>435 active lenders, 5,255 requirements</li>
+        <li>Filter: industry, state, deposits, NSFs</li>
+        <li>Filter: time in biz, positions, credit score</li>
+        <li>Results grouped A → B → C → D grade</li>
+        <li>Shows email, phone, rep, portal, max advance</li>
+      </ul>
+    </div>
+    <div class="feature-card orange">
+      <h3>📊 Merchant CRM Dashboard</h3>
+      <ul class="checks" style="margin-top:8px">
+        <li>All merchants listed with aggregate stats</li>
+        <li>Per-merchant page with all statements</li>
+        <li>Latest risk level, recommendation, summary</li>
+        <li>"Find Lenders" button per merchant</li>
+        <li>Statement history with drill-down</li>
+      </ul>
+    </div>
+    <div class="feature-card red">
+      <h3>📤 Exports &amp; Integrations</h3>
+      <ul class="checks" style="margin-top:8px">
+        <li>CSV export of full monthly breakdown</li>
+        <li>Print-to-PDF formatted report page</li>
+        <li>REST API with API key authentication</li>
+        <li>Telegram bot notifications on completion</li>
+        <li>Email alerts after each analysis</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Additional Platform Features</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px">
+    <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+      <h4>🔐 Auth &amp; Accounts</h4>
+      <p style="font-size:12px">Email/password registration, JWT sessions, password change, profile management.</p>
+    </div>
+    <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+      <h4>💳 Billing (Stripe)</h4>
+      <p style="font-size:12px">6 credit packs ($14.90–$499.90) + 2 monthly plans ($49/mo, $149/mo). Webhook-based credit delivery.</p>
+    </div>
+    <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+      <h4>⚙️ Custom Scorecard</h4>
+      <p style="font-size:12px">Users set their own thresholds: max NSFs, min balance, allow MCA, auto-decline gambling, etc.</p>
+    </div>
+    <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+      <h4>📝 SEO Blog</h4>
+      <p style="font-size:12px">56 SEO-optimized articles on bank statement analysis, MCA, mortgages, DSCR, fraud detection.</p>
+    </div>
+    <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+      <h4>📞 Lead Capture</h4>
+      <p style="font-size:12px">Contact form, book-a-demo form, testimonials page, how-it-works page.</p>
+    </div>
+    <div style="padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0">
+      <h4>🎫 Support Tickets</h4>
+      <p style="font-size:12px">In-app support form generates ticket IDs and emails the team automatically.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     04 — AI ENGINE
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 04</span>
+  <h2>AI Analysis Engine</h2>
+
+  <div style="background:#0f172a;border-radius:14px;padding:24px 28px;margin-bottom:20px;color:#e2e8f0">
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;color:#6366f1;margin-bottom:12px;text-transform:uppercase">How It Works</div>
+    <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:200px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;background:#6366f1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">1</div>
+          <span style="font-size:12.5px">PDF uploaded → pdfplumber extracts raw text</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;background:#0ea5e9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">2</div>
+          <span style="font-size:12.5px">Text truncated to fit context window</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;background:#22c55e;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">3</div>
+          <span style="font-size:12.5px">Claude Haiku analyzes with cached system prompt</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;background:#f59e0b;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">4</div>
+          <span style="font-size:12.5px">JSON report stored in DB, displayed in UI</span>
+        </div>
+      </div>
+      <div style="flex:1;min-width:220px">
+        <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:8px">OUTPUT FIELDS</div>
+        <div style="font-size:11.5px;color:#cbd5e1;line-height:1.9">
+          bank_name · account_holder · statement_period · avg_monthly_deposits ·
+          avg_daily_balance · income_sources · expense_categories · nsf_count ·
+          overdraft_count · mca_detected · structuring_risk · circular_deposits ·
+          velocity_spike · ach_returns · risk_score (0–100) · risk_level ·
+          approval_recommendation · fraud_summary · lender_summary · monthly_breakdown
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-grid">
+    <div style="padding:16px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0">
+      <h4 style="color:#15803d">✅ Strengths</h4>
+      <ul class="checks" style="margin-top:8px">
+        <li>Prompt caching cuts cost ~90% on repeated calls</li>
+        <li>~$0.03 per analysis with Claude Haiku</li>
+        <li>12 fraud detection patterns (Thumbprint-equivalent)</li>
+        <li>Structured JSON output — no parsing errors</li>
+        <li>System prompt optimized for lender use case</li>
+      </ul>
+    </div>
+    <div style="padding:16px;background:#fef2f2;border-radius:12px;border:1px solid #fecaca">
+      <h4 style="color:#b91c1c">⚠️ Limitations</h4>
+      <ul class="issues" style="margin-top:8px">
+        <li>Scanned/image PDFs fail (no OCR)</li>
+        <li>Long statements get truncated (loses data)</li>
+        <li>Single-statement analysis only (no multi-month merge)</li>
+        <li>No confidence interval on AI numbers</li>
+        <li>No re-analysis without uploading again</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Fraud Detection Patterns Covered</h3>
+  <table style="margin-top:10px">
+    <thead><tr><th>Pattern</th><th>Detection Method</th><th>Risk Weight</th></tr></thead>
+    <tbody>
+      <tr><td>Structuring ($9k–$9,999 deposits)</td><td>AI pattern recognition</td><td><span class="badge badge-red">+25 pts</span></td></tr>
+      <tr><td>Circular Deposits / Account Cycling</td><td>AI inflow/outflow correlation</td><td><span class="badge badge-red">+20 pts</span></td></tr>
+      <tr><td>MCA Loan Detection</td><td>Known MCA lender name matching</td><td><span class="badge badge-red">+15 pts per loan</span></td></tr>
+      <tr><td>Velocity Spike</td><td>Month-over-month deposit anomaly</td><td><span class="badge badge-purple">+10 pts</span></td></tr>
+      <tr><td>NSF Events</td><td>NSF/OD transaction count</td><td><span class="badge badge-purple">+5 pts each</span></td></tr>
+      <tr><td>ACH Returns</td><td>RETURN/RTN code scanning</td><td><span class="badge badge-blue">+5 pts</span></td></tr>
+      <tr><td>Round-Number Deposits</td><td>Exact $1k/$5k/$9k repeats</td><td><span class="badge badge-blue">+3 pts</span></td></tr>
+      <tr><td>Payday Loan Apps</td><td>Dave, Earnin, MoneyLion, etc.</td><td><span class="badge badge-blue">+5 pts</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     05 — LENDER MATCHING
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 05</span>
+  <h2>Lender Matching System</h2>
+
+  <p style="font-size:14px;color:#334155;margin-bottom:20px">
+    The most differentiating feature. No other bank statement tool on the market combines AI analysis with a live lender directory and real-time qualification matching.
+  </p>
+
+  <div style="background:#eef2ff;border:1px solid #c7d2fe;border-radius:14px;padding:20px 24px;margin-bottom:20px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center">
+      <div>
+        <div style="font-size:24px;font-weight:900;color:#4f46e5">435</div>
+        <div style="font-size:11px;color:#6366f1;font-weight:700">Active Lenders</div>
+      </div>
+      <div>
+        <div style="font-size:24px;font-weight:900;color:#4f46e5">5,255</div>
+        <div style="font-size:11px;color:#6366f1;font-weight:700">Requirement Rows</div>
+      </div>
+      <div>
+        <div style="font-size:24px;font-weight:900;color:#4f46e5">48</div>
+        <div style="font-size:11px;color:#6366f1;font-weight:700">Industries</div>
+      </div>
+      <div>
+        <div style="font-size:24px;font-weight:900;color:#4f46e5">51</div>
+        <div style="font-size:11px;color:#6366f1;font-weight:700">States + DC + PR</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Matching Criteria (All Combined)</h3>
+  <table style="margin-top:10px">
+    <thead><tr><th>Criteria</th><th>Source</th><th>How Matched</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Industry</strong></td><td>User selects</td><td>Exact match against lender's allowed industries</td></tr>
+      <tr><td><strong>State</strong></td><td>User selects</td><td>Must appear in lender's allowed state array</td></tr>
+      <tr><td><strong>Avg Monthly Deposits</strong></td><td>Bank statement AI / user</td><td>Must be ≥ lender's min_avg_deposit</td></tr>
+      <tr><td><strong>Avg Daily Balance</strong></td><td>Bank statement AI / user</td><td>Must be ≥ lender's min_daily_balance</td></tr>
+      <tr><td><strong>NSF Count</strong></td><td>Bank statement AI / user</td><td>Must be ≤ lender's max_neg_days &amp; nsf_days</td></tr>
+      <tr><td><strong>Time in Business</strong></td><td>User enters</td><td>Must be ≥ lender's min_months_required</td></tr>
+      <tr><td><strong>Current MCA Positions</strong></td><td>User enters</td><td>Must be ≤ lender's max_position</td></tr>
+      <tr><td><strong>Credit Score</strong></td><td>User enters (optional)</td><td>Must be ≥ lender's min_credit_score</td></tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <h3>Two Ways to Match</h3>
+  <div class="feature-grid" style="margin-top:12px">
+    <div class="feature-card blue">
+      <h3>👥 Merchant Mode</h3>
+      <p>Select any previously analyzed merchant. Deposits, balance, and NSF count are <strong>auto-filled from bank statement averages</strong>. User only needs to add industry, state, time in business. One click → results.</p>
+    </div>
+    <div class="feature-card">
+      <h3>✏️ Manual Mode</h3>
+      <p>Enter all financial criteria manually. Useful for pre-screening a merchant before uploading statements, or matching based on client-provided data without an uploaded PDF.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Results Display</h3>
+  <ul class="checks" style="margin-top:8px">
+    <li>Lenders grouped by grade: A (best) → B → C → D (last resort)</li>
+    <li>Each card shows: name, code, email (clickable), phone, ISO rep, notes, portal link</li>
+    <li>Max advance amount displayed per lender</li>
+    <li>Consolidation OK / Default History OK tags per lender</li>
+    <li>When no lenders match: shows WHY each lender declined (which criteria failed)</li>
+    <li>"Find Lenders" button on every merchant page — pre-fills from statement data</li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     06 — PRICING
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 06</span>
+  <h2>Pricing &amp; Monetization</h2>
+
+  <h3>One-Time Credit Packs (via Stripe)</h3>
+  <table style="margin:12px 0">
+    <thead><tr><th>Pack</th><th>Credits</th><th>Price</th><th>Per Analysis</th><th>Best For</th></tr></thead>
+    <tbody>
+      <tr><td>Starter</td><td>10</td><td>$14.90</td><td>$1.49</td><td>Occasional users</td></tr>
+      <tr><td>Basic</td><td>25</td><td>$27.90</td><td>$1.12</td><td>Small brokers</td></tr>
+      <tr><td>Standard</td><td>50</td><td>$54.90</td><td>$1.10</td><td>Regular users</td></tr>
+      <tr><td><strong>Business</strong></td><td><strong>100</strong></td><td><strong>$104.90</strong></td><td><strong>$1.05</strong></td><td><strong>Active brokers</strong></td></tr>
+      <tr><td>Growth</td><td>250</td><td>$262.90</td><td>$1.05</td><td>Teams</td></tr>
+      <tr><td>Scale</td><td>500</td><td>$499.90</td><td>$1.00</td><td>High-volume shops</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:20px">Monthly Subscriptions</h3>
+  <div class="price-grid">
+    <div class="price-card">
+      <div style="font-size:11px;font-weight:800;color:#94a3b8;margin-bottom:8px">FREE</div>
+      <div class="price-tag">$0</div>
+      <div class="price-sub">3 analyses included</div>
+      <ul class="checks" style="margin-top:12px;text-align:left">
+        <li>3 bank statement analyses</li>
+        <li>Full AI report</li>
+        <li>Basic lender matching</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div style="font-size:11px;font-weight:800;color:#6366f1;margin-bottom:8px">STARTER MONTHLY</div>
+      <div class="price-tag">$49<span style="font-size:14px;font-weight:500;color:#94a3b8">/mo</span></div>
+      <div class="price-sub">50 credits/month · auto-renewed</div>
+      <ul class="checks" style="margin-top:12px;text-align:left">
+        <li>50 analyses per month</li>
+        <li>All features included</li>
+        <li>Telegram notifications</li>
+        <li>CSV + PDF export</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <div style="font-size:11px;font-weight:800;color:#94a3b8;margin-bottom:8px">PRO MONTHLY</div>
+      <div class="price-tag">$149<span style="font-size:14px;font-weight:500;color:#94a3b8">/mo</span></div>
+      <div class="price-sub">250 credits/month · auto-renewed</div>
+      <ul class="checks" style="margin-top:12px;text-align:left">
+        <li>250 analyses per month</li>
+        <li>Priority processing</li>
+        <li>API access</li>
+        <li>Custom scorecard</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px 20px">
+    <h4 style="color:#15803d;margin-bottom:8px">💰 Unit Economics</h4>
+    <p style="margin:0;font-size:12.5px;color:#166534">
+      AI cost per analysis: ~$0.03 (Claude Haiku with prompt caching). Revenue per analysis: $1.00–$1.49.
+      <strong>Gross margin: ~97%.</strong> A broker doing 100 analyses/month on the Business pack generates ~$100 MRR at $0.03 AI cost = $97 gross margin.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     07 — TECH STACK
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 07</span>
+  <h2>Technical Stack</h2>
+
+  <table>
+    <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Backend</strong></td><td>FastAPI (Python 3.11)</td><td>API framework + HTML page serving</td></tr>
+      <tr><td><strong>AI Engine</strong></td><td>Claude Haiku (Anthropic)</td><td>Bank statement analysis with prompt caching</td></tr>
+      <tr><td><strong>PDF Extraction</strong></td><td>pdfplumber</td><td>Text extraction from bank statement PDFs</td></tr>
+      <tr><td><strong>Database</strong></td><td>SQLite (SQLAlchemy ORM)</td><td>Users, analyses, lenders, requirements</td></tr>
+      <tr><td><strong>Auth</strong></td><td>JWT + bcrypt</td><td>Session tokens, password hashing</td></tr>
+      <tr><td><strong>Frontend</strong></td><td>Bootstrap 5.3 + Jinja2</td><td>Server-side rendered templates</td></tr>
+      <tr><td><strong>Payments</strong></td><td>Stripe</td><td>Credit packs + subscriptions + webhooks</td></tr>
+      <tr><td><strong>Notifications</strong></td><td>Email + Telegram Bot API</td><td>Analysis completion alerts</td></tr>
+      <tr><td><strong>Server</strong></td><td>AWS EC2 + Uvicorn</td><td>Ubuntu, 2 workers, 3.137.153.194</td></tr>
+      <tr><td><strong>CI/CD</strong></td><td>GitHub + manual git pull</td><td>Deploy via SSH + git reset --hard</td></tr>
+      <tr><td><strong>Domain</strong></td><td>statementscrub.com</td><td>Public-facing SaaS</td></tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <h3>Database Schema (Key Tables)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Key Columns</th><th>Records</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>users</strong></td>
+        <td>email, hashed_password, plan, credits, analyses_used, api_key, stripe_subscription_id</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td><strong>analyses</strong></td>
+        <td>user_id, filename, bank_name, account_holder, avg_monthly_deposits, avg_daily_balance, nsf_count, result_json, status</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td><strong>lender_infos</strong></td>
+        <td>lender_name, lender_code, grade (a/b/c/d), email_1/2, phone_1/2, advance_amount, status, notes, isorep</td>
+        <td>445</td>
+      </tr>
+      <tr>
+        <td><strong>lender_requirements</strong></td>
+        <td>lender_id, allow_industry, allow_state (JSON array), min_avg_deposit, max_neg_days, time_in_business, min_credit_score</td>
+        <td>5,255</td>
+      </tr>
+      <tr>
+        <td><strong>user_scorecards</strong></td>
+        <td>max_nsf_count, min_avg_daily_balance, allow_mca, auto_decline_gambling, max_risk_score</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     08 — GROWTH GAPS
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 08</span>
+  <h2>Growth Gaps — What's Missing</h2>
+  <p style="color:#475569;margin-bottom:20px">These are the gaps between the current state and what's needed to acquire and retain paying users at scale.</p>
+
+  <h3 style="color:#b91c1c;margin-bottom:12px">🔴 Critical (Blocking Users)</h3>
+  <table>
+    <thead><tr><th>Gap</th><th>Impact</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>No OCR for scanned PDFs</strong></td>
+        <td>~40% of bank statements are scanned images — these return blank/gibberish text and fail silently</td>
+        <td>Add Google Vision API or Tesseract OCR as fallback</td>
+      </tr>
+      <tr>
+        <td><strong>No onboarding flow</strong></td>
+        <td>New users see an empty dashboard with no guidance — high immediate churn</td>
+        <td>Add welcome wizard: upload first statement → see sample result → buy credits</td>
+      </tr>
+      <tr>
+        <td><strong>SQLite in production</strong></td>
+        <td>SQLite doesn't scale beyond 1 server, no concurrent writes, no backups</td>
+        <td>Migrate to PostgreSQL (AWS RDS or Supabase)</td>
+      </tr>
+      <tr>
+        <td><strong>No error messaging on PDF fail</strong></td>
+        <td>When analysis fails (bad PDF, OCR fail), user sees generic 500 error</td>
+        <td>Return specific user-friendly error: "Could not read this PDF — try another format"</td>
+      </tr>
+      <tr>
+        <td><strong>App not persisted on reboot</strong></td>
+        <td>If server reboots, uvicorn dies and site goes down</td>
+        <td>Add systemd service or PM2 process manager</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="color:#f59e0b;margin-top:24px;margin-bottom:12px">🟡 High Priority (Retention &amp; Revenue)</h3>
+  <table>
+    <thead><tr><th>Gap</th><th>Impact</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>No team/multi-user accounts</strong></td>
+        <td>MCA shops have 3–15 reps — no way to share an account or have sub-users</td>
+        <td>Add organization model with seats/roles (owner, analyst, viewer)</td>
+      </tr>
+      <tr>
+        <td><strong>No saved lender lists / favorites</strong></td>
+        <td>Users find good lenders but can't save them — have to re-run match every time</td>
+        <td>Add "Save Lender" to user account with notes per lender</td>
+      </tr>
+      <tr>
+        <td><strong>No deal/application tracker</strong></td>
+        <td>Brokers need to track which merchants were submitted to which lenders and the outcome</td>
+        <td>Add "Create Deal" from merchant page → track lender, amount, status</td>
+      </tr>
+      <tr>
+        <td><strong>No re-analysis / update</strong></td>
+        <td>Users upload the same merchant monthly — no way to compare old vs. new</td>
+        <td>Add "View Trend" comparing 3-month and 6-month deposit/balance history</td>
+      </tr>
+      <tr>
+        <td><strong>No white-label / PDF branded report</strong></td>
+        <td>Brokers want to send reports to clients with their own branding</td>
+        <td>Add logo upload + custom color → branded PDF export</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="color:#0ea5e9;margin-top:24px;margin-bottom:12px">🔵 Growth (Acquisition)</h3>
+  <table>
+    <thead><tr><th>Gap</th><th>Impact</th></tr></thead>
+    <tbody>
+      <tr><td><strong>No affiliate/referral program</strong></td><td>MCA community is relationship-driven — brokers refer other brokers. No referral system = missing viral loop.</td></tr>
+      <tr><td><strong>No Google/LinkedIn login</strong></td><td>Signup friction increases drop-off. OAuth reduces it significantly.</td></tr>
+      <tr><td><strong>No public API docs</strong></td><td>API key is generated but there's no documentation page — tech-savvy users can't self-serve.</td></tr>
+      <tr><td><strong>No email nurture sequence</strong></td><td>Free users who don't convert get no follow-up emails. Automated drip would recover churned trials.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     09 — ROADMAP
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 09</span>
+  <h2>Prioritized Improvement Roadmap</h2>
+
+  <div style="margin-bottom:24px">
+    <h3 style="margin-bottom:14px">Impact vs. Effort — Ranked</h3>
+
+    <div class="impact-row">
+      <div class="impact-label">1. OCR for Scanned PDFs</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:95%;background:#ef4444"></div></div>
+      <div class="impact-score">95</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">2. Systemd / PM2 (Always On)</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:90%;background:#ef4444"></div></div>
+      <div class="impact-score">90</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">3. Onboarding Wizard</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:88%;background:#f59e0b"></div></div>
+      <div class="impact-score">88</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">4. Deal / Application Tracker</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:85%;background:#f59e0b"></div></div>
+      <div class="impact-score">85</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">5. PostgreSQL Migration</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:82%;background:#f59e0b"></div></div>
+      <div class="impact-score">82</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">6. Team / Multi-User Accounts</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:80%;background:#6366f1"></div></div>
+      <div class="impact-score">80</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">7. Branded PDF Report Export</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:76%;background:#6366f1"></div></div>
+      <div class="impact-score">76</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">8. Referral / Affiliate Program</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:74%;background:#6366f1"></div></div>
+      <div class="impact-score">74</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">9. Saved Lender Favorites</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:70%;background:#0ea5e9"></div></div>
+      <div class="impact-score">70</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">10. Google / LinkedIn OAuth</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:65%;background:#0ea5e9"></div></div>
+      <div class="impact-score">65</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">11. Email Nurture Drip (SendGrid)</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:60%;background:#22c55e"></div></div>
+      <div class="impact-score">60</div>
+    </div>
+    <div class="impact-row">
+      <div class="impact-label">12. Public API Documentation Page</div>
+      <div class="impact-bar"><div class="impact-fill" style="width:55%;background:#22c55e"></div></div>
+      <div class="impact-score">55</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Sprint Plan (3 Months)</h3>
+  <table>
+    <thead><tr><th>Month</th><th>Focus</th><th>Deliverables</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Month 1</strong><br><span style="font-size:10px;color:#6366f1">Foundation</span></td>
+        <td>Stability &amp; Retention</td>
+        <td>
+          • Systemd service (always on)<br>
+          • OCR fallback for scanned PDFs<br>
+          • Onboarding wizard (3-step)<br>
+          • PostgreSQL migration
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Month 2</strong><br><span style="font-size:10px;color:#f59e0b">Stickiness</span></td>
+        <td>Power User Features</td>
+        <td>
+          • Deal tracker (merchant → lender → status)<br>
+          • Saved lender favorites with notes<br>
+          • Branded PDF report export<br>
+          • Multi-month trend comparison
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Month 3</strong><br><span style="font-size:10px;color:#22c55e">Growth</span></td>
+        <td>Acquisition &amp; Scale</td>
+        <td>
+          • Team accounts (seats model)<br>
+          • Referral program (give 5 credits, get 5)<br>
+          • Google OAuth<br>
+          • Email drip sequence for free users<br>
+          • Public API docs
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     10 — USER ACQUISITION
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 10</span>
+  <h2>User Acquisition Strategy</h2>
+
+  <div class="feature-grid">
+    <div class="feature-card green">
+      <h3>📝 SEO Content (Already Started)</h3>
+      <p style="font-size:12.5px"><strong>56 blog posts</strong> covering bank statement analysis, MCA, mortgage, DSCR, fraud detection. These target high-intent searches by brokers and underwriters. Estimated 3–6 month ramp to organic traffic.</p>
+      <ul class="checks" style="margin-top:8px;font-size:12px">
+        <li>Target: "bank statement analyzer for lenders"</li>
+        <li>Target: "how to detect MCA loans on bank statement"</li>
+        <li>Target: "NSF frequency risk underwriting"</li>
+        <li>Build backlinks from fintech directories</li>
+      </ul>
+    </div>
+    <div class="feature-card blue">
+      <h3>🤝 MCA Community Outreach</h3>
+      <p style="font-size:12.5px">MCA brokers are highly networked. Target forums (DailyFunder, OC Talk Funding), LinkedIn groups, and ISO associations. One well-connected broker referral = 10+ signups.</p>
+      <ul class="checks" style="margin-top:8px;font-size:12px">
+        <li>Post demo video in DailyFunder forum</li>
+        <li>LinkedIn posts targeting ISO reps</li>
+        <li>Offer free credits to industry influencers</li>
+        <li>Sponsor MCA newsletters (Broker Fair)</li>
+      </ul>
+    </div>
+    <div class="feature-card orange">
+      <h3>🎯 Direct Lender Partnerships</h3>
+      <p style="font-size:12.5px">We have 435 lenders in our database. Reach out to Grade A lenders and offer to be their "pre-screening tool" — recommend us to their ISO broker network in exchange for co-marketing.</p>
+      <ul class="checks" style="margin-top:8px;font-size:12px">
+        <li>Email Grade A lenders from our database</li>
+        <li>Offer branded version of match tool</li>
+        <li>Lender refers their brokers → we give lender a cut</li>
+        <li>White-label deal for larger funders</li>
+      </ul>
+    </div>
+    <div class="feature-card purple">
+      <h3>📺 YouTube / Demo Content</h3>
+      <p style="font-size:12.5px">Short-form video showing the tool in action gets shared in broker communities. "I analyzed 3 months of bank statements in 90 seconds" is highly shareable content.</p>
+      <ul class="checks" style="margin-top:8px;font-size:12px">
+        <li>Record 60-second demo video</li>
+        <li>Post on LinkedIn, YouTube, TikTok</li>
+        <li>Before/after: 45 min manual vs 30 sec AI</li>
+        <li>Show the lender matching feature specifically</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>Free Trial Conversion Funnel</h3>
+  <table>
+    <thead><tr><th>Stage</th><th>Current State</th><th>Target Improvement</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Landing → Signup</strong></td><td>No data yet</td><td>Target 8–12% with clear value prop + demo video on homepage</td></tr>
+      <tr><td><strong>Signup → First Upload</strong></td><td>No onboarding</td><td>Add guided wizard → target 70% upload rate within first session</td></tr>
+      <tr><td><strong>First Upload → Paid</strong></td><td>No drip email</td><td>Add "1 credit left" and "credits expired" trigger emails → target 15% conversion</td></tr>
+      <tr><td><strong>Paid → Active Subscriber</strong></td><td>No retention features</td><td>Deal tracker + saved lenders → target 60% monthly retention</td></tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <h3>Pricing Anchoring Recommendation</h3>
+  <p style="font-size:12.5px;color:#475569">
+    The current free tier (3 analyses) is too generous without enough friction. Consider: <strong>1 free analysis with full report</strong> (enough to see value) → then require credit card for more. Also add a <strong>"$1 trial"</strong> for 5 analyses — removes risk for the user while filtering serious buyers.
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     11 — COMPETITIVE POSITIONING
+══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <span class="section-label">Section 11</span>
+  <h2>Competitive Positioning</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>StatementScrub</th>
+        <th>Moneythumb/Thumbprint</th>
+        <th>Ocrolus</th>
+        <th>Plaid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AI Bank Statement Analysis</td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-blue">Partial</span></td>
+      </tr>
+      <tr>
+        <td>Lender Matching (435 lenders)</td>
+        <td><span class="badge badge-green">✓ Unique</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>Fraud / Structuring Detection</td>
+        <td><span class="badge badge-green">✓ 12 patterns</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>Price Per Analysis</td>
+        <td><span class="badge badge-green">~$1.00</span></td>
+        <td><span class="badge badge-red">$5–$15</span></td>
+        <td><span class="badge badge-red">$8–$25+</span></td>
+        <td><span class="badge badge-blue">Per transaction</span></td>
+      </tr>
+      <tr>
+        <td>No Code / Self-Serve</td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-blue">Partial</span></td>
+        <td><span class="badge badge-red">Enterprise only</span></td>
+        <td><span class="badge badge-red">Dev required</span></td>
+      </tr>
+      <tr>
+        <td>MCA Community Focused</td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-blue">Partial</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>CSV / PDF Export</td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-red">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>REST API</td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-blue">Partial</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+        <td><span class="badge badge-green">✓ Yes</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <div style="background:#eef2ff;border:1px solid #c7d2fe;border-radius:14px;padding:20px 24px">
+    <h3 style="color:#4f46e5;margin-bottom:12px">🎯 Our Unique Positioning Statement</h3>
+    <p style="font-size:14px;color:#1e1b4b;line-height:1.7;margin:0">
+      <strong>StatementScrub is the only bank statement analyzer built specifically for MCA brokers that combines instant AI fraud detection with a live lender matching engine.</strong> While Moneythumb and Ocrolus focus on analysis alone at $5–$25 per report, StatementScrub delivers the same quality analysis at $1/report AND tells you exactly which of 435 lenders will fund the deal — eliminating the hours brokers spend calling lenders after analysis.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>The 30-Second Pitch</h3>
+  <div style="background:#0f172a;color:#e2e8f0;border-radius:14px;padding:20px 24px;font-size:13px;line-height:1.8">
+    "StatementScrub turns a 45-minute manual bank statement review into a 30-second AI report. Upload the PDF, get income verification, NSF counts, MCA detection, and fraud signals — then instantly see which of 435 lenders will approve the merchant based on their deposits, balance, industry, and state. At $1 per analysis, it pays for itself on the first deal."
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BACK COVER
+══════════════════════════════════════════════════════════════ -->
+<div style="background:#0f172a;color:#fff;padding:60px;margin-top:40px;text-align:center">
+  <div style="font-size:32px;font-weight:900;margin-bottom:8px">
+    Statement<span style="background:linear-gradient(90deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Scrub</span>
+  </div>
+  <div style="color:#64748b;font-size:14px;margin-bottom:32px">AI Bank Statement Analyzer &amp; Lender Matching CRM</div>
+
+  <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-bottom:32px">
+    <div><div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Website</div><div style="font-size:14px;color:#a5b4fc;margin-top:4px">statementscrub.com</div></div>
+    <div><div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Email</div><div style="font-size:14px;color:#a5b4fc;margin-top:4px">patelsmit368@gmail.com</div></div>
+    <div><div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Server</div><div style="font-size:14px;color:#a5b4fc;margin-top:4px">AWS EC2 · us-east-2</div></div>
+  </div>
+
+  <div style="font-size:11px;color:#334155">Prepared June 2026 · Confidential</div>
+</div>
+
+</body>
+</html>

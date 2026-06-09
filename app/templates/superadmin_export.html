@@ -1,0 +1,49 @@
+{% extends "superadmin_base.html" %}
+{% block title %}Export Lenders{% endblock %}
+{% block page_title %}Export Lenders{% endblock %}
+
+{% block content %}
+<div class="sa-card" style="max-width:600px">
+  <div class="sa-card-title">Export Lender Directory as CSV</div>
+  <p style="font-size:13px;color:#64748b;margin-bottom:20px">Filter by any combination of grade, industry, and state. Leave blank to export all active lenders.</p>
+
+  <form method="GET" action="/superadmin/export/csv">
+    <label class="sa-label">Grade</label>
+    <select class="sa-select" name="grade">
+      <option value="">All Grades</option>
+      {% for g in ['a','b','c','d'] %}
+      <option value="{{ g }}">Grade {{ g|upper }}</option>
+      {% endfor %}
+    </select>
+
+    <label class="sa-label">Industry</label>
+    <select class="sa-select" name="industry">
+      <option value="">All Industries</option>
+      {% for ind in industries %}
+      <option value="{{ ind }}">{{ ind }}</option>
+      {% endfor %}
+    </select>
+
+    <label class="sa-label">State</label>
+    <select class="sa-select" name="state">
+      <option value="">All States</option>
+      {% for code, name in states %}
+      <option value="{{ code }}">{{ name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="sa-btn sa-btn-primary" style="margin-top:20px;width:100%;justify-content:center;padding:12px">
+      📥 Download CSV
+    </button>
+  </form>
+</div>
+
+<div class="sa-card" style="max-width:600px">
+  <div class="sa-card-title">CSV Columns Included</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    {% for col in ['Name','Code','Grade','Email','Phone','ISO Rep','Max Advance','Notes','Portal'] %}
+    <span style="background:#0f172a;color:#94a3b8;font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid #1e293b">{{ col }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

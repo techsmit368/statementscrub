@@ -396,6 +396,112 @@
   </div>
 </section>
 
+<!-- ══ TEAM PLANS ══ -->
+<section id="teams" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);padding:80px 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 25% 40%,rgba(99,102,241,0.15) 0%,transparent 50%),radial-gradient(circle at 75% 60%,rgba(14,165,233,0.1) 0%,transparent 50%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:26px 26px;pointer-events:none"></div>
+
+  <div style="max-width:1060px;margin:0 auto;padding:0 24px;position:relative">
+
+    <div style="text-align:center;margin-bottom:52px">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.35);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:800;color:#fcd34d;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:16px">
+        🏢 For ISO Shops & Companies
+      </div>
+      <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:-0.02em">Team Plans</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:1rem;max-width:480px;margin:0 auto;line-height:1.65">
+        One account for your whole shop. Partner, Admin, and Broker roles. Shared report pool billed once.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+
+      <!-- Starter Team -->
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:32px 28px">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:10px">Starter Team</div>
+        <div style="font-size:3rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.04em">$399</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:6px">/month</div>
+        <div style="background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;color:#a5b4fc;margin-bottom:26px;display:inline-block">
+          3 seats · 150 reports/mo
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+          {% for f in ["1 Partner + 2 Broker seats","150 shared reports/month","Partner / Admin / Broker roles","ISO rep contacts per broker","Lender matching for all brokers","Email support"] %}
+          <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.75)">
+            <div style="width:17px;height:17px;background:rgba(99,102,241,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg style="width:8px;height:8px;color:#818cf8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ f }}
+          </div>
+          {% endfor %}
+        </div>
+        <form method="POST" action="/billing/team-subscribe">
+          <input type="hidden" name="plan" value="starter_team">
+          <button type="submit" style="width:100%;padding:13px;border-radius:13px;font-weight:800;font-size:13px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-family:inherit">
+            Start Starter Team →
+          </button>
+        </form>
+      </div>
+
+      <!-- Business Team (featured) -->
+      <div style="background:linear-gradient(145deg,rgba(99,102,241,0.28),rgba(14,165,233,0.18));border:1.5px solid rgba(99,102,241,0.5);border-radius:22px;padding:32px 28px;position:relative">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:10px;font-weight:900;padding:5px 16px;border-radius:100px;letter-spacing:0.08em;white-space:nowrap">MOST POPULAR</div>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.5);margin-bottom:10px">Business Team</div>
+        <div style="font-size:3rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.04em">$799</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:6px">/month</div>
+        <div style="background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.35);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;color:#fcd34d;margin-bottom:26px;display:inline-block">
+          10 seats · 500 reports/mo
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+          {% for f in ["1 Partner + 2 Admins + 7 Brokers","500 shared reports/month","Full role management","ISO rep contacts per broker","API access for all members","Priority support","Lender export by criteria"] %}
+          <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.85)">
+            <div style="width:17px;height:17px;background:rgba(245,158,11,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg style="width:8px;height:8px;color:#fcd34d" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ f }}
+          </div>
+          {% endfor %}
+        </div>
+        <form method="POST" action="/billing/team-subscribe">
+          <input type="hidden" name="plan" value="business_team">
+          <button type="submit" style="width:100%;padding:13px;border-radius:13px;font-weight:800;font-size:13px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border:none;cursor:pointer;font-family:inherit;box-shadow:0 6px 24px rgba(245,158,11,0.35)">
+            Start Business Team →
+          </button>
+        </form>
+      </div>
+
+      <!-- Enterprise -->
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:32px 28px">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:10px">Enterprise</div>
+        <div style="font-size:3rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-0.04em">$1,999</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:6px">/month</div>
+        <div style="background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.35);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;color:#c4b5fd;margin-bottom:26px;display:inline-block">
+          Unlimited seats · 2,000 reports/mo
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+          {% for f in ["Unlimited broker seats","2,000 shared reports/month","Full role management","Dedicated account manager","API + webhook access","White-label PDF reports","Custom onboarding"] %}
+          <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.75)">
+            <div style="width:17px;height:17px;background:rgba(139,92,246,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg style="width:8px;height:8px;color:#c4b5fd" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            {{ f }}
+          </div>
+          {% endfor %}
+        </div>
+        <form method="POST" action="/billing/team-subscribe">
+          <input type="hidden" name="plan" value="enterprise">
+          <button type="submit" style="width:100%;padding:13px;border-radius:13px;font-weight:800;font-size:13px;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;border:none;cursor:pointer;font-family:inherit;box-shadow:0 6px 24px rgba(124,58,237,0.35)">
+            Start Enterprise →
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <p style="text-align:center;color:rgba(255,255,255,0.25);font-size:11px;margin-top:24px">
+      All team plans auto-renew monthly. Cancel any time. Unused reports carry forward.
+    </p>
+  </div>
+</section>
+
 <!-- ══ FAQ ══ -->
 <section style="background:#fff;padding:64px 0">
   <div style="max-width:680px;margin:0 auto;padding:0 24px">
