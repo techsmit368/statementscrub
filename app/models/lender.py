@@ -39,6 +39,7 @@ class LenderInfo(Base):
     notes = Column(Text, nullable=True)
     isorep = Column(String(125), nullable=True)
     website_link = Column(String(125), nullable=True)
+    featured = Column(Integer, default=0)  # 1 = featured, shows first in results
     deleted_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

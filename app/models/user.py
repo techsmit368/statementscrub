@@ -19,6 +19,8 @@ class User(Base):
     telegram_id = Column(String, nullable=True)
     telegram_token = Column(String, nullable=True)
     api_key = Column(String, nullable=True, unique=True, index=True)
+    org_id = Column(Integer, nullable=True)
+    org_role = Column(String, nullable=True)  # partner, admin, broker
     created_at = Column(DateTime, server_default=func.now())
 
 
