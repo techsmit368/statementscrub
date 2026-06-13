@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-site-verification" content="63008f57257cc8ac" />
+  <meta name="theme-color" content="#6366f1" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='url(%23g)'/><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%236366f1'/><stop offset='1' stop-color='%230ea5e9'/></linearGradient></defs><text x='16' y='22' text-anchor='middle' font-family='Arial' font-weight='900' font-size='18' fill='white'>S</text></svg>" />
   <title>{% block title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}</title>
 
   <!-- Default SEO meta (overridden per-page via block meta) -->
@@ -138,6 +140,41 @@
     ::-webkit-scrollbar-track { background: #f8fafc; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://statementscrub.com/#organization",
+        "name": "StatementScrub",
+        "url": "https://statementscrub.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://statementscrub.com/static/og-image.png"
+        },
+        "description": "AI-powered bank statement analysis for mortgage brokers, MCA lenders, and underwriters. Income verification, NSF detection, MCA detection, and risk scoring in under 30 seconds.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "url": "https://statementscrub.com/contact"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://statementscrub.com/#website",
+        "url": "https://statementscrub.com",
+        "name": "StatementScrub",
+        "publisher": {"@id": "https://statementscrub.com/#organization"},
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://statementscrub.com/blog?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
   {% block head %}{% endblock %}
 </head>
 <body>

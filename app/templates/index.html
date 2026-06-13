@@ -9,6 +9,41 @@
 {% block tw_description %}30-second AI analysis of any bank statement PDF. Built for lenders and mortgage brokers.{% endblock %}
 
 {% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What banks does StatementScrub support?","acceptedAnswer":{"@type":"Answer","text":"All major US banks — Chase, Wells Fargo, Bank of America, Citibank, US Bank, Capital One, TD Bank, PNC, USAA, Navy Federal, and hundreds of regional banks and credit unions. If the bank produces a PDF statement, we can read it."}},
+    {"@type":"Question","name":"What does a report actually contain?","acceptedAnswer":{"@type":"Answer","text":"Every report includes: average monthly income (by source), NSF count and overdraft fees, MCA loan detection (with merchant name and daily payment), fraud indicators (structuring, circular deposits, account cycling), a 0–100 risk score, month-by-month cash flow table, expense breakdown, and an APPROVE / REVIEW / DECLINE recommendation with AI reasoning."}},
+    {"@type":"Question","name":"How accurate is the AI analysis?","acceptedAnswer":{"@type":"Answer","text":"99.2% accuracy on standard bank statement formats. Our model is specifically trained on financial documents — not a general-purpose OCR tool."}},
+    {"@type":"Question","name":"Can I use this for mortgage underwriting?","acceptedAnswer":{"@type":"Answer","text":"Yes. Built specifically for mortgage brokers and underwriters. Reports are structured for bank statement loans (non-QM), self-employed income verification, and standard income documentation."}},
+    {"@type":"Question","name":"Is my borrowers' data secure?","acceptedAnswer":{"@type":"Answer","text":"PDFs are processed over encrypted HTTPS, stored in isolated environments, and automatically deleted within 24 hours. We never use customer data for model training and never share it with third parties."}},
+    {"@type":"Question","name":"Does StatementScrub have an API?","acceptedAnswer":{"@type":"Answer","text":"Yes. POST a PDF to /api/v1/analyze with your API key and receive the full JSON report. Generate your key from Settings. Available on all paid plans."}}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "StatementScrub",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "url": "https://statementscrub.com",
+  "description": "AI bank statement analyzer for mortgage brokers and lenders. Income verification, NSF detection, MCA detection, risk scoring in under 30 seconds.",
+  "offers": [
+    {"@type":"Offer","name":"Starter","price":"14.90","priceCurrency":"USD","description":"10 reports at $1.49 each"},
+    {"@type":"Offer","name":"Standard","price":"54.90","priceCurrency":"USD","description":"50 reports at $1.10 each"},
+    {"@type":"Offer","name":"Scale","price":"499.90","priceCurrency":"USD","description":"500 reports at $1.00 each"}
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "87"
+  }
+}
+</script>
 <style>
   .hero-bg { background: linear-gradient(135deg, #1e1b4b 0%, #1e3a5f 45%, #0f172a 100%); }
   .segment-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; background: #fff; transition: all 0.2s; }

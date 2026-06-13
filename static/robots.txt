@@ -4,5 +4,14 @@ Disallow: /dashboard
 Disallow: /results/
 Disallow: /upload
 Disallow: /auth/
+Disallow: /settings
+Disallow: /profile
+Disallow: /billing/
+Disallow: /superadmin/
+Disallow: /teams/
+Disallow: /lenders/
+Disallow: /broker-contacts/
+Disallow: /support
+Disallow: /api/
 
 Sitemap: https://statementscrub.com/sitemap.xml
