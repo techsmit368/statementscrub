@@ -15,10 +15,10 @@
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "mainEntityOfPage": {"@type": "WebPage", "@id": "https://statementscrub.com/blog/{{ post.slug }}"},
-  "headline": {{ post.title | tojson }},
-  "description": {{ post.meta | tojson }},
+  "headline": {{ post.title | default('', true) | tojson }},
+  "description": {{ post.meta | default('', true) | tojson }},
   "image": "https://statementscrub.com/static/og-image.png",
-  "articleSection": {{ post.category | tojson }},
+  "articleSection": {{ post.category | default('', true) | tojson }},
   "datePublished": "{{ post.date }}",
   "dateModified": "{{ post.date }}",
   "author": {"@type": "Organization", "name": "StatementScrub", "url": "https://statementscrub.com"},
@@ -37,7 +37,7 @@
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementscrub.com/"},
     {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://statementscrub.com/blog"},
-    {"@type": "ListItem", "position": 3, "name": {{ post.title | tojson }}, "item": "https://statementscrub.com/blog/{{ post.slug }}"}
+    {"@type": "ListItem", "position": 3, "name": {{ post.title | default('', true) | tojson }}, "item": "https://statementscrub.com/blog/{{ post.slug }}"}
   ]
 }
 </script>

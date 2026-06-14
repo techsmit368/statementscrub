@@ -16,7 +16,7 @@
   "description": "Expert guides on bank statement analysis, income verification, MCA detection, and mortgage underwriting for lenders and brokers.",
   "publisher": {"@type": "Organization", "name": "StatementScrub", "url": "https://statementscrub.com"},
   "blogPost": [
-    {% for post in posts %}{"@type": "BlogPosting", "headline": {{ post.title | tojson }}, "url": "https://statementscrub.com/blog/{{ post.slug }}", "datePublished": "{{ post.date }}", "description": {{ post.meta | tojson }}}{{ "," if not loop.last }}{% endfor %}
+    {% for post in posts %}{"@type": "BlogPosting", "headline": {{ post.title | default('', true) | tojson }}, "url": "https://statementscrub.com/blog/{{ post.slug }}", "datePublished": "{{ post.date | default('', true) }}", "description": {{ post.meta | default('', true) | tojson }}}{{ "," if not loop.last }}{% endfor %}
   ]
 }
 </script>
