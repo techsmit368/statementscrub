@@ -33,9 +33,9 @@
   "url": "https://statementscrub.com",
   "description": "AI bank statement analyzer for mortgage brokers and lenders. Income verification, NSF detection, MCA detection, risk scoring in under 30 seconds.",
   "offers": [
-    {"@type":"Offer","name":"Starter","price":"14.90","priceCurrency":"USD","description":"10 reports at $1.49 each"},
-    {"@type":"Offer","name":"Standard","price":"54.90","priceCurrency":"USD","description":"50 reports at $1.10 each"},
-    {"@type":"Offer","name":"Scale","price":"499.90","priceCurrency":"USD","description":"500 reports at $1.00 each"}
+    {"@type":"Offer","name":"Broker","price":"49.00","priceCurrency":"USD","description":"25 bank statement reports per month ($2.00 each) + 435-lender matching"},
+    {"@type":"Offer","name":"Pro","price":"149.00","priceCurrency":"USD","description":"100 bank statement reports per month ($1.50 each) + API access"},
+    {"@type":"Offer","name":"Agency","price":"299.00","priceCurrency":"USD","description":"300 bank statement reports per month ($1.00 each) + team seats"}
   ],
   "aggregateRating": {
     "@type": "AggregateRating",
@@ -409,66 +409,66 @@
   <div class="max-w-5xl mx-auto px-4">
     <div style="text-align:center;margin-bottom:56px">
       <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6366f1;margin-bottom:10px">Pricing</p>
-      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:12px">Pay Only for What You Use</h2>
-      <p style="color:#64748b;font-size:1rem">Credits never expire. No subscription. No hidden fees. Start with 3 free reports.</p>
+      <h2 style="font-size:2.5rem;font-weight:900;color:#0f172a;line-height:1.1;margin-bottom:12px">One Tool. Three Simple Plans.</h2>
+      <p style="color:#64748b;font-size:1rem">AI analysis + 435-lender matching in one platform. Cancel any time. Start with 3 free reports — no card required.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start">
 
-      <!-- Starter -->
+      <!-- Broker -->
       <div style="border:1px solid #e2e8f0;border-radius:20px;padding:28px;background:#fff">
-        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Starter</div>
-        <div style="margin-bottom:6px"><span style="font-size:2.75rem;font-weight:900;color:#0f172a">$14.90</span><span style="font-size:13px;color:#94a3b8;margin-left:4px">one-time</span></div>
-        <div style="font-size:13px;font-weight:700;color:#6366f1;margin-bottom:22px">10 reports · $1.49 each</div>
+        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">Broker</div>
+        <div style="margin-bottom:4px"><span style="font-size:2.75rem;font-weight:900;color:#0f172a">$49</span><span style="font-size:13px;color:#94a3b8;margin-left:4px">/month</span></div>
+        <div style="display:inline-flex;background:#f0fdf4;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:800;color:#15803d;margin-bottom:22px">25 reports/mo · $2.00 each</div>
         <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#475569">
-          {% for item in ["Full AI analysis report","NSF + MCA + fraud detection","Risk score + recommendation","CSV + print/PDF export","Credits never expire"] %}
+          {% for item in ["Full AI analysis report","NSF + MCA + fraud detection","Risk score + recommendation","Lender matching — 435+ lenders","CSV + print/PDF export"] %}
           <li style="display:flex;align-items:center;gap:8px">
             <svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             {{ item }}
           </li>
           {% endfor %}
         </ul>
-        <a href="/auth/register" style="display:block;text-align:center;padding:11px;font-size:14px;font-weight:700;border:1.5px solid #e2e8f0;border-radius:12px;color:#334155;text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#334155'">Get Started</a>
+        <a href="/credits" style="display:block;text-align:center;padding:11px;font-size:14px;font-weight:700;border:1.5px solid #e2e8f0;border-radius:12px;color:#334155;text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#334155'">Get Started</a>
       </div>
 
-      <!-- Standard (Popular) -->
+      <!-- Pro (Popular) -->
       <div class="pricing-popular" style="border-radius:20px;padding:28px;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;font-size:11px;font-weight:800;padding:4px 16px;border-radius:100px;white-space:nowrap;box-shadow:0 4px 14px rgba(99,102,241,0.4)">MOST POPULAR</div>
-        <div style="font-size:11px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Standard</div>
-        <div style="margin-bottom:6px"><span style="font-size:2.75rem;font-weight:900;color:#fff">$54.90</span><span style="font-size:13px;color:#64748b;margin-left:4px">one-time</span></div>
-        <div style="font-size:13px;font-weight:700;color:#38bdf8;margin-bottom:22px">50 reports · $1.10 each</div>
+        <div style="font-size:11px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">Pro</div>
+        <div style="margin-bottom:4px"><span style="font-size:2.75rem;font-weight:900;color:#fff">$149</span><span style="font-size:13px;color:#64748b;margin-left:4px">/month</span></div>
+        <div style="display:inline-flex;background:rgba(99,102,241,0.25);border:1px solid rgba(99,102,241,0.4);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:800;color:#a5b4fc;margin-bottom:22px">100 reports/mo · $1.50 each</div>
         <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#94a3b8">
-          {% for item in ["Everything in Starter","Batch upload (multiple PDFs)","API access (JSON output)","Custom scorecard thresholds","Telegram bot notifications"] %}
+          {% for item in ["Everything in Broker","API access (JSON output)","Custom scorecard thresholds","Telegram bot notifications","Priority support"] %}
           <li style="display:flex;align-items:center;gap:8px">
             <svg style="width:14px;height:14px;color:#4ade80;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             {{ item }}
           </li>
           {% endfor %}
         </ul>
-        <a href="/credits" class="btn-primary" style="display:block;text-align:center;padding:11px;font-size:14px;border-radius:12px;text-decoration:none">Get Standard Pack</a>
+        <a href="/credits" class="btn-primary" style="display:block;text-align:center;padding:11px;font-size:14px;border-radius:12px;text-decoration:none">Get Pro Plan</a>
       </div>
 
-      <!-- Scale -->
+      <!-- Agency -->
       <div style="border:1px solid #e2e8f0;border-radius:20px;padding:28px;background:#fff">
-        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px">Scale</div>
-        <div style="margin-bottom:6px"><span style="font-size:2.75rem;font-weight:900;color:#0f172a">$499.90</span><span style="font-size:13px;color:#94a3b8;margin-left:4px">one-time</span></div>
-        <div style="font-size:13px;font-weight:700;color:#8b5cf6;margin-bottom:22px">500 reports · $1.00 each</div>
+        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">Agency</div>
+        <div style="margin-bottom:4px"><span style="font-size:2.75rem;font-weight:900;color:#0f172a">$299</span><span style="font-size:13px;color:#94a3b8;margin-left:4px">/month</span></div>
+        <div style="display:inline-flex;background:#faf5ff;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:800;color:#7c3aed;margin-bottom:22px">300 reports/mo · $1.00 each</div>
         <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#475569">
-          {% for item in ["Everything in Standard","Priority support","Invoice billing","Volume discounts above 500","Custom LOS integration"] %}
+          {% for item in ["Everything in Pro","5 team member seats","Dedicated account manager","Volume pricing above 300","Custom LOS integration"] %}
           <li style="display:flex;align-items:center;gap:8px">
             <svg style="width:14px;height:14px;color:#16a34a;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             {{ item }}
           </li>
           {% endfor %}
         </ul>
-        <a href="/contact" style="display:block;text-align:center;padding:11px;font-size:14px;font-weight:700;border:1.5px solid #e2e8f0;border-radius:12px;color:#334155;text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#334155'">Contact Sales</a>
+        <a href="/credits" style="display:block;text-align:center;padding:11px;font-size:14px;font-weight:700;border:1.5px solid #e2e8f0;border-radius:12px;color:#334155;text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='#6366f1';this.style.color='#6366f1'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#334155'">Get Started</a>
       </div>
 
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;padding:20px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0">
       {% for icon, label, desc in [
         ("🎁","3 free reports","Every new account gets 3 free analyses — no credit card"),
-        ("♾️","Credits never expire","Buy now, use at your own pace. No time pressure."),
-        ("🔒","No subscription","Pay once, use as needed. Zero recurring charges."),
+        ("🔄","Credits roll over","Unused monthly reports carry forward — never lost."),
+        ("🚫","Cancel any time","No contracts, no lock-in. Upgrade or cancel in one click."),
       ] %}
       <div style="text-align:center;padding:8px">
         <div style="font-size:20px;margin-bottom:5px">{{ icon }}</div>
@@ -477,7 +477,7 @@
       </div>
       {% endfor %}
     </div>
-    <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:14px">Need more than 500 reports? <a href="/credits" style="color:#6366f1;font-weight:600">See all 6 credit pack sizes →</a></p>
+    <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:14px">Lower volume? <a href="/credits" style="color:#6366f1;font-weight:600">Buy one-time credit packs from $14.90 →</a></p>
   </div>
 </section>
 

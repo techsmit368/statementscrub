@@ -21,7 +21,11 @@
           {% if user.subscription_plan %}
           <div class="d-flex align-items-center gap-2" style="background:rgba(34,197,94,0.18);border:1px solid rgba(34,197,94,0.35);padding:6px 14px;border-radius:20px">
             <span style="width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>
-            <span class="fw-bold" style="font-size:12px;color:#6ee7b7">{{ 'Pro Plan' if user.subscription_plan=='pro_sub' else 'Starter Plan' }} Active</span>
+            <span class="fw-bold" style="font-size:12px;color:#6ee7b7">
+              {% if user.subscription_plan == 'broker' %}Broker Plan
+              {% elif user.subscription_plan == 'pro' %}Pro Plan
+              {% elif user.subscription_plan == 'agency' %}Agency Plan
+              {% else %}Subscription{% endif %} Active</span>
           </div>
           {% else %}
           <span class="fw-semibold" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(148,163,184,0.7);font-size:12px;padding:6px 14px;border-radius:20px">{{ user.plan|capitalize }} Plan</span>
@@ -118,71 +122,55 @@
 </div>
 
 <div class="row g-4 mb-5 au2">
-  <div class="col-md-6">
-    <div class="card h-100 shadow-sm" style="border-radius:16px">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-start justify-content-between mb-4">
-          <div>
-            <div class="fw-bold mb-1" style="font-size:17px;color:#0f172a">Starter</div>
-            <div class="text-muted" style="font-size:12.5px">Growing lenders</div>
-          </div>
-          <div class="text-end">
-            <div style="font-size:2.2rem;font-weight:900;letter-spacing:-0.05em;color:#0f172a;line-height:1">$49</div>
-            <div class="text-muted" style="font-size:11px">/month</div>
-          </div>
-        </div>
-        <div class="d-flex flex-column gap-2 mb-4">
-          {% for f in ["50 credits per month","Unused credits roll over","All analysis features","Email support"] %}
-          <div class="d-flex align-items-center gap-2" style="font-size:13px;color:#374151">
-            <i class="bi bi-check-circle-fill text-success" style="font-size:12px;flex-shrink:0"></i> {{ f }}
-          </div>
-          {% endfor %}
-        </div>
-        <div class="d-flex justify-content-between p-3 rounded-3 mb-4" style="background:#f8f9fb;border:1px solid #e8ecf0;font-size:12.5px">
-          <span class="text-muted">Cost per report</span><span class="fw-bold text-dark">$0.98</span>
-        </div>
-        <form method="POST" action="/billing/subscribe">
-          <input type="hidden" name="plan" value="starter_sub">
-          <button type="submit" class="btn btn-outline-primary w-100 fw-semibold" style="border-radius:10px;padding:11px">Subscribe — $49/mo →</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <div class="card h-100 shadow-sm overflow-hidden" style="border-radius:16px;border:2px solid #6366f1;box-shadow:0 6px 28px rgba(99,102,241,0.18)!important">
+  {% for plan, name, audience, price, reports, per, featured, feats in [
+    ("broker","Broker","Growing brokers",49,25,"2.00",false,
+      ["25 reports per month","Unused credits roll over","NSF, overdraft & MCA detection","12-point fraud check","Lender matching — 435+ lenders","CSV & PDF export","Email support"]),
+    ("pro","Pro","High-volume underwriters",149,100,"1.50",true,
+      ["100 reports per month","Unused credits roll over","Everything in Broker","API access with key management","Custom scorecard config","Telegram bot notifications","Priority support"]),
+    ("agency","Agency","Teams & agencies",299,300,"1.00",false,
+      ["300 reports per month","Unused credits roll over","Everything in Pro","5 team member seats","Dedicated account manager","Volume pricing above 300"]),
+  ] %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm overflow-hidden" style="border-radius:16px;{% if featured %}border:2px solid #6366f1;box-shadow:0 6px 28px rgba(99,102,241,0.18)!important{% endif %}">
+      {% if featured %}
       <div class="d-flex align-items-center gap-2 px-4" style="background:linear-gradient(135deg,#6366f1,#4f46e5);padding-top:9px;padding-bottom:9px">
         <i class="bi bi-stars text-white" style="font-size:12px"></i>
-        <span class="fw-bold text-white" style="font-size:10.5px;letter-spacing:0.07em">BEST VALUE</span>
+        <span class="fw-bold text-white" style="font-size:10.5px;letter-spacing:0.07em">MOST POPULAR</span>
       </div>
-      <div class="card-body p-4">
-        <div class="d-flex align-items-start justify-content-between mb-4">
+      {% endif %}
+      <div class="card-body p-4 d-flex flex-column">
+        <div class="d-flex align-items-start justify-content-between mb-3">
           <div>
-            <div class="fw-bold mb-1" style="font-size:17px;color:#0f172a">Pro</div>
-            <div class="text-muted" style="font-size:12.5px">High-volume underwriters</div>
+            <div class="fw-bold mb-1" style="font-size:17px;color:#0f172a">{{ name }}</div>
+            <div class="text-muted" style="font-size:12.5px">{{ audience }}</div>
           </div>
           <div class="text-end">
-            <div style="font-size:2.2rem;font-weight:900;letter-spacing:-0.05em;color:#6366f1;line-height:1">$149</div>
+            <div style="font-size:2.2rem;font-weight:900;letter-spacing:-0.05em;color:{% if featured %}#6366f1{% else %}#0f172a{% endif %};line-height:1">${{ price }}</div>
             <div class="text-muted" style="font-size:11px">/month</div>
           </div>
         </div>
+        <div class="d-inline-flex align-items-center gap-1 mb-3" style="background:{% if featured %}#eef2ff{% else %}#f0fdf4{% endif %};border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:800;color:{% if featured %}#4338ca{% else %}#15803d{% endif %};align-self:flex-start">
+          {{ reports }} reports/mo · ${{ per }}/report
+        </div>
         <div class="d-flex flex-column gap-2 mb-4">
-          {% for f in ["250 credits per month","Unused credits roll over","All analysis features","Priority support","API access included","Custom scorecard config"] %}
+          {% for f in feats %}
           <div class="d-flex align-items-center gap-2" style="font-size:13px;color:#374151">
-            <i class="bi bi-check-circle-fill" style="font-size:12px;flex-shrink:0;color:#6366f1"></i> {{ f }}
+            <i class="bi bi-check-circle-fill" style="font-size:12px;flex-shrink:0;color:{% if featured %}#6366f1{% else %}#16a34a{% endif %}"></i> {{ f }}
           </div>
           {% endfor %}
         </div>
-        <div class="d-flex justify-content-between p-3 rounded-3 mb-4" style="background:#eef2ff;border:1px solid #c7d2fe;font-size:12.5px;color:#4338ca">
-          <span>Cost per report</span><span class="fw-bold">$0.60 — saves 40%</span>
-        </div>
-        <form method="POST" action="/billing/subscribe">
-          <input type="hidden" name="plan" value="pro_sub">
-          <button type="submit" class="btn btn-primary w-100 fw-bold" style="border-radius:10px;padding:11px;box-shadow:0 4px 16px rgba(99,102,241,0.35)">Subscribe — $149/mo →</button>
+        {% if user.subscription_plan == plan %}
+        <button type="button" class="btn w-100 fw-bold mt-auto" disabled style="border-radius:10px;padding:11px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0">✓ Current Plan</button>
+        {% else %}
+        <form method="POST" action="/billing/subscribe" class="mt-auto">
+          <input type="hidden" name="plan" value="{{ plan }}">
+          <button type="submit" class="btn w-100 fw-bold {% if featured %}btn-primary{% else %}btn-outline-primary{% endif %}" style="border-radius:10px;padding:11px;{% if featured %}box-shadow:0 4px 16px rgba(99,102,241,0.35){% endif %}">Subscribe — ${{ price }}/mo →</button>
         </form>
+        {% endif %}
       </div>
     </div>
   </div>
+  {% endfor %}
 </div>
 
 <!-- Guide -->
@@ -192,9 +180,9 @@
   </div>
   <div class="row g-0">
     {% for icon, vol, rec, col, bg in [
-      ("bi-1-circle-fill","1–15 reports/month","Buy a one-time pack","#6366f1","#eef2ff"),
-      ("bi-2-circle-fill","16–50 reports/month","Starter subscription","#0284c7","#f0f9ff"),
-      ("bi-3-circle-fill","50+ reports/month","Pro subscription","#7c3aed","#faf5ff"),
+      ("bi-1-circle-fill","1–20 reports/month","Buy a one-time pack","#6366f1","#eef2ff"),
+      ("bi-2-circle-fill","25–100 reports/month","Broker or Pro plan","#0284c7","#f0f9ff"),
+      ("bi-3-circle-fill","100+ reports/month","Pro or Agency plan","#7c3aed","#faf5ff"),
     ] %}
     <div class="col-md-4 p-4{% if not loop.last %} border-end{% endif %}" style="border-color:#e8ecf0!important">
       <div class="icon-box mb-3" style="width:36px;height:36px;border-radius:9px;background:{{ bg }};color:{{ col }}">

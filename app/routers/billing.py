@@ -39,14 +39,18 @@ templates = Jinja2Templates(directory="app/templates")
 
 stripe.api_key = settings.stripe_secret_key
 
-# One-time credit packs (legacy — not shown in UI, kept for direct API use)
+# One-time credit packs (pay-as-you-go) — all 6 SKUs must match billing_plans.html
 PACKS = {
     "starter":  {"credits": 10,  "price_cents": 1490,  "label": "Starter Pack — 10 Credits"},
+    "basic":    {"credits": 25,  "price_cents": 2790,  "label": "Basic Pack — 25 Credits"},
     "standard": {"credits": 50,  "price_cents": 5490,  "label": "Standard Pack — 50 Credits"},
+    "business": {"credits": 100, "price_cents": 10490, "label": "Business Pack — 100 Credits"},
+    "growth":   {"credits": 250, "price_cents": 26290, "label": "Growth Pack — 250 Credits"},
     "scale":    {"credits": 500, "price_cents": 49990, "label": "Scale Pack — 500 Credits"},
 }
 
-# Monthly subscription plans — 3 tiers
+# Monthly subscription plans — 3 tiers. Keys are the canonical plan identifiers
+# used in checkout forms AND stored in User.subscription_plan.
 SUBSCRIPTIONS = {
     "broker": {
         "credits_per_month": 25,

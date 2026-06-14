@@ -40,8 +40,8 @@
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
       {% for num, label, desc, col in [
         ("3–5×","Faster Results","Under 30 seconds vs 2–10 minutes for legacy tools.","#6366f1"),
-        ("60–80%","Lower Cost","$1.00/analysis vs $1.50–$5.00 elsewhere.","#16a34a"),
-        ("Zero","Monthly Fees","No subscriptions. Pay only when you process.","#d97706")
+        ("60–80%","Lower Cost","From $1.00/analysis vs $1.50–$5.00 elsewhere.","#16a34a"),
+        ("435+","Lenders Matched","Built-in lender matching no other analyzer offers.","#d97706")
       ] %}
       <div class="card" style="padding:28px;">
         <div style="font-size:2.5rem;font-weight:900;color:{{ col }};line-height:1;margin-bottom:8px">{{ num }}</div>
@@ -77,8 +77,9 @@
         <tbody>
           {% set rows = [
             ("Processing Time",        "~25 seconds",     "2–5 minutes",   "1–3 minutes",  "30s–2 min"),
-            ("Cost Per Analysis",       "$1.00 – $1.49",  "$1.50 – $2.50", "$2.00 – $4.00","$1.00 – $3.00"),
-            ("Monthly Fee Required",    "✗ None",         "✓ Yes",         "✓ Yes",        "✓ Yes"),
+            ("Cost Per Analysis",       "$1.00 – $2.00",  "$1.50 – $2.50", "$2.00 – $4.00","$1.00 – $3.00"),
+            ("Pay-As-You-Go Option",    "✓ Yes",          "✗ No",          "~ Limited",    "✗ No"),
+            ("Built-in Lender Matching","✓ 435+ lenders", "✗ No",          "✗ No",         "✗ No"),
             ("Automated Analysis",      "✓ Full",         "✗ Rule-based",  "~ Limited",    "~ Partial"),
             ("NSF / Overdraft Detection","✓ Automatic",   "✓ Manual review","✓ Basic",     "✓ Yes"),
             ("MCA Loan Detection",      "✓ Yes",          "✗ No",          "✗ No",         "~ Partial"),
@@ -126,7 +127,7 @@
     <p style="color:#64748b;text-align:center;font-size:14px;margin-bottom:40px">Typical monthly cost for a mid-volume lending operation</p>
     <div style="display:flex;flex-direction:column;gap:16px;max-width:600px;margin:0 auto">
       {% for label, cost, pct, grad in [
-        ("StatementScrub (Standard Pack)","$54.90",14,"linear-gradient(90deg,#6366f1,#0ea5e9)"),
+        ("StatementScrub (100-report pack)","$104.90",28,"linear-gradient(90deg,#6366f1,#0ea5e9)"),
         ("Tool B (Cloud OCR)","$200–$400",55,"#cbd5e1"),
         ("Tool C (Enterprise SaaS)","$150–$300",42,"#cbd5e1"),
         ("Tool A (Legacy + Subscription)","$200+",60,"#e2e8f0"),

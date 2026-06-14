@@ -235,7 +235,7 @@
       <div style="min-width:0;flex:1">
         <div style="font-size:12.5px;font-weight:600;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:118px;line-height:1.2">{{ user.full_name or user.email.split('@')[0] }}</div>
         <div style="font-size:10px;font-weight:600;margin-top:1px;color:{% if user.subscription_plan %}#6ee7b7{% else %}rgba(100,116,139,0.5){% endif %}">
-          {{ 'Pro Plan' if user.subscription_plan=='pro_sub' else ('Starter' if user.subscription_plan=='starter_sub' else (user.plan|capitalize)) }}
+          {{ {'broker':'Broker Plan','pro':'Pro Plan','agency':'Agency Plan'}.get(user.subscription_plan, user.plan|capitalize) }}
         </div>
       </div>
     </a>

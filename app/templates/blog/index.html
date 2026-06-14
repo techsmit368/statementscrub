@@ -3,8 +3,34 @@
 {% block meta_description %}Expert guides on bank statement analysis, income verification, MCA detection, mortgage underwriting, and lending risk assessment. Written for mortgage brokers and lenders.{% endblock %}
 {% block canonical %}https://statementscrub.com/blog{% endblock %}
 {% block og_title %}Bank Statement Analysis Blog — Tips & Guides for Lenders{% endblock %}
-{% block og_description %}53+ expert articles on income verification, NSF detection, MCA risk, DSCR loans, and mortgage underwriting. Free resources for mortgage brokers and lenders.{% endblock %}
+{% block og_description %}90+ expert articles on income verification, NSF detection, MCA risk, DSCR loans, and mortgage underwriting. Free resources for mortgage brokers and lenders.{% endblock %}
 {% block og_url %}https://statementscrub.com/blog{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": "https://statementscrub.com/blog",
+  "name": "StatementScrub Blog",
+  "description": "Expert guides on bank statement analysis, income verification, MCA detection, and mortgage underwriting for lenders and brokers.",
+  "publisher": {"@type": "Organization", "name": "StatementScrub", "url": "https://statementscrub.com"},
+  "blogPost": [
+    {% for post in posts %}{"@type": "BlogPosting", "headline": {{ post.title | tojson }}, "url": "https://statementscrub.com/blog/{{ post.slug }}", "datePublished": "{{ post.date }}", "description": {{ post.meta | tojson }}}{{ "," if not loop.last }}{% endfor %}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementscrub.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://statementscrub.com/blog"}
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">

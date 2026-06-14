@@ -24,7 +24,7 @@
             <h5 class="fw-bold mb-1" style="color:#0f172a;font-size:17px">{{ user.full_name or 'No name set' }}</h5>
             <div class="text-muted mb-2" style="font-size:13px">{{ user.email }}</div>
             {% if user.subscription_plan %}
-            <span class="badge fw-bold" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);font-size:10.5px;padding:5px 10px">{{ 'Pro Plan' if user.subscription_plan=='pro_sub' else 'Starter Plan' }}</span>
+            <span class="badge fw-bold" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);font-size:10.5px;padding:5px 10px">{{ {'broker':'Broker Plan','pro':'Pro Plan','agency':'Agency Plan'}.get(user.subscription_plan, 'Active Plan') }}</span>
             {% else %}
             <span class="badge bg-light text-secondary fw-bold border" style="font-size:10.5px;padding:5px 10px">{{ user.plan|capitalize }} Plan</span>
             {% endif %}

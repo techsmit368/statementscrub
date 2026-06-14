@@ -1,31 +1,56 @@
 {% extends "base.html" %}
 {% block title %}{{ post.title }} | StatementScrub Blog{% endblock %}
+{% block meta_description %}{{ post.meta }}{% endblock %}
+{% block canonical %}https://statementscrub.com/blog/{{ post.slug }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.meta }}{% endblock %}
+{% block og_url %}https://statementscrub.com/blog/{{ post.slug }}{% endblock %}
+{% block tw_title %}{{ post.title }}{% endblock %}
+{% block tw_description %}{{ post.meta }}{% endblock %}
 
-{% block content %}
-<meta name="description" content="{{ post.meta }}" />
-<meta property="og:title" content="{{ post.title }}" />
-<meta property="og:description" content="{{ post.meta }}" />
-<meta property="og:url" content="https://statementscrub.com/blog/{{ post.slug }}" />
-<link rel="canonical" href="https://statementscrub.com/blog/{{ post.slug }}" />
+{% block head %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "{{ post.title }}",
-  "description": "{{ post.meta }}",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://statementscrub.com/blog/{{ post.slug }}"},
+  "headline": {{ post.title | tojson }},
+  "description": {{ post.meta | tojson }},
+  "image": "https://statementscrub.com/static/og-image.png",
+  "articleSection": {{ post.category | tojson }},
   "datePublished": "{{ post.date }}",
-  "author": {"@type": "Organization", "name": "StatementScrub"},
-  "publisher": {"@type": "Organization", "name": "StatementScrub", "url": "https://statementscrub.com"}
+  "dateModified": "{{ post.date }}",
+  "author": {"@type": "Organization", "name": "StatementScrub", "url": "https://statementscrub.com"},
+  "publisher": {
+    "@type": "Organization",
+    "name": "StatementScrub",
+    "url": "https://statementscrub.com",
+    "logo": {"@type": "ImageObject", "url": "https://statementscrub.com/static/og-image.png"}
+  }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementscrub.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://statementscrub.com/blog"},
+    {"@type": "ListItem", "position": 3, "name": {{ post.title | tojson }}, "item": "https://statementscrub.com/blog/{{ post.slug }}"}
+  ]
+}
+</script>
+{% endblock %}
 
+{% block content %}
 <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
 
   <!-- Breadcrumb -->
   <nav class="text-sm text-slate-400 mb-8">
     <a href="/" class="hover:text-sky-600">Home</a> /
     <a href="/blog" class="hover:text-sky-600">Blog</a> /
-    <span class="text-slate-600">{{ post.title[:50] }}...</span>
+    <span class="text-slate-600">{{ post.title if post.title|length <= 55 else post.title[:55] ~ '…' }}</span>
   </nav>
 
   <!-- Header -->

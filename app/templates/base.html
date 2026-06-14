@@ -14,7 +14,7 @@
   <link rel="canonical" href="{% block canonical %}https://statementscrub.com{% endblock %}" />
 
   <!-- Open Graph -->
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
   <meta property="og:site_name" content="StatementScrub" />
   <meta property="og:title" content="{% block og_title %}StatementScrub — AI Bank Statement Analyzer{% endblock %}" />
   <meta property="og:description" content="{% block og_description %}Analyze any bank statement PDF in 30 seconds. Income verification, NSF detection, risk scoring — built for mortgage brokers and lenders.{% endblock %}" />
