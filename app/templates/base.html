@@ -12,7 +12,7 @@
 
   <!-- Default SEO meta (overridden per-page via block meta) -->
   <meta name="description" content="{% block meta_description %}StatementScrub analyzes any bank statement PDF in under 30 seconds. Automated income verification, NSF detection, risk scoring, and APPROVE/REVIEW/DECLINE for mortgage brokers and lenders.{% endblock %}" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="{% block robots %}index, follow{% endblock %}" />
   <link rel="canonical" href="{% block canonical %}https://statementscrub.com{% endblock %}" />
 
   <!-- Open Graph -->

@@ -105,4 +105,37 @@
     </div>
   </div>
 </section>
+
+<!-- What you can reach us about -->
+<section class="bg-slate-50 border-t border-slate-200">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+    <div class="max-w-2xl mx-auto text-center mb-10">
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3">How our team can help</h2>
+      <p class="text-slate-500">StatementScrub is built for mortgage brokers, MCA and small-business lenders, underwriters, and bookkeepers. Whatever you're trying to figure out about bank statement analysis, we're happy to point you in the right direction.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for title, body in [
+        ("Product questions", "Not sure whether StatementScrub fits your workflow? Tell us how many statements you process each month and what decisions you make, and we'll explain exactly what the report shows and how fast you'll get it."),
+        ("Enterprise & volume pricing", "Processing 1,000+ reports a month, or running a team of brokers? We offer custom volume pricing, shared report pools, and role-based team accounts beyond the standard plans. Reach out and we'll size a plan to your volume."),
+        ("API & integrations", "Want to send statements to StatementScrub from your CRM or loan origination system? Ask us about the REST API, your API key, JSON output, and webhook options so analysis fits inside your existing pipeline."),
+        ("Demos & onboarding", "Prefer to see it before you commit? Book a 15-minute walkthrough and we'll run a couple of your own statements live so you can judge the accuracy, speed, and lender-matching results for yourself."),
+        ("Billing & accounts", "Questions about your plan, credits that carry forward, invoices, or cancelling? We answer billing questions within one business day and there are no cancellation fees or lock-in contracts."),
+        ("Security & data handling", "Concerned about borrower data? Uploaded PDFs are processed over encrypted connections and deleted automatically — we never sell data or use it to train third-party models. Ask us for the details."),
+      ] %}
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="font-bold text-slate-900 mb-2">{{ title }}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">{{ body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-10 text-slate-500 text-sm">
+      Looking for answers right now? Explore
+      <a href="/how-it-works" class="text-sky-600 font-semibold hover:underline">how it works</a>,
+      browse the <a href="/blog" class="text-sky-600 font-semibold hover:underline">bank statement analysis blog</a>,
+      or review <a href="/credits" class="text-sky-600 font-semibold hover:underline">pricing plans</a>.
+      Most questions are answered there — and you can always
+      <a href="/auth/register" class="text-sky-600 font-semibold hover:underline">start free with 3 reports</a> while you decide.
+    </div>
+  </div>
+</section>
 {% endblock %}
